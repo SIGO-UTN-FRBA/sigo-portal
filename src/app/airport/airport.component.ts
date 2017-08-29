@@ -2,8 +2,11 @@ import { Component } from "@angular/core";
 
 @Component({
   template: `
-    <h2>Airports</h2>
+    <h1>Airports</h1>
     <p>This section allows users to manage airports.</p>
+    <hr/>
+    
+    <router-outlet></router-outlet>
   `
 })
 

@@ -5,8 +5,7 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './not-found.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {HomeComponent} from "./home.component";
-import {NavbarModule} from "../navbar/navbar.module";
-import {NavbarComponent} from "../navbar/navbar.component";
+import {NavbarComponent} from "./navbar.component";
 
 
 @NgModule({
@@ -18,8 +17,7 @@ import {NavbarComponent} from "../navbar/navbar.component";
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    NavbarModule
+    AppRoutingModule
   ],
   exports: [],
   providers: [],
