@@ -6,6 +6,7 @@ import {AirportRoutingModule} from "./airport-routing.module";
 import {AirportComponent} from "./airport.component";
 import {AirportSearchComponent} from "./airoport-search.component";
 import {AirportService} from "./airport.service";
+import {AirportListComponent} from "./airport-list.component";
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {AirportService} from "./airport.service";
   ],
   declarations: [
     AirportComponent,
-    AirportSearchComponent
+    AirportSearchComponent,
+    AirportListComponent
   ],
   providers: [
     AirportService

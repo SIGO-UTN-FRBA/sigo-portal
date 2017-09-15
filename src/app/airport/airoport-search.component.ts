@@ -1,9 +1,7 @@
 import {Component} from "@angular/core";
-import {AirportService} from "./airport.service";
-import {Airport} from "./airport";
+import {Router} from "@angular/router";
 
 @Component({
-  selector:'airport-finder',
   template:`
     <div class="container-fluid">
       <div class="row">
@@ -29,6 +27,7 @@ import {Airport} from "./airport";
                   [(ngModel)]="searchValue"
                   class="form-control input-lg"
                   [placeholder]="searchType['placeHolder']"
+                  (ngModelChange)="clearList()"
                   autofocus
                   maxlength="80"
                   required>
@@ -46,6 +45,9 @@ import {Airport} from "./airport";
         </form>
       </div>
     </div>
+    <br>
+    <br>
+    <router-outlet></router-outlet>
   `
 
 })
@@ -64,7 +66,7 @@ export class AirportSearchComponent  {
       placeHolder : "IATA 3-letter code of the location"
     },
     {
-      name : 'name',
+      name : 'Name',
       property : "name_fir",
       placeHolder : "Name of the airport"
     }
@@ -74,19 +76,22 @@ export class AirportSearchComponent  {
 
   searchValue : string = "";
 
-  results : Airport[];
-
   constructor(
-    private airportService : AirportService
+    private router : Router
   ){}
 
-  setSearchType = (type) => { this.searchType = type };
+  setSearchType = (type) => {
+      this.searchType = type;
+      this.searchValue = '';
+      this.clearList();
+    };
 
   onSubmit = () => {
+    this.router.navigate(['/airports/search/list', {property: this.searchType['property'], value: this.searchValue }]);
+  };
 
-    this.airportService
-      .search(this.searchType['property'], this.searchValue)
-      .then(airports => this.results = airports);
+  clearList = () =>{
+    if(!this.router.isActive('/airports/search', true))
+      this.router.navigate(['/airports/search']);
   }
-
 }

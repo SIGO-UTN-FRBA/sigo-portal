@@ -12,18 +12,18 @@ export class AirportService {
 
   search(property: string, value : string) : Promise<Airport[]>{
     return this.http
-              .get(`${AppSettings.API_ENDPOINT}/airports?${property}=${value}`)
-              .toPromise()
-              .then(response => response.json().data as Airport[])
-              .catch(this.handleError)
+      .get(`${AppSettings.API_ENDPOINT}/airports?${property}=${value}`)
+      .toPromise()
+      .then(response => response.json() as Airport[])
+      .catch(this.handleError);
   }
 
-  get(id : number){
+  get(id : number) : Promise<Airport>{
     return this.http
-              .get(`${AppSettings.API_ENDPOINT}/airports/${id}`)
-              .toPromise()
-              .then(response => response.json().data as Airport)
-              .catch(this.handleError)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${id}`)
+      .toPromise()
+      .then(response => response.json() as Airport)
+      .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {

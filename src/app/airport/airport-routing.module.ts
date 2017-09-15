@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import {AirportComponent} from "./airport.component";
 import {AirportSearchComponent} from "./airoport-search.component";
+import {AirportListComponent} from "./airport-list.component";
 
 const airportRoutes : Routes = [
   {
@@ -10,12 +11,18 @@ const airportRoutes : Routes = [
     component: AirportComponent,
     children:[
       {
-        path: 'finder',
-        component: AirportSearchComponent
+        path: 'search',
+        component: AirportSearchComponent,
+        children: [
+          {
+            path: 'list',
+            component: AirportListComponent
+          }
+        ]
       },
       {
         path: '',
-        redirectTo: 'finder'
+        redirectTo: 'search'
       }
     ]
   }
