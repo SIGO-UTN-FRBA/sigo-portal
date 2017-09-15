@@ -4,7 +4,8 @@ import { FormsModule }   from '@angular/forms';
 
 import {AirportRoutingModule} from "./airport-routing.module";
 import {AirportComponent} from "./airport.component";
-import {AirportFinderComponent} from "./finder.component";
+import {AirportSearchComponent} from "./airoport-search.component";
+import {AirportService} from "./airport.service";
 
 @NgModule({
   imports: [
@@ -14,7 +15,10 @@ import {AirportFinderComponent} from "./finder.component";
   ],
   declarations: [
     AirportComponent,
-    AirportFinderComponent
+    AirportSearchComponent
+  ],
+  providers: [
+    AirportService
   ]
 })
 
