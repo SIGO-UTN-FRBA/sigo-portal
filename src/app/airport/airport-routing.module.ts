@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {AirportComponent} from "./airport.component";
 import {AirportSearchComponent} from "./airoport-search.component";
 import {AirportListComponent} from "./airport-list.component";
+import {AirportDetailComponent} from "./airport-detail.component";
 
 const airportRoutes : Routes = [
   {
@@ -19,6 +20,10 @@ const airportRoutes : Routes = [
             component: AirportListComponent
           }
         ]
+      },
+      {
+        path: ':id',
+        component: AirportDetailComponent
       },
       {
         path: '',

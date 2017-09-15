@@ -11,7 +11,7 @@ import "rxjs/add/operator/catch";
       <ul class="media-list">
         <li *ngFor="let airport of results" class="media media-border">
           <div class="media-left">
-            <a href="#">
+            <a routerLink="/airports/{{airport.id}}">
               <img class="media-object" src="" alt="...">
             </a>
           </div>

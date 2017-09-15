@@ -7,6 +7,7 @@ import {AirportComponent} from "./airport.component";
 import {AirportSearchComponent} from "./airoport-search.component";
 import {AirportService} from "./airport.service";
 import {AirportListComponent} from "./airport-list.component";
+import {AirportDetailComponent} from "./airport-detail.component";
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {AirportListComponent} from "./airport-list.component";
   declarations: [
     AirportComponent,
     AirportSearchComponent,
-    AirportListComponent
+    AirportListComponent,
+    AirportDetailComponent
   ],
   providers: [
     AirportService

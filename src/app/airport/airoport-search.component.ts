@@ -3,6 +3,10 @@ import {Router} from "@angular/router";
 
 @Component({
   template:`
+    <h1>Airports</h1>
+    <p>This section allows users to manage airports.</p>
+    <hr/>
+
     <div class="container-fluid">
       <div class="row">
         <form #searchForm="ngForm" class="form" role="form" (ngSubmit)="onSubmit()">
