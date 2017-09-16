@@ -2,14 +2,80 @@ import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {AirportService} from "./airport.service";
 import {Airport} from "./airport";
+import {RunwayService} from "../runway/runway.service";
 
 @Component({
   template: `
-    <h1>Airport detail <small></small></h1>
-    <p>This section allows users to edit the airport <i>{{airport.code_fir}}</i>.</p>
+    <h1>Airport detail
+      <small></small>
+    </h1>
+    <p>This section allows users to inspect an airport.</p>
     <hr/>
 
-    <span>{{airport.id}}</span>
+    <div *ngIf="!mainContentLoaded" class="container-fluid">
+      <img class="center-block" src="../../assets/images/loading.gif">
+    </div>
+
+    <div *ngIf="mainContentLoaded" class="container-fluid">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">General</h3>
+        </div>
+        <div class="panel-body">
+          <form #airportForm="ngForm" role="form" class="form container-fluid">
+            <div class="row">
+              <div class="col-md-12 col-sm-12 form-group">
+                <label for="inputNameFir" class="control-label">Name ICAO</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="inputNameFir"
+                  [(ngModel)]="airport.name_fir"
+                  required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-sm-12 form-group">
+                <label for="inputCodeFir" class="control-label">Code ICAO</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="inputCodeFir"
+                  [ngModel]="airport.code_fir"
+                  disabled
+                  required>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <label for="inputCodeIATA" class="control-label">Code IATA</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="inputCodeIATA"
+                  [(ngModel)]="airport.code_IATA"
+                  required>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <br>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Runways</h3>
+        </div>
+        <div class="panel-body">
+          <div *ngIf="!childContentLoaded" class="container-fluid">
+            <img src="../../assets/images/loading.gif" class="center-block">
+          </div>
+          
+          <ul *ngIf="childContentLoaded">
+            <li *ngFor="let runway of airport.runways">
+              <a routerLink="/airports/{{airport.id}}/runways/{{runway.id}}">{{runway.name}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   `
 })
 
@@ -17,15 +83,36 @@ import {Airport} from "./airport";
 export class AirportDetailComponent implements OnInit{
 
   airport : Airport;
+  mainContentLoaded : boolean;
+  childContentLoaded : boolean;
 
   constructor(
     private route : ActivatedRoute,
-    private airportServive : AirportService
-  ){}
+    private airportServive : AirportService,
+    private runwayServive : RunwayService
+  ){
+    this.airport = new Airport();
+    this.mainContentLoaded = false;
+    this.childContentLoaded = false;
+  }
 
   ngOnInit() : void {
+
+    let airportId : number = +this.route.snapshot.params['airportId'];
+
     this.airportServive
-      .get(+this.route.snapshot.params['id'])
-      .then(data => this.airport = data)
+      .get(airportId)
+      .then(data => {
+        this.airport = data;
+        this.mainContentLoaded = true;
+
+        this.runwayServive
+          .list(airportId)
+          .then( data => {
+            this.airport.runways = data;
+            this.childContentLoaded = true;
+          })
+      })
+
   }
 }

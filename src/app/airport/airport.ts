@@ -1,3 +1,5 @@
+import {Runway} from "../runway/runway";
+
 export class Airport {
   id: number;
   region_id: number;
@@ -7,5 +9,6 @@ export class Airport {
   code_IATA: string;
   latitude: number;
   longitude: number;
-  elevation: number
+  elevation: number;
+  runways: Runway[]
 }

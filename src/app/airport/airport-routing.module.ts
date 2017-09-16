@@ -22,8 +22,12 @@ const airportRoutes : Routes = [
         ]
       },
       {
-        path: ':id',
+        path: ':airportId',
         component: AirportDetailComponent
+      },
+      {
+        path: ':airportId/runways',
+        loadChildren: 'app/runway/runway.module#RunwayModule'
       },
       {
         path: '',

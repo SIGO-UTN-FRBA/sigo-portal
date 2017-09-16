@@ -22,5 +22,37 @@
       "longitude": 30.9991991,
       "elevation": 0
 		}
-	]
+	],
+  "runways": [
+    {
+      "id": 1,
+      "name": "RNW 03/27",
+      "width": 90,
+      "length": 3500,
+      "surface_id": 1,
+      "airportsId": 1,
+      "directions": [
+        {
+          "id":3,
+          "runway_id": 1,
+          "type_id": 1,
+          "elevation": 0
+        },
+        {
+          "id":27,
+          "runway_id": 1,
+          "type_id": 1,
+          "elevation": 0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "RNW 19/01",
+      "width": 100,
+      "length": 4000,
+      "surface_id": 1,
+      "airportsId": 1
+    }
+  ]
 }
