@@ -4,21 +4,24 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --aot --locale es --i18n-format xlf --i18n-file src/locale/messages.es.xlf",
+    "build": "ng build --aot --output-path dist/es --locale es --i18n-format xlf --i18n-file src/i18n/messages.es.xlf --missing-translation error",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "i18n": "ng xi18n --output-path src/locale --i18n-format xlf"
   },
   "private": true,
   "dependencies": {
     "@angular/common": "^4.2.4",
     "@angular/compiler": "^4.2.4",
+    "@angular/compiler-cli": "^4.4.1",
     "@angular/core": "^4.2.4",
     "@angular/forms": "^4.2.4",
     "@angular/http": "^4.2.4",
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
+    "@angular/platform-server": "^4.4.1",
     "@angular/router": "^4.2.4",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",

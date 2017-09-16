@@ -3,8 +3,12 @@ import {Router} from "@angular/router";
 
 @Component({
   template:`
-    <h1>Airports</h1>
-    <p>This section allows users to manage airports.</p>
+    <h1 i18n="@@airport.search.title">
+      Airports
+    </h1>
+    <p i18n="@@airport.search.main_description">
+      This section allows users to manage airports.
+    </p>
     <hr/>
 
     <div class="container-fluid">

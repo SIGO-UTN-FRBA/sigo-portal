@@ -6,10 +6,12 @@ import {RunwayService} from "../runway/runway.service";
 
 @Component({
   template: `
-    <h1>Airport detail
-      <small></small>
+    <h1 i18n="@@airport.detail.title">
+      Airport detail
     </h1>
-    <p>This section allows users to inspect an airport.</p>
+    <p i18n="@@airport.detail.main_description">
+      This section allows users to inspect an airport.
+    </p>
     <hr/>
 
     <div *ngIf="!mainContentLoaded" class="container-fluid">
@@ -19,13 +21,17 @@ import {RunwayService} from "../runway/runway.service";
     <div *ngIf="mainContentLoaded" class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">General</h3>
+          <h3 class="panel-title" i18n="@@airport.detail.section.general.title">
+            General
+          </h3>
         </div>
         <div class="panel-body">
           <form #airportForm="ngForm" role="form" class="form container-fluid">
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
-                <label for="inputNameFir" class="control-label">Name ICAO</label>
+                <label for="inputNameFir" class="control-label" i18n="@@airport.detail.section.general.inputNameFir">
+                  Name ICAO
+                </label>
                 <input
                   type="text"
                   class="form-control"
@@ -36,7 +42,9 @@ import {RunwayService} from "../runway/runway.service";
             </div>
             <div class="row">
               <div class="col-md-6 col-sm-12 form-group">
-                <label for="inputCodeFir" class="control-label">Code ICAO</label>
+                <label for="inputCodeFir" class="control-label" i18n="@@airport.detail.section.general.inputCodeFir">
+                  Code ICAO
+                </label>
                 <input
                   type="text"
                   class="form-control"
@@ -46,7 +54,9 @@ import {RunwayService} from "../runway/runway.service";
                   required>
               </div>
               <div class="col-md-6 col-sm-12">
-                <label for="inputCodeIATA" class="control-label">Code IATA</label>
+                <label for="inputCodeIATA" class="control-label" i18n="@@airport.detail.section.general.inputCodeIATA">
+                  Code IATA
+                </label>
                 <input
                   type="text"
                   class="form-control"
@@ -61,7 +71,9 @@ import {RunwayService} from "../runway/runway.service";
       <br>
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Runways</h3>
+          <h3 class="panel-title" i18n="@@airport.detail.section.runways.title">
+            Runways
+          </h3>
         </div>
         <div class="panel-body">
           <div *ngIf="!childContentLoaded" class="container-fluid">

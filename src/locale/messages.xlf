@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="home.title" datatype="html">
+        <source>
+      Home
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/home.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="navbar.home" datatype="html">
+        <source>
+            Home
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="navbar.airports" datatype="html">
+        <source>
+            Airports
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="navbar.objects" datatype="html">
+        <source>
+            Objects
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="navbar.regulations" datatype="html">
+        <source>
+            Regulations
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="navbar.analysis" datatype="html">
+        <source>
+            Analysis
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.search.title" datatype="html">
+        <source>
+      Airports
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airoport-search.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.search.main_description" datatype="html">
+        <source>
+      This section allows users to manage airports.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airoport-search.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.title" datatype="html">
+        <source>
+      Airport detail
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.main_description" datatype="html">
+        <source>
+      This section allows users to inspect an airport.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.general.title" datatype="html">
+        <source>
+            General
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.general.inputNameFir" datatype="html">
+        <source>
+                  Name ICAO
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.general.inputCodeFir" datatype="html">
+        <source>
+                  Code ICAO
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.general.inputCodeIATA" datatype="html">
+        <source>
+                  Code IATA
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.runways.title" datatype="html">
+        <source>
+            Runways
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
