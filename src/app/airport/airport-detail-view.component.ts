@@ -8,7 +8,7 @@ import {ActivatedRoute} from "@angular/router";
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="row">
-          <h3 class="panel-title col-md-6" i18n="@@airport.detail.section.general.title" style="padding-top: 7.5px;">
+          <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@airport.detail.section.general.title">
             General
           </h3>
           <div class="col-md-6 btn-group">

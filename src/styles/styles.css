@@ -9,3 +9,7 @@ html, body {
   box-shadow: 1px 1px 1px lightgrey;
   padding: 1em;
 }
+
+.panel-title-with-buttons {
+  padding-top: 7.5px;
+}

@@ -19,9 +19,20 @@ import {RunwayService} from "../runway/runway.service";
       <br>
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title" i18n="@@airport.detail.section.runways.title">
-            Runways
-          </h3>
+          <div class="row">
+            <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@airport.detail.section.runways.title">
+              Runways
+            </h3>
+            <div class="col-md-6 btn-group">
+              <a
+                routerLink="/"
+                class="btn btn-default pull-right"
+                i18n="@@commons.button.new">
+                New
+              </a>
+            </div>
+            <div class="clearfix"></div>
+          </div>
         </div>
         <div class="panel-body">
           <div *ngIf="!runwayContentLoaded" class="container-fluid">
