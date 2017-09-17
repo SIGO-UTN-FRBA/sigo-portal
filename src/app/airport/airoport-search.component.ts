@@ -14,7 +14,7 @@ import {Router} from "@angular/router";
     <div class="container-fluid">
       <div class="row">
         <form #searchForm="ngForm" class="form" role="form" (ngSubmit)="onSubmit()">
-          <div class="form-group">
+          <div class="row form-group">
             <div class="col-lg-8 col-lg-offset-2">
               <div class="input-group input-group-lg">
                 <div class="input-group-btn">
@@ -39,15 +39,27 @@ import {Router} from "@angular/router";
                   autofocus
                   maxlength="80"
                   required>
-                <span class="input-group-btn">
+                <span class="input-group-btn" role="group">
                   <button
                     type="submit"
                     class="btn btn-lg btn-primary"
-                    [disabled]="searchForm.invalid">
-                  <i class="glyphicon glyphicon-search"></i>
+                    [disabled]="searchForm.invalid"
+                    i18n-title="@@commons.button.search"
+                    title="Search">
+                      <span class="glyphicon glyphicon-search"></span>
                   </button>
                 </span>
               </div>
+            </div>
+            <div class="col-md-2">
+              <button
+                type="button"
+                (click)="create()"
+                class="btn btn-primary btn-lg"
+                i18n-title="@@commons.button.new"
+                title="New">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
             </div>
           </div>
         </form>
@@ -101,5 +113,9 @@ export class AirportSearchComponent  {
   clearList = () =>{
     if(!this.router.isActive('/airports/search', true))
       this.router.navigate(['/airports/search']);
+  };
+
+  create = () => {
+
   }
 }
