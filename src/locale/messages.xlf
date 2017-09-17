@@ -74,6 +74,103 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="commons.button.search" datatype="html">
+        <source>Search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airoport-search.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="commons.button.new" datatype="html">
+        <source>New</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airoport-search.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.general.title" datatype="html">
+        <source>
+            General
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.general.inputNameFir" datatype="html">
+        <source>
+                  Name ICAO
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.general.inputCodeFir" datatype="html">
+        <source>
+                  Code ICAO
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="airport.detail.section.general.inputCodeIATA" datatype="html">
+        <source>
+                  Code IATA
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="commons.button.cancel" datatype="html">
+        <source>
+                  Cancel
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="commons.button.save" datatype="html">
+        <source>
+                  Save
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="commons.button.edit" datatype="html">
+        <source>
+              Edit
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="airport.detail.title" datatype="html">
         <source>
       Airport detail
@@ -92,49 +189,13 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="airport.detail.section.general.title" datatype="html">
-        <source>
-            General
-          </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="airport.detail.section.general.inputNameFir" datatype="html">
-        <source>
-                  Name ICAO
-                </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="airport.detail.section.general.inputCodeFir" datatype="html">
-        <source>
-                  Code ICAO
-                </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-          <context context-type="linenumber">38</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="airport.detail.section.general.inputCodeIATA" datatype="html">
-        <source>
-                  Code IATA
-                </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="airport.detail.section.runways.title" datatype="html">
         <source>
-            Runways
-          </source>
+              Runways
+            </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
     </body>
