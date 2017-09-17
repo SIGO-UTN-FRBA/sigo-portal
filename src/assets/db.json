@@ -1,18 +1,18 @@
 {
-	"airports" : [
-		{
-			"id" : 1,
+  "airports": [
+    {
+      "id": 1,
       "region_id": 1,
       "regulation_id": 1,
-      "name_fir": "Jorge Newvery",
+      "name_fir": "Jorge Newbery",
       "code_fir": "SARA",
       "code_IATA": "AEP",
       "latitude": 15.0000001,
       "longitude": 10.1231321,
       "elevation": 0
-		},
-		{
-			"id" : 2,
+    },
+    {
+      "id": 2,
       "region_id": 1,
       "regulation_id": 1,
       "name_fir": "San Fernando",
@@ -21,8 +21,8 @@
       "latitude": 57.0001222,
       "longitude": 30.9991991,
       "elevation": 0
-		}
-	],
+    }
+  ],
   "runways": [
     {
       "id": 1,
@@ -33,13 +33,13 @@
       "airportsId": 1,
       "directions": [
         {
-          "id":3,
+          "id": 3,
           "runway_id": 1,
           "type_id": 1,
           "elevation": 0
         },
         {
-          "id":27,
+          "id": 27,
           "runway_id": 1,
           "type_id": 1,
           "elevation": 0

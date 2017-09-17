@@ -30,4 +30,12 @@ export class AirportService {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }
+
+  save(airport: Airport) : Promise<Airport> {
+    return this.http
+      .put(`${AppSettings.API_ENDPOINT}/airports/${airport.id}`, airport)
+      .toPromise()
+      .then(response => response.json() as Airport)
+      .catch(this.handleError)
+  }
 }
