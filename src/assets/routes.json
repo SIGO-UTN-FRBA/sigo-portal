@@ -1,0 +1,6 @@
+{
+  "/api/airports": "/airports",
+  "/api/airports/:id": "/airports/:id",
+  "/api/airports/:airport_id/runways": "/runways?airportsId=:airport_id",
+  "/api/airports/:airport_id/runways/:runway_id": "/runways?airportsId=:airport_id&id=:runway_id"
+}
