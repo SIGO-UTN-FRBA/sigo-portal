@@ -1,8 +1,6 @@
 import {Component, OnInit, Output} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
-import {AirportService} from "./airport.service";
 import {Airport} from "./airport";
-import {RunwayService} from "../runway/runway.service";
+
 
 @Component({
   template: `
@@ -17,35 +15,9 @@ import {RunwayService} from "../runway/runway.service";
     <div class="container-fluid">
       <router-outlet></router-outlet>
       <br>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <div class="row">
-            <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@airport.detail.section.runways.title">
-              Runways
-            </h3>
-            <div class="col-md-6 btn-group">
-              <a
-                routerLink="/"
-                class="btn btn-default pull-right"
-                i18n="@@commons.button.new">
-                New
-              </a>
-            </div>
-            <div class="clearfix"></div>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div *ngIf="!runwayContentLoaded" class="container-fluid">
-            <img src="../../assets/images/loading.gif" class="center-block">
-          </div>
-          
-          <ul *ngIf="runwayContentLoaded">
-            <li *ngFor="let runway of airport.runways">
-              <a routerLink="/airports/{{airport.id}}/runways/{{runway.id}}">{{runway.name}}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <airport-geometry></airport-geometry>
+      <br>
+      <airport-children [airport]="airport"></airport-children>
     </div>
   `
 })
@@ -54,25 +26,12 @@ import {RunwayService} from "../runway/runway.service";
 export class AirportDetailComponent implements OnInit{
 
   @Output() airport : Airport;
-  runwayContentLoaded : boolean;
 
-  constructor(
-    private route : ActivatedRoute,
-    private runwayService : RunwayService
-  ){
+  constructor(){
     this.airport = new Airport();
-    this.runwayContentLoaded = false;
   }
 
   ngOnInit() : void {
 
-    let airportId : number = +this.route.snapshot.params['airportId'];
-
-    this.runwayService
-      .list(airportId)
-      .then( data => {
-        this.airport.runways = data;
-        this.runwayContentLoaded = true;
-      })
   }
 }

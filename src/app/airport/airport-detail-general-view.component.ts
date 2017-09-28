@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Airport} from "./airport";
 import {AirportService} from "./airport.service";
 import {ActivatedRoute} from "@angular/router";
+import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
   template:`
@@ -23,76 +24,81 @@ import {ActivatedRoute} from "@angular/router";
         </div>
       </div>
       
-      <div *ngIf="!contentLoaded">
-        <img class="center-block" src="../../assets/images/loading.gif">
-      </div>
-      
-      <div *ngIf="contentLoaded" class="panel-body">
-        <form #airportForm="ngForm" role="form" class="form container-fluid">
-          <div class="row">
-            <div class="col-md-12 col-sm-12 form-group">
-              <label for="inputNameFir" class="control-label" i18n="@@airport.detail.section.general.inputNameFir">
-                Name ICAO
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                name="inputNameFir"
-                [ngModel]="airport.nameFIR"
-                readonly>
+      <div [ngSwitch]="status" class="panel-body">
+
+        <div *ngSwitchCase="indicator.LOADING">
+          <loading-indicator></loading-indicator>
+        </div>
+        
+        <div *ngSwitchCase="indicator.ACTIVE">
+          <form #airportForm="ngForm" role="form" class="form container-fluid">
+            <div class="row">
+              <div class="col-md-12 col-sm-12 form-group">
+                <label for="inputNameFir" class="control-label" i18n="@@airport.detail.section.general.inputNameFir">
+                  Name ICAO
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="inputNameFir"
+                  [ngModel]="airport.nameFIR"
+                  readonly>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 col-sm-12 form-group">
-              <label for="inputCodeFir" class="control-label" i18n="@@airport.detail.section.general.inputCodeFir">
-                Code ICAO
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                name="inputCodeFir"
-                [ngModel]="airport.codeFIR"
-                readonly>
+            <div class="row">
+              <div class="col-md-6 col-sm-12 form-group">
+                <label for="inputCodeFir" class="control-label" i18n="@@airport.detail.section.general.inputCodeFir">
+                  Code ICAO
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="inputCodeFir"
+                  [ngModel]="airport.codeFIR"
+                  readonly>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <label for="inputCodeIATA" class="control-label" i18n="@@airport.detail.section.general.inputCodeIATA">
+                  Code IATA
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="inputCodeIATA"
+                  [ngModel]="airport.codeIATA"
+                  readonly>
+              </div>
             </div>
-            <div class="col-md-6 col-sm-12">
-              <label for="inputCodeIATA" class="control-label" i18n="@@airport.detail.section.general.inputCodeIATA">
-                Code IATA
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                name="inputCodeIATA"
-                [ngModel]="airport.codeIATA"
-                readonly>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   `
 })
 
-export class AirportDetailViewComponent implements OnInit{
+export class AirportDetailGeneralViewComponent implements OnInit{
 
   airport : Airport;
-  contentLoaded : boolean;
+  indicator;
+  status : number;
 
   constructor(
     private airportService : AirportService,
     private route : ActivatedRoute
   ){
-    this.airport = new Airport()
+    this.airport = new Airport();
+    this.indicator = STATUS_INDICATOR;
   }
 
   ngOnInit() : void {
 
-    this.contentLoaded = false;
+    this.status = this.indicator.LOADING;
 
     this.airportService
       .get(this.route.parent.snapshot.params['airportId'])
       .then(data => {
         this.airport = data;
-        this.contentLoaded = true;
+        this.status = this.indicator.ACTIVE;
       })
 
   }

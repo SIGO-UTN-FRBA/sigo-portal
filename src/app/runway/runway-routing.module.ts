@@ -1,6 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {RunwayDetailComponent} from "./runway.component";
+import {CommonsModule} from "../commons/commons.module";
 
 const runwayRoutes : Routes = [
   {
@@ -11,7 +12,8 @@ const runwayRoutes : Routes = [
 
 @NgModule({
   imports:[
-    RouterModule.forChild(runwayRoutes)
+    RouterModule.forChild(runwayRoutes),
+    CommonsModule
   ],
   declarations: [],
   exports:[

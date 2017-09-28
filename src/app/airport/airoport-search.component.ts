@@ -77,17 +77,17 @@ export class AirportSearchComponent  {
   searchTypes : object[] = [
     {
       name : "ICAO Code",
-      property : "code_fir",
+      property : "codeFIR",
       placeHolder : "ICAO 4-letter code of the location (DOC7910)"
     },
     {
       name : 'IATA Code',
-      property : "code_IATA",
+      property : "codeIATA",
       placeHolder : "IATA 3-letter code of the location"
     },
     {
       name : 'Name',
-      property : "name_fir",
+      property : "nameFIR",
       placeHolder : "Name of the airport"
     }
   ];

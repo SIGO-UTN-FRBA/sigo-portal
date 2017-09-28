@@ -1,4 +1,4 @@
-import {Component, InjectionToken} from "@angular/core";
+import {Component} from "@angular/core";
 
 @Component({
   selector: 'loading-indicator',
@@ -9,12 +9,4 @@ import {Component, InjectionToken} from "@angular/core";
   `
 })
 
-export class LoadingIndicatorComponent{
-
-  status = {
-    LOADING : 0,
-    ACTIVE: 1,
-    EMPTY: 2
-  }
-  
-}
+export class LoadingIndicatorComponent{}

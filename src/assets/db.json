@@ -4,9 +4,9 @@
       "id": 1,
       "region_id": 1,
       "regulation_id": 1,
-      "name_fir": "Aeropuerto Jorge Newbery",
-      "code_fir": "SARA",
-      "code_IATA": "AEP",
+      "nameFIR": "Aeropuerto Jorge Newbery",
+      "codeFIR": "SARA",
+      "codeIATA": "AEP",
       "latitude": 15.0000001,
       "longitude": 10.1231321,
       "elevation": 0
@@ -15,9 +15,9 @@
       "id": 2,
       "region_id": 1,
       "regulation_id": 1,
-      "name_fir": "San Fernando",
-      "code_fir": "SARO",
-      "code_IATA": "SFO",
+      "nameFIR": "San Fernando",
+      "codeFIR": "SARO",
+      "codeIATA": "SFO",
       "latitude": 57.0001222,
       "longitude": 30.9991991,
       "elevation": 0
@@ -29,7 +29,7 @@
       "name": "RNW 03/27",
       "width": 90,
       "length": 3500,
-      "surface_id": 1,
+      "surfaceId": 1,
       "airportsId": 1,
       "directions": [
         {

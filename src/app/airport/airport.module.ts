@@ -1,4 +1,4 @@
-import { NgModule }       from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import { CommonModule }   from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 
@@ -9,27 +9,32 @@ import {AirportService} from "./airport.service";
 import {AirportListComponent} from "./airport-list.component";
 import {AirportDetailComponent} from "./airport-detail.component";
 import {RunwayService} from "../runway/runway.service";
-import {AirportDetailViewComponent} from "./airport-detail-view.component";
-import {AirportDetailEditionComponent} from "./airport-detail-edition.component";
+import {AirportDetailGeneralViewComponent} from "./airport-detail-general-view.component";
+import {AirportDetailGeneralEditionComponent} from "./airport-detail-general-edition.component";
+import {CommonsModule} from "../commons/commons.module";
+import {AirportDetailChildren} from "./airport-detail-children";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    AirportRoutingModule
+    AirportRoutingModule,
+    CommonsModule
   ],
   declarations: [
     AirportComponent,
     AirportSearchComponent,
     AirportListComponent,
     AirportDetailComponent,
-    AirportDetailViewComponent,
-    AirportDetailEditionComponent
+    AirportDetailGeneralViewComponent,
+    AirportDetailGeneralEditionComponent,
+    AirportDetailChildren
   ],
   providers: [
     AirportService,
     RunwayService
-  ]
+  ],
+  schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })
 
 export class AirportModule{}

@@ -5,8 +5,8 @@ import {AirportComponent} from "./airport.component";
 import {AirportSearchComponent} from "./airoport-search.component";
 import {AirportListComponent} from "./airport-list.component";
 import {AirportDetailComponent} from "./airport-detail.component";
-import {AirportDetailEditionComponent} from "./airport-detail-edition.component";
-import {AirportDetailViewComponent} from "./airport-detail-view.component";
+import {AirportDetailGeneralEditionComponent} from "./airport-detail-general-edition.component";
+import {AirportDetailGeneralViewComponent} from "./airport-detail-general-view.component";
 
 const airportRoutes : Routes = [
   {
@@ -29,11 +29,11 @@ const airportRoutes : Routes = [
         children: [
           {
             path: 'view',
-            component: AirportDetailViewComponent
+            component: AirportDetailGeneralViewComponent
           },
           {
             path: 'edit',
-            component: AirportDetailEditionComponent
+            component: AirportDetailGeneralEditionComponent
           },
           {
             path: '',

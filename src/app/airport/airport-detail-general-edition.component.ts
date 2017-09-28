@@ -88,7 +88,7 @@ import {ActivatedRoute} from "@angular/router";
 })
 
 
-export class AirportDetailEditionComponent implements OnInit{
+export class AirportDetailGeneralEditionComponent implements OnInit{
 
   airport : Airport;
 

@@ -97,11 +97,11 @@
             General
           </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-edition.component.ts</context>
           <context context-type="linenumber">4</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
@@ -110,11 +110,11 @@
                   Name ICAO
                 </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-edition.component.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
@@ -123,11 +123,11 @@
                   Code ICAO
                 </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-edition.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
@@ -136,11 +136,11 @@
                   Code IATA
                 </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-edition.component.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
@@ -149,7 +149,7 @@
                   Cancel
                 </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-edition.component.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
@@ -158,7 +158,7 @@
                   Save
                 </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-edition.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-edition.component.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
@@ -167,7 +167,7 @@
               Edit
             </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/airport/airport-detail-view.component.ts</context>
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>

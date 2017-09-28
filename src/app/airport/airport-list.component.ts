@@ -4,23 +4,34 @@ import {Airport} from "./airport";
 import {ActivatedRoute} from "@angular/router";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";
+import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
   template:`
-    <div class="container-fluid">
-      <ul class="media-list">
+    <div [ngSwitch]="status" class="container-fluid">
+
+      <div *ngSwitchCase="indicator.LOADING">
+        <loading-indicator></loading-indicator>  
+      </div>
+      
+      
+      <ul *ngSwitchCase="indicator.ACTIVE" class="media-list">
         <li *ngFor="let airport of results" class="media media-border">
           <div class="media-left">
-            <a routerLink="/airports/{{airport.id}}">
-              <img class="media-object" src="" alt="...">
-            </a>
+            
           </div>
           <div class="media-body">
-            <h4 class="media-heading">{{airport.code_fir}}</h4>
-            <p>{{airport.name_fir}}</p>
+            <h4 class="media-heading">
+              <a routerLink="/airports/{{airport.id}}">{{airport.codeFIR}}</a>
+            </h4>
+            <p>{{airport.nameFIR}}</p>
           </div>
         </li>
       </ul>
+
+      <div *ngSwitchCase="indicator.EMPTY">
+        <empty-indicator type="result" entity="airports"></empty-indicator>
+      </div>
     </div>
   `
 })
@@ -28,21 +39,31 @@ import "rxjs/add/operator/catch";
 export class AirportListComponent implements OnInit {
 
   results : Airport[];
-
+  status : number;
+  indicator;
 
   constructor(
     private airportService : AirportService,
     private route: ActivatedRoute
-  ){}
+  ){
+    this.indicator = STATUS_INDICATOR;
+  }
 
   ngOnInit() : void {
+
+    this.status = this.indicator.LOADING;
 
     this.airportService
       .search(
         this.route.snapshot.paramMap.get('property'),
         this.route.snapshot.paramMap.get('value')
       )
-      .then( data => {this.results = data;})
+      .then( data => {
+        this.results = data;
+
+        (data.length == 0) ? this.status = this.indicator.EMPTY : this.status = this.indicator.ACTIVE;
+
+      })
   }
 
 }
