@@ -1,5 +1,4 @@
-import {Component, OnInit, Output} from "@angular/core";
-import {Airport} from "./airport";
+import {Component, OnInit} from "@angular/core";
 
 
 @Component({
@@ -13,11 +12,14 @@ import {Airport} from "./airport";
     <hr/>
 
     <div class="container-fluid">
-      <router-outlet></router-outlet>
+      <airport-general-view *ngIf="!edit_general" [(edit)]="edit_general"></airport-general-view>
+      <airport-general-edit *ngIf="edit_general" [(edit)]="edit_general"></airport-general-edit>
       <br>
-      <airport-geometry></airport-geometry>
-      <br>
-      <airport-children [airport]="airport"></airport-children>
+      <!--
+      <airport-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry"></airport-geometry-view>
+      <airport-geometry-edit *ngIf="edit_geometry"></airport-geometry-edit>
+      <br> -->
+      <airport-children></airport-children>
     </div>
   `
 })
@@ -25,13 +27,16 @@ import {Airport} from "./airport";
 
 export class AirportDetailComponent implements OnInit{
 
-  @Output() airport : Airport;
+  edit_general : boolean;
+  edit_geometry : boolean;
 
   constructor(){
-    this.airport = new Airport();
+    this.edit_general = false;
+    this.edit_geometry = false;
   }
 
   ngOnInit() : void {
 
   }
+
 }

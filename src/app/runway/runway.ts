@@ -5,7 +5,7 @@ export class Runway {
   name: string;
   width: number;
   length: number;
-  surface_id: number;
-  aerodrome_id: number;
+  surfaceId: number;
+  airportId: number;
   directions: RunwayDirection[]
 }

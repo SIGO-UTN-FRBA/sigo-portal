@@ -1,10 +1,10 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {AirportService} from "./airport.service";
 import {Airport} from "./airport";
-import {Location} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
+  selector: 'airport-general-edit',
   template: `
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -88,12 +88,13 @@ import {ActivatedRoute} from "@angular/router";
 })
 
 
-export class AirportDetailGeneralEditionComponent implements OnInit{
+export class AirportDetailGeneralEditComponent implements OnInit{
 
   airport : Airport;
+  @Input() edit : boolean;
+  @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private location : Location,
     private route : ActivatedRoute,
     private airportService : AirportService
   ){
@@ -101,18 +102,25 @@ export class AirportDetailGeneralEditionComponent implements OnInit{
   }
 
   ngOnInit(): void {
-      this.airportService
-        .get(this.route.parent.snapshot.params['airportId'])
-        .then( data => this.airport = data)
+
+    let airportId : number = +this.route.snapshot.params['airportId'];
+
+    this.airportService
+      .get(airportId)
+      .then( data => this.airport = data)
   }
 
-  onSubmit = () => {
+  onSubmit(){
     this.airportService
       .save(this.airport)
-      .then( () => this.location.back());
+      .then( () => this.disallowEdition() );
   };
 
-  onCancel = () => {
-    this.location.back();
+  onCancel(){
+    this.disallowEdition();
+  };
+
+  disallowEdition() {
+    this.editChange.emit(false);
   }
 }

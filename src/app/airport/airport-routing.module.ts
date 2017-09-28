@@ -5,7 +5,7 @@ import {AirportComponent} from "./airport.component";
 import {AirportSearchComponent} from "./airoport-search.component";
 import {AirportListComponent} from "./airport-list.component";
 import {AirportDetailComponent} from "./airport-detail.component";
-import {AirportDetailGeneralEditionComponent} from "./airport-detail-general-edition.component";
+import {AirportDetailGeneralEditComponent} from "./airport-detail-general-edit.component";
 import {AirportDetailGeneralViewComponent} from "./airport-detail-general-view.component";
 
 const airportRoutes : Routes = [
@@ -24,22 +24,8 @@ const airportRoutes : Routes = [
         ]
       },
       {
-        path: ':airportId',
-        component: AirportDetailComponent,
-        children: [
-          {
-            path: 'view',
-            component: AirportDetailGeneralViewComponent
-          },
-          {
-            path: 'edit',
-            component: AirportDetailGeneralEditionComponent
-          },
-          {
-            path: '',
-            redirectTo: 'view'
-          }
-        ]
+        path: ':airportId/detail',
+        component: AirportDetailComponent
       },
       {
         path: ':airportId/runways',

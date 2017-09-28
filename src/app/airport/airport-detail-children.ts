@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from "@angular/core";
 import {RunwayService} from "../runway/runway.service";
 import {ActivatedRoute} from "@angular/router";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {Airport} from "./airport";
+import {Runway} from "../runway/runway";
 
 @Component({
   selector: 'airport-children',
@@ -30,8 +30,8 @@ import {Airport} from "./airport";
         </div>
 
         <ul *ngSwitchCase="indicator.ACTIVE">
-          <li *ngFor="let runway of airport.runways">
-            <a routerLink="/airports/{{airport.id}}/runways/{{runway.id}}">{{runway.name}}</a>
+          <li *ngFor="let runway of runways">
+            <a routerLink="/airports/{{runway.airportId}}/runways/{{runway.id}}">{{runway.name}}</a>
           </li>
         </ul>
 
@@ -46,14 +46,16 @@ import {Airport} from "./airport";
 
 export class AirportDetailChildren implements OnInit{
 
-  @Input() airport : Airport;
+  runways : Runway[];
   status : number;
   indicator = STATUS_INDICATOR;
 
   constructor(
     private route : ActivatedRoute,
     private runwayService : RunwayService
-  ){}
+  ){
+    this.runways = [];
+  }
 
   ngOnInit(): void {
     let airportId : number = +this.route.snapshot.params['airportId'];
@@ -62,7 +64,7 @@ export class AirportDetailChildren implements OnInit{
       .list(airportId)
       .then( data => {
 
-        this.airport.runways = data;
+        this.runways = data;
 
         (data.length == 0 )? this.status = this.indicator.EMPTY : this.status = this.indicator.ACTIVE;
       })

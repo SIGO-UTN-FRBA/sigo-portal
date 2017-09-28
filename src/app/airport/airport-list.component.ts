@@ -22,7 +22,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/airports/{{airport.id}}">{{airport.codeFIR}}</a>
+              <a routerLink="/airports/{{airport.id}}/detail">{{airport.codeFIR}}</a>
             </h4>
             <p>{{airport.nameFIR}}</p>
           </div>

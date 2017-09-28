@@ -10,9 +10,11 @@ import {AirportListComponent} from "./airport-list.component";
 import {AirportDetailComponent} from "./airport-detail.component";
 import {RunwayService} from "../runway/runway.service";
 import {AirportDetailGeneralViewComponent} from "./airport-detail-general-view.component";
-import {AirportDetailGeneralEditionComponent} from "./airport-detail-general-edition.component";
+import {AirportDetailGeneralEditComponent} from "./airport-detail-general-edit.component";
 import {CommonsModule} from "../commons/commons.module";
 import {AirportDetailChildren} from "./airport-detail-children";
+import {AirportDetailGeometryEditComponent} from "./airport-detail-geometry-edit.component";
+import {AirportDetailGeometryViewComponent} from "./airport-detail-geometry-view.component";
 
 @NgModule({
   imports: [
@@ -27,8 +29,10 @@ import {AirportDetailChildren} from "./airport-detail-children";
     AirportListComponent,
     AirportDetailComponent,
     AirportDetailGeneralViewComponent,
-    AirportDetailGeneralEditionComponent,
-    AirportDetailChildren
+    AirportDetailGeneralEditComponent,
+    AirportDetailChildren,
+    AirportDetailGeometryViewComponent,
+    AirportDetailGeometryEditComponent
   ],
   providers: [
     AirportService,

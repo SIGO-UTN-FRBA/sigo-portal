@@ -1,10 +1,11 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {Airport} from "./airport";
 import {AirportService} from "./airport.service";
 import {ActivatedRoute} from "@angular/router";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
+  selector: 'airport-general-view',
   template:`
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -14,7 +15,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           </h3>
           <div class="col-md-6 btn-group">
             <a
-              routerLink="../edit"
+              (click)="allowEdition();"
               class="btn btn-default pull-right"
               i18n="@@commons.button.edit">
               Edit
@@ -81,6 +82,8 @@ export class AirportDetailGeneralViewComponent implements OnInit{
   airport : Airport;
   indicator;
   status : number;
+  @Input() edit : boolean;
+  @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     private airportService : AirportService,
@@ -94,12 +97,18 @@ export class AirportDetailGeneralViewComponent implements OnInit{
 
     this.status = this.indicator.LOADING;
 
+    let airportId : number = +this.route.snapshot.params['airportId'];
+
     this.airportService
-      .get(this.route.parent.snapshot.params['airportId'])
+      .get(airportId)
       .then(data => {
         this.airport = data;
         this.status = this.indicator.ACTIVE;
       })
 
+  }
+
+  allowEdition() {
+    this.editChange.emit(true);
   }
 }
