@@ -26,7 +26,7 @@ import {ActivatedRoute} from "@angular/router";
                   type="text"
                   class="form-control"
                   name="inputNameFir"
-                  [(ngModel)]="airport.name_fir"
+                  [(ngModel)]="airport.nameFIR"
                   required>
               </div>
             </div>
@@ -42,7 +42,7 @@ import {ActivatedRoute} from "@angular/router";
                   type="text"
                   class="form-control"
                   name="inputCodeFir"
-                  [ngModel]="airport.code_fir"
+                  [ngModel]="airport.codeFIR"
                   disabled
                   required>
               </div>
@@ -57,7 +57,7 @@ import {ActivatedRoute} from "@angular/router";
                   type="text"
                   class="form-control"
                   name="inputCodeIATA"
-                  [(ngModel)]="airport.code_IATA"
+                  [(ngModel)]="airport.codeIATA"
                   required>
               </div>
             </div>
