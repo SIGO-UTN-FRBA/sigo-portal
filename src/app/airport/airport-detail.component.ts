@@ -15,10 +15,12 @@ import {Component, OnInit} from "@angular/core";
       <airport-general-view *ngIf="!edit_general" [(edit)]="edit_general"></airport-general-view>
       <airport-general-edit *ngIf="edit_general" [(edit)]="edit_general"></airport-general-edit>
       <br>
-      <!--
+      
       <airport-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry"></airport-geometry-view>
+      <!--
       <airport-geometry-edit *ngIf="edit_geometry"></airport-geometry-edit>
-      <br> -->
+      <br> 
+      -->
       <airport-children></airport-children>
     </div>
   `

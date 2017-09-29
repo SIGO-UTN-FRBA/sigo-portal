@@ -112,7 +112,7 @@ export class AirportDetailGeneralEditComponent implements OnInit{
 
   onSubmit(){
     this.airportService
-      .save(this.airport)
+      .update(this.airport)
       .then( () => this.disallowEdition() );
   };
 

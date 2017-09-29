@@ -15,13 +15,17 @@ import {CommonsModule} from "../commons/commons.module";
 import {AirportDetailChildren} from "./airport-detail-children";
 import {AirportDetailGeometryEditComponent} from "./airport-detail-geometry-edit.component";
 import {AirportDetailGeometryViewComponent} from "./airport-detail-geometry-view.component";
+import {OlService} from "../olmap/ol.service";
+import {OlComponent} from "../olmap/ol.component";
+import {OlmapModule} from "../olmap/olmap.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     AirportRoutingModule,
-    CommonsModule
+    CommonsModule,
+    OlmapModule
   ],
   declarations: [
     AirportComponent,
@@ -36,7 +40,9 @@ import {AirportDetailGeometryViewComponent} from "./airport-detail-geometry-view
   ],
   providers: [
     AirportService,
-    RunwayService
+    RunwayService,
+    OlService,
+    OlComponent
   ],
   schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })

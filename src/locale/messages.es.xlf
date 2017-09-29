@@ -56,7 +56,7 @@
       <source>
         Analysis
       </source>
-      <target>Analisis</target>
+      <target>Análisis</target>
       <context-group purpose="location">
         <context context-type="sourcefile">app/main/navbar.component.ts</context>
         <context context-type="linenumber">38</context>
@@ -66,7 +66,7 @@
       <source>
         Airports
       </source>
-      <target>Busqueda de aeódromos</target>
+      <target>Búsqueda de aeródromos</target>
       <context-group purpose="location">
         <context context-type="sourcefile">app/airport/airoport-search.component.ts</context>
         <context context-type="linenumber">2</context>
@@ -96,7 +96,7 @@
       <source>
         This section allows users to inspect an airport.
       </source>
-      <target>Esta sección te permite inspeccioar un aeródromo</target>
+      <target>Esta sección te permite inspeccionar un aeródromo</target>
       <context-group purpose="location">
         <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
         <context context-type="linenumber">5</context>

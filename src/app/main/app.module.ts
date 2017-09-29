@@ -9,7 +9,6 @@ import {HomeComponent} from "./home.component";
 import {NavbarComponent} from "./navbar.component";
 import {CommonsModule} from "../commons/commons.module";
 
-const API_URL = 'http://localhost:3000'
 
 @NgModule({
   declarations: [
