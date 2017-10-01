@@ -74,7 +74,7 @@ import {ActivatedRoute} from "@angular/router";
                 </button>
                 <button 
                   type="submit" 
-                  [disabled]="airportForm.invalid || airportForm.untouched"
+                  [disabled]="airportForm.invalid"
                   class="btn btn-success" 
                   i18n="@@commons.button.save">
                   Save
