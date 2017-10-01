@@ -1,16 +1,15 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild,
-  ViewChildren, ViewContainerRef
-} from "@angular/core";
+  AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {AirportService} from "./airport.service";
 import {ActivatedRoute} from "@angular/router";
 import Point = ol.geom.Point;
+import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
-
 
 @Component({
   selector: 'airport-geometry-view',
+  providers: [ OlComponent ],
   template: `
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -54,7 +53,7 @@ import {OlComponent} from "../olmap/ol.component";
             </div>
           </form>
           <br>
-          <app-map #contentPlaceholder [(test)]="test"></app-map>
+          <app-map #contentPlaceholder (map)="map"></app-map>
         </div>
         
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
@@ -68,12 +67,12 @@ import {OlComponent} from "../olmap/ol.component";
 
 export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit{
 
-  test: string = "XXXXXXXXXXXX";
+  map: Map;
 
-  private contentPlaceholder: ElementRef;
+  private olmap: OlComponent;
 
-  @ViewChild('contentPlaceholder') set content(content: ElementRef) {
-    this.contentPlaceholder = content;
+  @ViewChild('contentPlaceholder') set content(content: OlComponent) {
+    this.olmap = content;
   }
   indicator;
   status : number;
@@ -115,16 +114,20 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
 
   ngAfterViewInit(): void {
 
-      console.log(this.contentPlaceholder);
-      debugger;
+      setTimeout(()=> {
+        this.locateGeom();
+      },
+      500
+      );
+
   }
 
   allowEdition() {
     this.editChange.emit(true);
   }
 
-  /*locateGeom(){
+  locateGeom(){
 
-    setMarker(this.geom["coordinates"],'airport', 'airport');
-  }*/
+    this.olmap.setMarker(this.geom["coordinates"],'airport', 'airport');
+  }
 }

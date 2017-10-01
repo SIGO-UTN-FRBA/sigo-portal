@@ -1,6 +1,9 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { OlService } from './ol.service';
 import Map = ol.Map;
+import GeoJSONFeature = ol.format.GeoJSONFeature;
+import GeoJSON = ol.format.GeoJSON;
+import Projection = ol.proj.Projection;
 
 @Component({
   selector: 'app-map',
@@ -10,28 +13,33 @@ import Map = ol.Map;
   `
 
 }) export class OlComponent implements OnInit {
-//test : string;
-  @Input() test : string;
-  @Output() testChange:EventEmitter<string> = new EventEmitter<string>();
+
+  @Input() map : Map;
+  @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
   lnglat: [number, number];
   zoom: number;
-  map : Map;
 
   public layers = [];
   private vectorSource;
 
   constructor(private olService: OlService) {
 
-    this.lnglat = [-93.49401, 45.08203];
+    this.lnglat = [0,0];
     this.zoom = 7;
 
   }
 
   createMap = () => {
-    console.info("createMap 1");
+
     let ol = this.olService.get();
 
-    this.vectorSource = new ol.source.Vector({});
+    this.vectorSource = new ol.source.Vector({
+      format: new GeoJSON({
+        defaultDataProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857'
+      })
+    });
+
     // define layers
 
     let OSM = new ol.layer.Tile({
@@ -57,6 +65,7 @@ import Map = ol.Map;
     });
 
     boundaries.set('name', 'Boundaries');
+
     let vector = new ol.layer.Vector({
       source: this.vectorSource
     });
@@ -80,8 +89,6 @@ import Map = ol.Map;
     let container = document.getElementById('ol-popup');
     let content = document.getElementById('ol-popup-content');
 
-
-
     let popup = new ol.Overlay({
       element: container,
       autoPan: true,
@@ -102,10 +109,6 @@ import Map = ol.Map;
         popup.setPosition(coordinate);
       }
     });
-
-    this.test = "oooooooooooooooooooooo";
-
-    console.info("createMap 2");
   };
 
   addPolygon = (polygon: [[number, number]], name: string, id: string) => {
@@ -132,6 +135,8 @@ import Map = ol.Map;
   setMarker(coords: [number, number], name: string, id: string) {
 
     this.addMarker(coords, name, id);
+
+    this.map.getView().setCenter(ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857'));
   }
 
   addMarker = (coords: [number, number], name: string, id: string) => {
@@ -147,7 +152,7 @@ import Map = ol.Map;
       image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
         opacity: 0.75,
         anchor: [0.5, 1],
-        src: '//cdn4.iconfinder.com/data/icons/pictype-free-vector-icons/16/location-alt-32.png'
+        src: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/16/map-marker-icon.png'
       }))
     });
 
@@ -174,9 +179,7 @@ import Map = ol.Map;
   };
 
   ngOnInit() {
-    this.test = "qqqqqqqqqqqqqqqqqqq";
     this.createMap();
-    console.info("createMap 3");
   }
 
 }
