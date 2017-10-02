@@ -25,6 +25,14 @@ export class RunwayService {
       .catch(this.handleError)
   }
 
+  save(airportId : number, runway : Runway) : Promise<Runway>{
+    return this.http
+      .post(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways`, runway)
+      .toPromise()
+      .then(response => response.json() as Runway)
+      .catch(this.handleError)
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);

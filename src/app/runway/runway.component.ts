@@ -8,7 +8,7 @@ import {ActivatedRoute} from "@angular/router";
     <h1>Runway detail
       <small></small>
     </h1>
-    <p>This section allows users to inspect a runway.</p>
+    <p>This section allows users to create a runway.</p>
     <hr/>
     
     <p>{{runway.name}}</p>

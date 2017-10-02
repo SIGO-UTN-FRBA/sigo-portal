@@ -15,7 +15,7 @@ import {Runway} from "../runway/runway";
           </h3>
           <div class="col-md-6 btn-group">
             <a
-              routerLink="/"
+              routerLink="/airports/{{airportId}}/runways/new"
               class="btn btn-default pull-right"
               i18n="@@commons.button.new">
               New
@@ -31,7 +31,7 @@ import {Runway} from "../runway/runway";
 
         <ul *ngSwitchCase="indicator.ACTIVE">
           <li *ngFor="let runway of runways">
-            <a routerLink="/airports/{{runway.airportId}}/runways/{{runway.id}}">{{runway.name}}</a>
+            <a routerLink="/airports/{{airportId}}/runways/{{runway.id}}/detail">{{runway.name}}</a>
           </li>
         </ul>
 
@@ -49,6 +49,7 @@ export class AirportDetailChildren implements OnInit{
   runways : Runway[];
   status : number;
   indicator = STATUS_INDICATOR;
+  airportId : number;
 
   constructor(
     private route : ActivatedRoute,
@@ -58,10 +59,10 @@ export class AirportDetailChildren implements OnInit{
   }
 
   ngOnInit(): void {
-    let airportId : number = +this.route.snapshot.params['airportId'];
+    this.airportId = +this.route.snapshot.params['airportId'];
 
     this.runwayService
-      .list(airportId)
+      .list(this.airportId)
       .then( data => {
 
         this.runways = data;
