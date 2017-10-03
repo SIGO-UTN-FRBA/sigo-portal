@@ -7,5 +7,4 @@ export class Runway {
   length: number;
   surfaceId: number;
   airportId: number;
-  directions: RunwayDirection[]
 }

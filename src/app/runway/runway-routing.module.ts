@@ -1,17 +1,24 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import {RunwayDetailComponent} from "./runway.component";
+import {RunwayComponent} from "./runway.component";
 import {CommonsModule} from "../commons/commons.module";
 import {RunwayNewComponent} from "./runway-new-component";
+import {RunwayDetailComponent} from "./runway-detail.component";
 
 const runwayRoutes : Routes = [
   {
-    path: 'new',
-    component: RunwayNewComponent
-  },
-  {
-    path: ':runwayId/detail',
-    component: RunwayDetailComponent
+    path: '',
+    component: RunwayComponent,
+    children:[
+      {
+        path: 'new',
+        component: RunwayNewComponent
+      },
+      {
+        path: ':runwayId/detail',
+        component: RunwayDetailComponent
+      }
+    ]
   }
 ];
 

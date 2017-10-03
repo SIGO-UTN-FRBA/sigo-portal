@@ -33,7 +33,6 @@ import Point = ol.geom.Point;
               </textarea>
             </div>
           </div>
-          <br>
           <hr>
           <div class="row">
             <div class="pull-right">
