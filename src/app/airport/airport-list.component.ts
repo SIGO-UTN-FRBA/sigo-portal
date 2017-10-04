@@ -11,7 +11,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
     <div [ngSwitch]="status" class="container-fluid">
 
       <div *ngSwitchCase="indicator.LOADING">
-        <loading-indicator></loading-indicator>  
+        <app-loading-indicator></app-loading-indicator>  
       </div>
       
       
@@ -30,7 +30,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
       </ul>
 
       <div *ngSwitchCase="indicator.EMPTY">
-        <empty-indicator type="result" entity="airports"></empty-indicator>
+        <app-empty-indicator type="result" entity="airports"></app-empty-indicator>
       </div>
     </div>
   `

@@ -6,7 +6,7 @@ import {RunwayCatalogService} from "./runway-catalog.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
-  selector: 'runway-general-view',
+  selector: 'app-runway-general-view',
   template:`
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -29,7 +29,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
       <div [ngSwitch]="status" class="panel-body">
         
         <div *ngSwitchCase="indicator.LOADING">
-          <loading-indicator></loading-indicator>
+          <app-loading-indicator></app-loading-indicator>
         </div>
         
         <form #generalForm="ngForm" *ngSwitchCase="indicator.ACTIVE" role="form" class="form container-fluid">

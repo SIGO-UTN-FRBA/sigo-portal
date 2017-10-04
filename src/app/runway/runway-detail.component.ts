@@ -1,10 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {Runway} from "./runway";
-import {RunwayService} from "./runway.service";
-import {ActivatedRoute} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  template:`
+  template: `    
     <h1>Runway detail
       <small></small>
     </h1>
@@ -12,18 +10,18 @@ import {ActivatedRoute} from "@angular/router";
     <hr/>
 
     <div class="container-fluid">
-      <runway-general-view *ngIf="!edit_general" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId"></runway-general-view>
-      <runway-general-edit *ngIf="edit_general" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId"></runway-general-edit>
+      <app-runway-general-view *ngIf="!edit_general" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId"></app-runway-general-view>
+      <app-runway-general-edit *ngIf="edit_general" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId"></app-runway-general-edit>
 
       <br>
 
-      <runway-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId"></runway-geometry-view>
-      <runway-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId"></runway-geometry-edit>
+      <app-runway-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId"></app-runway-geometry-view>
+      <app-runway-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId"></app-runway-geometry-edit>
 
       <br>
 
-      <runway-children [airportId]="airportId" [runwayId]="runwayId"></runway-children>
-      
+      <app-runway-children [airportId]="airportId" [runwayId]="runwayId"></app-runway-children>
+
     </div>
   `
 })
@@ -32,11 +30,11 @@ export class RunwayDetailComponent implements OnInit{
 
   runwayId: number;
   airportId: number;
-  edit_general : boolean;
-  edit_geometry : boolean;
+  edit_general: boolean;
+  edit_geometry: boolean;
 
   constructor(
-    private route : ActivatedRoute,
+    private route: ActivatedRoute,
   ){
     this.edit_general = false;
     this.edit_geometry = false;

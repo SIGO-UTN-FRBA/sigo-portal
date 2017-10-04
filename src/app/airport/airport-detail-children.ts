@@ -5,7 +5,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {Runway} from "../runway/runway";
 
 @Component({
-  selector: 'airport-children',
+  selector: 'app-airport-children',
   template:`
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -26,7 +26,7 @@ import {Runway} from "../runway/runway";
       </div>
       <div [ngSwitch]="status" class="panel-body">
         <div *ngSwitchCase="indicator.LOADING" class="container-fluid">
-          <loading-indicator></loading-indicator>
+          <app-loading-indicator></app-loading-indicator>
         </div>
 
         <ul *ngSwitchCase="indicator.ACTIVE">
@@ -36,7 +36,7 @@ import {Runway} from "../runway/runway";
         </ul>
 
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
-          <empty-indicator type="relation" entity="runways"></empty-indicator>
+          <app-empty-indicator type="relation" entity="runways"></app-empty-indicator>
         </div>
         
       </div>

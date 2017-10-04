@@ -8,7 +8,7 @@ import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 
 @Component({
-  selector: 'airport-geometry-view',
+  selector: 'app-airport-geometry-view',
   providers: [ OlComponent ],
   template: `
     <div class="panel panel-default">
@@ -31,7 +31,7 @@ import {OlComponent} from "../olmap/ol.component";
 
       <div [ngSwitch]="status" class="panel-body">
         <div *ngSwitchCase="indicator.LOADING" class="container-fluid">
-          <loading-indicator></loading-indicator>
+          <app-loading-indicator></app-loading-indicator>
         </div>
 
         <div *ngSwitchCase="indicator.ACTIVE">
@@ -57,7 +57,7 @@ import {OlComponent} from "../olmap/ol.component";
         </div>
         
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
-          <empty-indicator type="definition" entity="point"></empty-indicator>
+          <app-empty-indicator type="definition" entity="point"></app-empty-indicator>
         </div>
       </div>
       

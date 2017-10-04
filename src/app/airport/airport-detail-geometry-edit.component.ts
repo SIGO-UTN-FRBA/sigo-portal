@@ -4,7 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import Point = ol.geom.Point;
 
 @Component({
-  selector: 'airport-geometry-edit',
+  selector: 'app-airport-geometry-edit',
   template: `
     <div class="panel panel-default">
       <div class="panel-heading">

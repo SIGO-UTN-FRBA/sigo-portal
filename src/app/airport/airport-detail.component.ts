@@ -12,17 +12,17 @@ import {Component, OnInit} from "@angular/core";
     <hr/>
 
     <div class="container-fluid">
-      <airport-general-view *ngIf="!edit_general" [(edit)]="edit_general"></airport-general-view>
-      <airport-general-edit *ngIf="edit_general" [(edit)]="edit_general"></airport-general-edit>
+      <app-airport-general-view *ngIf="!edit_general" [(edit)]="edit_general"></app-airport-general-view>
+      <app-airport-general-edit *ngIf="edit_general" [(edit)]="edit_general"></app-airport-general-edit>
       
       <br>
       
-      <airport-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry"></airport-geometry-view>
-      <airport-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry"></airport-geometry-edit>
+      <app-airport-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry"></app-airport-geometry-view>
+      <app-airport-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry"></app-airport-geometry-edit>
       
       <br>
       
-      <airport-children></airport-children>
+      <app-airport-children></app-airport-children>
     </div>
   `
 })

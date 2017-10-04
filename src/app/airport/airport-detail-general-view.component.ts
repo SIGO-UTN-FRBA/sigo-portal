@@ -5,7 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
-  selector: 'airport-general-view',
+  selector: 'app-airport-general-view',
   template:`
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -28,7 +28,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
       <div [ngSwitch]="status" class="panel-body">
 
         <div *ngSwitchCase="indicator.LOADING">
-          <loading-indicator></loading-indicator>
+          <app-loading-indicator></app-loading-indicator>
         </div>
         
         <div *ngSwitchCase="indicator.ACTIVE">

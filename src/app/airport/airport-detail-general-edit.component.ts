@@ -4,7 +4,7 @@ import {Airport} from "./airport";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
-  selector: 'airport-general-edit',
+  selector: 'app-airport-general-edit',
   template: `
       <div class="panel panel-default">
         <div class="panel-heading">
