@@ -1,8 +1,7 @@
 import {
-  AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
+  AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {AirportService} from "./airport.service";
-import {ActivatedRoute} from "@angular/router";
 import Point = ol.geom.Point;
 import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
@@ -67,6 +66,7 @@ import {OlComponent} from "../olmap/ol.component";
 
 export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit{
 
+  @Input() airportId : number;
   map: Map;
   private olmap: OlComponent;
 
@@ -81,8 +81,7 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
   geomText : string;
 
   constructor(
-    private airportService : AirportService,
-    private route : ActivatedRoute
+    private airportService : AirportService
   ){
 
     this.indicator = STATUS_INDICATOR;
@@ -91,10 +90,8 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
   ngOnInit(): void {
     this.status = this.indicator.LOADING;
 
-    let airportId : number = +this.route.snapshot.params['airportId'];
-
     this.airportService
-      .getGeom(airportId)
+      .getGeom(this.airportId)
       .then(point => {
 
         if(!point){
@@ -110,13 +107,7 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-
-      setTimeout(()=> {
-        this.locateGeom();
-      },
-      500
-      );
-
+      setTimeout(()=> {this.locateGeom(); },500);
   }
 
   allowEdition() {

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {Airport} from "./airport";
 import {AirportService} from "./airport.service";
-import {ActivatedRoute} from "@angular/router";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
@@ -80,14 +79,14 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 export class AirportDetailGeneralViewComponent implements OnInit{
 
   airport : Airport;
+  @Input() airportId : number;
   indicator;
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private airportService : AirportService,
-    private route : ActivatedRoute
+    private airportService : AirportService
   ){
     this.airport = new Airport();
     this.indicator = STATUS_INDICATOR;
@@ -97,10 +96,8 @@ export class AirportDetailGeneralViewComponent implements OnInit{
 
     this.status = this.indicator.LOADING;
 
-    let airportId : number = +this.route.snapshot.params['airportId'];
-
     this.airportService
-      .get(airportId)
+      .get(this.airportId)
       .then(data => {
         this.airport = data;
         this.status = this.indicator.ACTIVE;

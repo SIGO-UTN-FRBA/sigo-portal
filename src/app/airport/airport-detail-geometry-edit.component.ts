@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {AirportService} from "./airport.service";
-import {ActivatedRoute} from "@angular/router";
 import Point = ol.geom.Point;
 
 @Component({
@@ -60,18 +59,15 @@ import Point = ol.geom.Point;
 
 export class AirportDetailGeometryEditComponent implements OnInit{
   geomText : string;
-  airportId : number;
+  @Input() airportId : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private route : ActivatedRoute,
     private airportService : AirportService
   ){}
 
   ngOnInit(): void {
-
-    this.airportId = +this.route.snapshot.params['airportId'];
 
     this.airportService
       .getGeom(this.airportId)

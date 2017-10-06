@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {RunwayService} from "../runway/runway.service";
-import {ActivatedRoute} from "@angular/router";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {Runway} from "../runway/runway";
 
@@ -49,17 +48,15 @@ export class AirportDetailChildren implements OnInit{
   runways : Runway[];
   status : number;
   indicator = STATUS_INDICATOR;
-  airportId : number;
+  @Input() airportId : number;
 
   constructor(
-    private route : ActivatedRoute,
     private runwayService : RunwayService
   ){
     this.runways = [];
   }
 
   ngOnInit(): void {
-    this.airportId = +this.route.snapshot.params['airportId'];
 
     this.runwayService
       .list(this.airportId)
