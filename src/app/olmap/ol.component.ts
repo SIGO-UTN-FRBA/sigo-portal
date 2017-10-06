@@ -7,6 +7,8 @@ import VectorSource = ol.source.Vector;
 import VectorLayer = ol.layer.Vector;
 import LineString = ol.geom.LineString;
 import Feature = ol.Feature;
+import Style = ol.style.Style;
+import Circle = ol.style.Circle;
 
 
 @Component({
@@ -54,16 +56,26 @@ import Feature = ol.Feature;
     OSM.set('name', 'Openstreetmap');
 
     let airportLayer = new VectorLayer({
-      source: this.airportSource
+      source: this.airportSource,
+      style: new Style({
+        image: new Circle({
+          radius: 7,
+          fill: new ol.style.Fill({color: 'lightgreen'}),
+          stroke: new ol.style.Stroke({ color: 'green', width:2})
+        })
+      })
     });
 
     let runwayLayer = new VectorLayer({
-      source: this.runwaySource
+      source: this.runwaySource,
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'red', width:3})
+      })
     });
 
     this.map = new Map({
       target: 'map',
-      layers: [OSM, airportLayer, runwayLayer],
+      layers: [OSM, airportLayer, runwayLayer], //TODO agregar por demanda
 
       view: new ol.View({
         center: ol.proj.fromLonLat([0,0]),
@@ -104,6 +116,8 @@ import Feature = ol.Feature;
 
   public addRunway (geom : LineString, options :{center: boolean, zoom: number}){
 
+    //TODO dry + pasar una geometry con sus propiedades y no una coordinada.
+
     let projectedLine = [];
 
     for (let coord of geom['coordinates']) {
@@ -129,21 +143,13 @@ import Feature = ol.Feature;
 
   public addAirport (coords: [number, number], options :{center: boolean, zoom: number}) {
 
+    //TODO dry + pasar una geometry con sus propiedades y no una coordinada.
+
     let feature = new ol.Feature({
       geometry: new ol.geom.Point(ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857')),
       name: 'xx',
       id: 'xx',
     });
-
-    let iconStyle = new ol.style.Style({
-      image: new ol.style.Icon(({
-        opacity: 0.75,
-        anchor: [0.5, 1],
-        src: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/16/map-marker-icon.png'
-      }))
-    });
-
-    feature.setStyle(iconStyle);
 
     this.airportSource.addFeature(feature);
 
