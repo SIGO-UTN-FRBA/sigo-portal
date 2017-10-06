@@ -34,23 +34,16 @@ import {OlComponent} from "../olmap/ol.component";
         </div>
 
         <div *ngSwitchCase="indicator.ACTIVE">
-          <form  #geometryForm="ngForm" role="form" class="form container-fluid">
+          <div class="form container-fluid">
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
                 <label for="inputGeoJSON" class="control-label" i18n="@@airport.detail.section.spatial.inputGeoJSON">
                   Point
                 </label>
-                <textarea 
-                  name="inputGeoJSON"
-                  [ngModel]="geomText"
-                  class="form-control"
-                  placeholder='{ "type": "Point", "coordinates": [0.0, 0.0] }'
-                  rows="3"
-                  readonly>
-                </textarea>
+                <p class="form-control-static">{{geomText}}</p>
               </div>
             </div>
-          </form>
+          </div>
           <br>
           <app-map #mapAirport (map)="map"></app-map>
         </div>

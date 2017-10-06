@@ -30,46 +30,29 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           <app-loading-indicator></app-loading-indicator>
         </div>
         
-        <div *ngSwitchCase="indicator.ACTIVE">
-          <form #airportForm="ngForm" role="form" class="form container-fluid">
-            <div class="row">
-              <div class="col-md-12 col-sm-12 form-group">
-                <label for="inputNameFir" class="control-label" i18n="@@airport.detail.section.general.inputNameFir">
-                  Name ICAO
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="inputNameFir"
-                  [ngModel]="airport.nameFIR"
-                  readonly>
-              </div>
+        <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
+          <div class="row">
+            <div class="col-md-12 col-sm-12 form-group">
+              <label for="inputNameFir" class="control-label" i18n="@@airport.detail.section.general.inputNameFir">
+                Name ICAO
+              </label>
+              <p class="form-control-static">{{airport.nameFIR}}</p>
             </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
-                <label for="inputCodeFir" class="control-label" i18n="@@airport.detail.section.general.inputCodeFir">
-                  Code ICAO
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="inputCodeFir"
-                  [ngModel]="airport.codeFIR"
-                  readonly>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <label for="inputCodeIATA" class="control-label" i18n="@@airport.detail.section.general.inputCodeIATA">
-                  Code IATA
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="inputCodeIATA"
-                  [ngModel]="airport.codeIATA"
-                  readonly>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12 form-group">
+              <label for="inputCodeFir" class="control-label" i18n="@@airport.detail.section.general.inputCodeFir">
+                Code ICAO
+              </label>
+              <p class="form-control-static">{{airport.codeFIR}}</p>
             </div>
-          </form>
+            <div class="col-md-6 col-sm-12">
+              <label for="inputCodeIATA" class="control-label" i18n="@@airport.detail.section.general.inputCodeIATA">
+                Code IATA
+              </label>
+              <p class="form-control-static">{{airport.codeIATA}}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

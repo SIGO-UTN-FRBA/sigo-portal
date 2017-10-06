@@ -33,23 +33,16 @@ import Map = ol.Map;
         </div>
 
         <div *ngSwitchCase="indicator.ACTIVE">
-          <form  #geometryForm="ngForm" role="form" class="form container-fluid">
+          <div class="form container-fluid">
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
                 <label for="inputGeoJSON" class="control-label" i18n="@@runway.detail.section.spatial.inputGeoJSON">
                   LineString
                 </label>
-                <textarea
-                  name="inputGeoJSON"
-                  [ngModel]="geomText"
-                  class="form-control"
-                  placeholder='{ "type": "LineString", "coordinates": [ [102.0, 0.0], ... , [104.0, 0.0] ] }'
-                  rows="3"
-                  readonly>
-                </textarea>
+                <p class="form-control-static">{{geomText}}</p>
               </div>
             </div>
-          </form>
+          </div>
           <br>
           <app-map #mapRunway (map)="map"></app-map>
         </div>
