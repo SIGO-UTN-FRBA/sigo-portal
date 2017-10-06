@@ -52,14 +52,14 @@ import {Router} from "@angular/router";
               </div>
             </div>
             <div class="col-md-2">
-              <button
+              <a
                 type="button"
-                (click)="create()"
+                routerLink="/airports/new"
                 class="btn btn-primary btn-lg"
                 i18n-title="@@commons.button.new"
                 title="New">
                 <span class="glyphicon glyphicon-plus"></span>
-              </button>
+              </a>
             </div>
           </div>
         </form>
@@ -114,8 +114,4 @@ export class AirportSearchComponent  {
     if(!this.router.isActive('/airports/search', true))
       this.router.navigate(['/airports/search']);
   };
-
-  create = () => {
-
-  }
 }

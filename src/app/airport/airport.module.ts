@@ -9,6 +9,7 @@ import {AirportService} from "./airport.service";
 import {AirportListComponent} from "./airport-list.component";
 import {AirportDetailComponent} from "./airport-detail.component";
 import {RunwayService} from "../runway/runway.service";
+import {AirportNewComponent} from "./airport-new-component";
 import {AirportDetailGeneralViewComponent} from "./airport-detail-general-view.component";
 import {AirportDetailGeneralEditComponent} from "./airport-detail-general-edit.component";
 import {CommonsModule} from "../commons/commons.module";
@@ -30,6 +31,7 @@ import {OlmapModule} from "../olmap/olmap.module";
   declarations: [
     AirportComponent,
     AirportSearchComponent,
+    AirportNewComponent,
     AirportListComponent,
     AirportDetailComponent,
     AirportDetailGeneralViewComponent,
