@@ -53,7 +53,7 @@ import {OlComponent} from "../olmap/ol.component";
             </div>
           </form>
           <br>
-          <app-map #contentPlaceholder (map)="map"></app-map>
+          <app-map #mapAirport (map)="map"></app-map>
         </div>
         
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
@@ -68,10 +68,9 @@ import {OlComponent} from "../olmap/ol.component";
 export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit{
 
   map: Map;
-
   private olmap: OlComponent;
 
-  @ViewChild('contentPlaceholder') set content(content: OlComponent) {
+  @ViewChild('mapAirport') set content(content: OlComponent) {
     this.olmap = content;
   }
   indicator;
@@ -107,8 +106,6 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
           this.geom = point;
           this.geomText = JSON.stringify(point);
         }
-
-        console.info(this.status);
       });
   }
 
@@ -128,6 +125,6 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
 
   locateGeom(){
 
-    this.olmap.setMarker(this.geom["coordinates"],'airport', 'airport');
+    this.olmap.addAirport(this.geom['coordinates'], {center: true, zoom: 12});
   }
 }

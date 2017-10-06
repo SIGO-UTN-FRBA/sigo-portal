@@ -11,12 +11,18 @@ import {RunwayDetailGeneralViewComponent} from './runway-detail-general-view.com
 import {DirectionService} from '../direction/direction.service';
 import {RunwayDetailGeneralEditComponent} from './runway-detail-general-edit.component';
 import {RunwayDetailGeometryViewComponent} from './runway-detail-geometry-view.component';
+import {OlComponent} from "../olmap/ol.component";
+import {OlService} from "../olmap/ol.service";
+import {OlmapModule} from "../olmap/olmap.module";
+import {CommonsModule} from "../commons/commons.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    RunwayRoutingModule
+    RunwayRoutingModule,
+    CommonsModule,
+    OlmapModule
   ],
   declarations: [
     RunwayComponent,
@@ -29,7 +35,9 @@ import {RunwayDetailGeometryViewComponent} from './runway-detail-geometry-view.c
   providers: [
     RunwayService,
     RunwayCatalogService,
-    DirectionService
+    DirectionService,
+    OlService,
+    OlComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
