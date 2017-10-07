@@ -42,7 +42,7 @@ export class RunwayDetailComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.airportId = this.route.snapshot.params['airportId'];
+    this.airportId = this.route.parent.snapshot.params['airportId'];
     this.runwayId = this.route.snapshot.params['runwayId'];
   }
 }

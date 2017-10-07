@@ -1,4 +1,4 @@
-import {Runway} from "./runway";
+import {Runway} from "../runway/runway";
 
 export class RunwayDirection {
   id: number;
@@ -6,4 +6,5 @@ export class RunwayDirection {
   runway: Runway;
   number: number;
   position: string;
+  name : string;
 }

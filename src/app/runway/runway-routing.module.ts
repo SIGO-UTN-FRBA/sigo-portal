@@ -17,6 +17,10 @@ const runwayRoutes: Routes = [
       {
         path: ':runwayId/detail',
         component: RunwayDetailComponent
+      },
+      {
+        path: ':runwayId/directions',
+        loadChildren: 'app/direction/direction.module#DirectionModule'
       }
     ]
   }
