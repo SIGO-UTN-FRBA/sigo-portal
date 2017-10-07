@@ -16,6 +16,7 @@ import {OlService} from "../olmap/ol.service";
 import {OlmapModule} from "../olmap/olmap.module";
 import {CommonsModule} from "../commons/commons.module";
 import {RunwayDetailGeometryEditComponent} from "./runway-detail-geometry-edit.component";
+import {RunwayDetailChildren} from "./runway-detail-children";
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import {RunwayDetailGeometryEditComponent} from "./runway-detail-geometry-edit.c
     RunwayDetailGeneralViewComponent,
     RunwayDetailGeneralEditComponent,
     RunwayDetailGeometryViewComponent,
-    RunwayDetailGeometryEditComponent
+    RunwayDetailGeometryEditComponent,
+    RunwayDetailChildren
   ],
   providers: [
     RunwayService,

@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
-import {RunwayDirectionPosition} from "./runwayDirectionPosition";
+import {RunwayDirectionPosition} from "../direction/runwayDirectionPosition";
 import {RunwaySurface} from "./runwaySurface";
 import {AppSettings} from "../main/app-settings";
 
