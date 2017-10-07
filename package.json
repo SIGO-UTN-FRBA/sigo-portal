@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --aot --locale es --i18n-format xlf --i18n-file src/locale/messages.es.xlf",
+    "start": "ng serve",
     "build": "ng build --aot --output-path dist/es --locale es --i18n-format xlf --i18n-file src/i18n/messages.es.xlf --missing-translation error",
     "test": "ng test",
     "lint": "ng lint",

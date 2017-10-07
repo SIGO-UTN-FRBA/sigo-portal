@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {RunwayService} from "./runway.service";
-import LineString = ol.geom.LineString;
+import Polygon = ol.geom.Polygon;
 
 @Component({
   selector: 'app-runway-geometry-edit',
@@ -57,7 +57,7 @@ import LineString = ol.geom.LineString;
   `
 })
 
-export class RunwayDetailGeometryEditComponent implements OnInit{
+export class RunwayDetailGeometryEditComponent implements OnInit {
   geomText : string;
   @Input() airportId : number;
   @Input() runwayId : number;
@@ -77,7 +77,7 @@ export class RunwayDetailGeometryEditComponent implements OnInit{
 
   onSubmit(){
 
-    let line : LineString = JSON.parse(this.geomText) as LineString;
+    let line : Polygon = JSON.parse(this.geomText) as Polygon;
 
     this.runwayService
       .saveGeom(this.airportId, this.runwayId, line)

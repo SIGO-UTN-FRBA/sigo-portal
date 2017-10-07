@@ -1,5 +1,3 @@
-import {RunwayDirection} from "../direction/runwayDirection";
-
 export class Runway {
   id: number;
   name: string;

@@ -10,6 +10,8 @@ import Feature = ol.Feature;
 import Style = ol.style.Style;
 import Circle = ol.style.Circle;
 import Layer = ol.layer.Layer;
+import Polygon = ol.geom.Polygon;
+import Point = ol.geom.Point;
 
 
 @Component({
@@ -74,7 +76,8 @@ import Layer = ol.layer.Layer;
     let runwayLayer = new VectorLayer({
       source: runwaySource,
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'red', width:3})
+        stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
+        fill: new ol.style.Fill({color: 'black'})
       })
     });
 
@@ -136,33 +139,29 @@ import Layer = ol.layer.Layer;
     });
   };
 
-  public addRunway (geom : LineString, options : {center: boolean, zoom: number}){
+  public addRunway (geom : Polygon, options : {center: boolean, zoom: number}){
 
     //TODO pasar una geometry con sus propiedades y no una coordinada.
 
-    let projectedLine = [];
-
-    for (let coord of geom['coordinates']) {
-      projectedLine.push(ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857'));
-    }
-
-    let line = new ol.geom.LineString(projectedLine);
+    let tmp = new ol.geom.Polygon(geom['coordinates']);
 
     let feature = new Feature({
       id: 'y',
       name: 'y',
-      geometry: line
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857')
     });
 
     this.addFeature(feature, this.getRunwayLayer(), options);
   }
 
-  public addAirport (coords: [number, number], options :{center: boolean, zoom: number}) {
+  public addAirport (geom: Point, options :{center: boolean, zoom: number}) {
 
     //TODO pasar una geometry con sus propiedades y no una coordinada.
 
+    let tmp = new ol.geom.Point(geom['coordinates']);
+
     let feature = new ol.Feature({
-      geometry: new ol.geom.Point(ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857')),
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
       name: 'xx',
       id: 'xx',
     });

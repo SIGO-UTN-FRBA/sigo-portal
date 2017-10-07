@@ -2,8 +2,8 @@ import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild
 import {OlComponent} from '../olmap/ol.component';
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {RunwayService} from "./runway.service";
-import LineString = ol.geom.LineString;
 import Map = ol.Map;
+import Polygon = ol.geom.Polygon;
 
 @Component({
   selector: 'app-runway-geometry-view',
@@ -37,7 +37,7 @@ import Map = ol.Map;
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
                 <label for="inputGeoJSON" class="control-label" i18n="@@runway.detail.section.spatial.inputGeoJSON">
-                  LineString
+                  Polygon
                 </label>
                 <p class="form-control-static">{{geomText}}</p>
               </div>
@@ -69,7 +69,7 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
-  geom  : LineString;
+  geom  : Polygon;
   geomText : string;
 
   constructor(
@@ -109,6 +109,6 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
 
   locateGeom(){
 
-    this.olmap.addRunway(this.geom as LineString,{center: true, zoom: 15});
+    this.olmap.addRunway(this.geom as Polygon,{center: true, zoom: 15});
   }
 }
