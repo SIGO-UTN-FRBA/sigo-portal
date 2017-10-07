@@ -16,9 +16,10 @@ import {ActivatedRoute} from "@angular/router";
       <app-direction-general-edit *ngIf="edit_general" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-general-edit>
 
       <br>
-
+      
       <app-direction-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-geometry-view>
       <app-direction-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-geometry-edit>
+      
     </div>
   `
 })

@@ -32,7 +32,7 @@ export class DirectionService{
         .then( response => response.json() as RunwayDirection)
   }
 
-  update(airportId : number, runwayId: number, direction : RunwayDirection) : Promise<RunwayDirection> {
+  update(airportId : number, runwayId: number, direction: RunwayDirection) : Promise<RunwayDirection> {
     return this.http
       .put(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${direction.id}`, direction)
       .toPromise()
