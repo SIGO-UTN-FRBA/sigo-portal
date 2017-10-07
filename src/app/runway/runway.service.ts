@@ -3,6 +3,7 @@ import {Http} from "@angular/http";
 import {Runway} from "./runway";
 import {AppSettings} from "../main/app-settings";
 import LineString = ol.geom.LineString;
+import Polygon = ol.geom.Polygon;
 
 @Injectable()
 
@@ -42,18 +43,18 @@ export class RunwayService {
       .catch(this.handleError)
   }
 
-  getGeom(airportId: number, runwayId: number) : Promise<LineString>{
+  getGeom(airportId: number, runwayId: number) : Promise<Polygon>{
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/geometry`)
       .toPromise()
-      .then(response => response.json() as LineString)
+      .then(response => response.json() as Polygon)
   }
 
-  saveGeom(airportId: number, runwayId: number, geom : LineString) : Promise<LineString>{
+  saveGeom(airportId: number, runwayId: number, geom : Polygon) : Promise<Polygon>{
     return this.http
       .post(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/geometry`, geom)
       .toPromise()
-      .then(response => response.json() as LineString)
+      .then(response => response.json() as Polygon)
   }
 
   private handleError(error: any): Promise<any> {

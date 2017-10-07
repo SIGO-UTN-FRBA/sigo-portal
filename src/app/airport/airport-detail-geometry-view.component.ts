@@ -109,6 +109,6 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
 
   locateGeom(){
 
-    this.olmap.addAirport(this.geom['coordinates'], {center: true, zoom: 12});
+    this.olmap.addAirport(this.geom, {center: true, zoom: 12});
   }
 }
