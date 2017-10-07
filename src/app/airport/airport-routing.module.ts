@@ -5,6 +5,7 @@ import {AirportComponent} from "./airport.component";
 import {AirportSearchComponent} from "./airoport-search.component";
 import {AirportListComponent} from "./airport-list.component";
 import {AirportDetailComponent} from "./airport-detail.component";
+import {AirportNewComponent} from "./airport-new-component";
 
 const airportRoutes : Routes = [
   {
@@ -24,6 +25,10 @@ const airportRoutes : Routes = [
       {
         path: ':airportId/detail',
         component: AirportDetailComponent
+      },
+      {
+        path: 'new',
+        component: AirportNewComponent
       },
       {
         path: ':airportId/runways',
