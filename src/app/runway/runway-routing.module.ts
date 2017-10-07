@@ -1,15 +1,15 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {RunwayComponent} from "./runway.component";
-import {CommonsModule} from "../commons/commons.module";
-import {RunwayNewComponent} from "./runway-new-component";
-import {RunwayDetailComponent} from "./runway-detail.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {RunwayComponent} from './runway.component';
+import {CommonsModule} from '../commons/commons.module';
+import {RunwayNewComponent} from './runway-new-component';
+import {RunwayDetailComponent} from './runway-detail.component';
 
-const runwayRoutes : Routes = [
+const runwayRoutes: Routes = [
   {
     path: '',
     component: RunwayComponent,
-    children:[
+    children: [
       {
         path: 'new',
         component: RunwayNewComponent
@@ -23,14 +23,16 @@ const runwayRoutes : Routes = [
 ];
 
 @NgModule({
-  imports:[
+  imports: [
     RouterModule.forChild(runwayRoutes),
     CommonsModule
   ],
   declarations: [],
-  exports:[
+  exports: [
     RouterModule
   ]
 })
 
-export class RunwayRoutingModule{}
+export class RunwayRoutingModule {
+
+}

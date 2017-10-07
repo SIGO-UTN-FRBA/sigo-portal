@@ -7,7 +7,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 
 @Component({
-  selector: 'runway-general-edit',
+  selector: 'app-runway-general-edit',
   template: `
     <div class="container-fluid">
       <div class="panel panel-default">
@@ -19,7 +19,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
         <div [ngSwitch]="status" class="panel-body">
           
           <div *ngSwitchCase="indicator.LOADING">
-            <loading-indicator></loading-indicator>
+            <app-loading-indicator></app-loading-indicator>
           </div>
           
           <form #generalForm *ngSwitchCase="indicator.ACTIVE" role="form" class="form container-fluid" (ngSubmit)="onSubmit()">

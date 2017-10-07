@@ -1,11 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {Airport} from "./airport";
 import {AirportService} from "./airport.service";
-import {ActivatedRoute} from "@angular/router";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
-  selector: 'airport-general-view',
+  selector: 'app-airport-general-view',
   template:`
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -28,49 +27,32 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
       <div [ngSwitch]="status" class="panel-body">
 
         <div *ngSwitchCase="indicator.LOADING">
-          <loading-indicator></loading-indicator>
+          <app-loading-indicator></app-loading-indicator>
         </div>
         
-        <div *ngSwitchCase="indicator.ACTIVE">
-          <form #airportForm="ngForm" role="form" class="form container-fluid">
-            <div class="row">
-              <div class="col-md-12 col-sm-12 form-group">
-                <label for="inputNameFir" class="control-label" i18n="@@airport.detail.section.general.inputNameFir">
-                  Name ICAO
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="inputNameFir"
-                  [ngModel]="airport.nameFIR"
-                  readonly>
-              </div>
+        <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
+          <div class="row">
+            <div class="col-md-12 col-sm-12 form-group">
+              <label for="inputNameFir" class="control-label" i18n="@@airport.detail.section.general.inputNameFir">
+                Name ICAO
+              </label>
+              <p class="form-control-static">{{airport.nameFIR}}</p>
             </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
-                <label for="inputCodeFir" class="control-label" i18n="@@airport.detail.section.general.inputCodeFir">
-                  Code ICAO
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="inputCodeFir"
-                  [ngModel]="airport.codeFIR"
-                  readonly>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <label for="inputCodeIATA" class="control-label" i18n="@@airport.detail.section.general.inputCodeIATA">
-                  Code IATA
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="inputCodeIATA"
-                  [ngModel]="airport.codeIATA"
-                  readonly>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12 form-group">
+              <label for="inputCodeFir" class="control-label" i18n="@@airport.detail.section.general.inputCodeFir">
+                Code ICAO
+              </label>
+              <p class="form-control-static">{{airport.codeFIR}}</p>
             </div>
-          </form>
+            <div class="col-md-6 col-sm-12">
+              <label for="inputCodeIATA" class="control-label" i18n="@@airport.detail.section.general.inputCodeIATA">
+                Code IATA
+              </label>
+              <p class="form-control-static">{{airport.codeIATA}}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -80,14 +62,14 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 export class AirportDetailGeneralViewComponent implements OnInit{
 
   airport : Airport;
+  @Input() airportId : number;
   indicator;
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private airportService : AirportService,
-    private route : ActivatedRoute
+    private airportService : AirportService
   ){
     this.airport = new Airport();
     this.indicator = STATUS_INDICATOR;
@@ -97,10 +79,8 @@ export class AirportDetailGeneralViewComponent implements OnInit{
 
     this.status = this.indicator.LOADING;
 
-    let airportId : number = +this.route.snapshot.params['airportId'];
-
     this.airportService
-      .get(airportId)
+      .get(this.airportId)
       .then(data => {
         this.airport = data;
         this.status = this.indicator.ACTIVE;

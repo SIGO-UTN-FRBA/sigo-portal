@@ -1,19 +1,18 @@
-import {
-  AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {OlComponent} from '../olmap/ol.component';
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {AirportService} from "./airport.service";
-import Point = ol.geom.Point;
+import {RunwayService} from "./runway.service";
+import LineString = ol.geom.LineString;
 import Map = ol.Map;
-import {OlComponent} from "../olmap/ol.component";
 
 @Component({
-  selector: 'app-airport-geometry-view',
+  selector: 'app-runway-geometry-view',
   providers: [ OlComponent ],
   template: `
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="row">
-          <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@airport.detail.section.spatial.title">
+          <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@runway.detail.section.spatial.title">
             Spatial
           </h3>
           <div class="col-md-6 btn-group">
@@ -37,44 +36,44 @@ import {OlComponent} from "../olmap/ol.component";
           <div class="form container-fluid">
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
-                <label for="inputGeoJSON" class="control-label" i18n="@@airport.detail.section.spatial.inputGeoJSON">
-                  Point
+                <label for="inputGeoJSON" class="control-label" i18n="@@runway.detail.section.spatial.inputGeoJSON">
+                  LineString
                 </label>
                 <p class="form-control-static">{{geomText}}</p>
               </div>
             </div>
           </div>
           <br>
-          <app-map #mapAirport (map)="map"></app-map>
+          <app-map #mapRunway (map)="map"></app-map>
         </div>
-        
+
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
-          <app-empty-indicator type="definition" entity="point"></app-empty-indicator>
+          <app-empty-indicator type="definition" entity="geometry"></app-empty-indicator>
         </div>
       </div>
-      
+
     </div>
   `
 })
 
-export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit{
-
-  @Input() airportId : number;
+export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit {
   map: Map;
+  @Input() airportId : number;
+  @Input() runwayId: number;
   private olmap: OlComponent;
 
-  @ViewChild('mapAirport') set content(content: OlComponent) {
+  @ViewChild('mapRunway') set content(content: OlComponent) {
     this.olmap = content;
   }
   indicator;
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
-  geom  : Point;
+  geom  : LineString;
   geomText : string;
 
   constructor(
-    private airportService : AirportService
+    private runwayService : RunwayService
   ){
 
     this.indicator = STATUS_INDICATOR;
@@ -83,24 +82,25 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
   ngOnInit(): void {
     this.status = this.indicator.LOADING;
 
-    this.airportService
-      .getGeom(this.airportId)
-      .then(point => {
+    this.runwayService
+      .getGeom(this.airportId, this.runwayId)
+      .then(line => {
 
-        if(!point){
+        if(!line){
           this.status = this.indicator.EMPTY;
 
         } else {
 
           this.status = this.indicator.ACTIVE;
-          this.geom = point;
-          this.geomText = JSON.stringify(point);
+          this.geom = line;
+          this.geomText = JSON.stringify(line);
         }
       });
   }
 
   ngAfterViewInit(): void {
-      setTimeout(()=> {this.locateGeom(); },500);
+
+    setTimeout(()=> this.locateGeom(),500);
   }
 
   allowEdition() {
@@ -109,6 +109,6 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
 
   locateGeom(){
 
-    this.olmap.addAirport(this.geom['coordinates'], {center: true, zoom: 12});
+    this.olmap.addRunway(this.geom as LineString,{center: true, zoom: 15});
   }
 }

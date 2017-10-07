@@ -1,7 +1,7 @@
 import {Component, Input} from "@angular/core";
 
 @Component({
-  selector: 'empty-indicator',
+  selector: 'app-empty-indicator',
   template: `
     <h3 class="text-center"> No {{entity}} </h3>
   `

@@ -1,82 +1,107 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { OlService } from './ol.service';
 import Map = ol.Map;
-import GeoJSONFeature = ol.format.GeoJSONFeature;
 import GeoJSON = ol.format.GeoJSON;
-import Projection = ol.proj.Projection;
+import Tile = ol.layer.Tile;
+import VectorSource = ol.source.Vector;
+import VectorLayer = ol.layer.Vector;
+import LineString = ol.geom.LineString;
+import Feature = ol.Feature;
+import Style = ol.style.Style;
+import Circle = ol.style.Circle;
+import Layer = ol.layer.Layer;
+
 
 @Component({
   selector: 'app-map',
   providers: [OlService],
   template: `
     <div id="map" class="map"></div>
+    <div id="ol-popup">
+      <div id="ol-popup-content"></div>
+    </div>
   `
 
 }) export class OlComponent implements OnInit {
 
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-  lnglat: [number, number];
-  zoom: number;
-
-  public layers = [];
-  private vectorSource;
+  layers = { airport: null, runway: null};
 
   constructor(private olService: OlService) {
 
-    this.lnglat = [0,0];
-    this.zoom = 7;
-
   }
 
-  createMap = () => {
+  getAirportLayer() : VectorLayer {
+    if(this.layers.airport != null)
+      return this.layers.airport;
 
-    let ol = this.olService.get();
-
-    this.vectorSource = new ol.source.Vector({
+    let airportSource = new VectorSource({
       format: new GeoJSON({
         defaultDataProjection: 'EPSG:3857',
         featureProjection: 'EPSG:3857'
       })
     });
 
-    // define layers
+    let airportLayer = new VectorLayer({
+      source: airportSource,
+      style: new Style({
+        image: new Circle({
+          radius: 7,
+          fill: new ol.style.Fill({color: 'lightgreen'}),
+          stroke: new ol.style.Stroke({ color: 'green', width:2})
+        })
+      })
+    });
 
-    let OSM = new ol.layer.Tile({
+    this.map.addLayer(airportLayer);
+
+    return airportLayer;
+  }
+
+  getRunwayLayer() : VectorLayer {
+
+    if(this.layers.runway != null)
+      return this.layers.runway;
+
+    let runwaySource = new VectorSource({
+      format: new GeoJSON({
+        defaultDataProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857'
+      })
+    });
+
+    let runwayLayer = new VectorLayer({
+      source: runwaySource,
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'red', width:3})
+      })
+    });
+
+    this.map.addLayer(runwayLayer);
+
+    return runwayLayer;
+  }
+
+  getOMS(){
+
+    let OSM = new Tile({
       source: new ol.source.OSM()
     });
 
     OSM.set('name', 'Openstreetmap');
 
-    let boundaries = new ol.layer.Tile({
-      opacity: 0.5,
+    return OSM;
+  }
 
-      source: new ol.source.TileWMS({
-        url: '',
-        params: {
-          'LAYERS': 'fwsys:fwsys_region',
-          'TILED': true,
-          'transparent': 'true',
-          'format': 'image/png'
-        },
-        serverType: 'geoserver',
-        projection: ol.proj.get('EPSG:3857')
-      })
-    });
+  createMap = () => {
 
-    boundaries.set('name', 'Boundaries');
-
-    let vector = new ol.layer.Vector({
-      source: this.vectorSource
-    });
-
-    this.map = new ol.Map({
+    this.map = new Map({
       target: 'map',
-      layers: [OSM, vector, boundaries],
-
+      layers: [this.getOMS()],
       view: new ol.View({
-        center: ol.proj.fromLonLat(this.lnglat),
-        zoom: this.zoom,
+        center: ol.proj.fromLonLat([0,0]),
+        zoom: 7,
         projection: ol.proj.get('EPSG:3857')
       })
     });
@@ -111,61 +136,50 @@ import Projection = ol.proj.Projection;
     });
   };
 
-  addPolygon = (polygon: [[number, number]], name: string, id: string) => {
-    let ol = this.olService.get();
-    let projectedPolygon = [];
+  public addRunway (geom : LineString, options : {center: boolean, zoom: number}){
 
-    for (let poly of polygon) {
-      projectedPolygon.push(ol.proj.transform(poly, 'EPSG:4326', 'EPSG:3857'));
+    //TODO pasar una geometry con sus propiedades y no una coordinada.
+
+    let projectedLine = [];
+
+    for (let coord of geom['coordinates']) {
+      projectedLine.push(ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857'));
     }
 
-    let p = new ol.geom.Polygon([projectedPolygon]);
+    let line = new ol.geom.LineString(projectedLine);
 
-    let featurething = new ol.Feature({
-      name: name,
-      id: id,
-      geometry: p
+    let feature = new Feature({
+      id: 'y',
+      name: 'y',
+      geometry: line
     });
 
-    this.vectorSource.addFeature(featurething);
-
-  };
-
-
-  setMarker(coords: [number, number], name: string, id: string) {
-
-    this.addMarker(coords, name, id);
-
-    this.map.getView().setCenter(ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857'));
+    this.addFeature(feature, this.getRunwayLayer(), options);
   }
 
-  addMarker = (coords: [number, number], name: string, id: string) => {
+  public addAirport (coords: [number, number], options :{center: boolean, zoom: number}) {
 
-    let ol = this.olService.get();
-    let iconFeature = new ol.Feature({
+    //TODO pasar una geometry con sus propiedades y no una coordinada.
+
+    let feature = new ol.Feature({
       geometry: new ol.geom.Point(ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857')),
-      name: name,
-      id: id,
+      name: 'xx',
+      id: 'xx',
     });
 
-    let iconStyle = new ol.style.Style({
-      image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
-        opacity: 0.75,
-        anchor: [0.5, 1],
-        src: 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/16/map-marker-icon.png'
-      }))
-    });
-
-    iconFeature.setStyle(iconStyle);
-
-    this.vectorSource.addFeature(iconFeature);
+    this.addFeature(feature, this.getAirportLayer(), options);
   };
 
-  addLayerSwitcher = (layers: [any]) => {
+  private addFeature(feature : Feature, layer : VectorLayer,  options :{center: boolean, zoom: number}){
 
-    this.layers = layers;
+    layer.getSource().addFeature(feature);
 
-  };
+    if(options.center)
+      this.map.getView().setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
+
+    if(options.zoom)
+      this.map.getView().setZoom(options.zoom);
+  }
 
   toggleLayer = (layer, evt) => {
     evt.target.blur();

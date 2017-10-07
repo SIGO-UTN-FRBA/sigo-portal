@@ -1,11 +1,10 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {RunwayService} from "../runway/runway.service";
-import {ActivatedRoute} from "@angular/router";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {Runway} from "../runway/runway";
 
 @Component({
-  selector: 'airport-children',
+  selector: 'app-airport-children',
   template:`
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -26,7 +25,7 @@ import {Runway} from "../runway/runway";
       </div>
       <div [ngSwitch]="status" class="panel-body">
         <div *ngSwitchCase="indicator.LOADING" class="container-fluid">
-          <loading-indicator></loading-indicator>
+          <app-loading-indicator></app-loading-indicator>
         </div>
 
         <ul *ngSwitchCase="indicator.ACTIVE">
@@ -36,7 +35,7 @@ import {Runway} from "../runway/runway";
         </ul>
 
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
-          <empty-indicator type="relation" entity="runways"></empty-indicator>
+          <app-empty-indicator type="relation" entity="runways"></app-empty-indicator>
         </div>
         
       </div>
@@ -49,17 +48,15 @@ export class AirportDetailChildren implements OnInit{
   runways : Runway[];
   status : number;
   indicator = STATUS_INDICATOR;
-  airportId : number;
+  @Input() airportId : number;
 
   constructor(
-    private route : ActivatedRoute,
     private runwayService : RunwayService
   ){
     this.runways = [];
   }
 
   ngOnInit(): void {
-    this.airportId = +this.route.snapshot.params['airportId'];
 
     this.runwayService
       .list(this.airportId)

@@ -1,10 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {AirportService} from "./airport.service";
 import {Airport} from "./airport";
-import {ActivatedRoute} from "@angular/router";
 
 @Component({
-  selector: 'airport-general-edit',
+  selector: 'app-airport-general-edit',
   template: `
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -90,11 +89,11 @@ import {ActivatedRoute} from "@angular/router";
 export class AirportDetailGeneralEditComponent implements OnInit{
 
   airport : Airport;
+  @Input() airportId : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private route : ActivatedRoute,
     private airportService : AirportService
   ){
     this.airport = new Airport();
@@ -102,10 +101,8 @@ export class AirportDetailGeneralEditComponent implements OnInit{
 
   ngOnInit(): void {
 
-    let airportId : number = +this.route.snapshot.params['airportId'];
-
     this.airportService
-      .get(airportId)
+      .get(this.airportId)
       .then( data => this.airport = data)
   }
 

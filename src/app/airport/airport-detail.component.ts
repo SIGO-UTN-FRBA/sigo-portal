@@ -1,4 +1,5 @@
 import {Component, OnInit} from "@angular/core";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -12,17 +13,17 @@ import {Component, OnInit} from "@angular/core";
     <hr/>
 
     <div class="container-fluid">
-      <airport-general-view *ngIf="!edit_general" [(edit)]="edit_general"></airport-general-view>
-      <airport-general-edit *ngIf="edit_general" [(edit)]="edit_general"></airport-general-edit>
+      <app-airport-general-view *ngIf="!edit_general" [(edit)]="edit_general" [airportId]="airportId"></app-airport-general-view>
+      <app-airport-general-edit *ngIf="edit_general" [(edit)]="edit_general" [airportId]="airportId"></app-airport-general-edit>
       
       <br>
       
-      <airport-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry"></airport-geometry-view>
-      <airport-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry"></airport-geometry-edit>
+      <app-airport-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId"></app-airport-geometry-view>
+      <app-airport-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId"></app-airport-geometry-edit>
       
       <br>
       
-      <airport-children></airport-children>
+      <app-airport-children [airportId]="airportId"></app-airport-children>
     </div>
   `
 })
@@ -32,14 +33,17 @@ export class AirportDetailComponent implements OnInit{
 
   edit_general : boolean;
   edit_geometry : boolean;
+  airportId: number;
 
-  constructor(){
+  constructor(
+    private route: ActivatedRoute
+  ){
     this.edit_general = false;
     this.edit_geometry = false;
   }
 
   ngOnInit() : void {
-
+    this.airportId = this.route.snapshot.params['airportId'];
   }
 
 }

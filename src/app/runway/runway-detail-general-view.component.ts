@@ -6,7 +6,7 @@ import {RunwayCatalogService} from "./runway-catalog.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
-  selector: 'runway-general-view',
+  selector: 'app-runway-general-view',
   template:`
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -29,10 +29,10 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
       <div [ngSwitch]="status" class="panel-body">
         
         <div *ngSwitchCase="indicator.LOADING">
-          <loading-indicator></loading-indicator>
+          <app-loading-indicator></app-loading-indicator>
         </div>
         
-        <form #generalForm="ngForm" *ngSwitchCase="indicator.ACTIVE" role="form" class="form container-fluid">
+        <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
               <label
@@ -41,12 +41,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                 i18n="@@ruwnay.detail.section.general.inputName">
                 Name
               </label>
-              <input
-                type="text"
-                class="form-control"
-                name="inputName"
-                [ngModel]="runway.name"
-                readonly>
+              <p class="form-control-static">{{runway.name}}</p>
             </div>
           </div>
 
@@ -58,18 +53,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                 i18n="@@runway.detail.section.general.inputWidth">
                 Width
               </label>
-              <div class="input-group">
-                <input
-                  type="number"
-                  min="1"
-                  step="0.5"
-                  name="inputWidth"
-                  [ngModel]="runway.width"
-                  class="form-control"
-                  placeholder="00.0"
-                  readonly>
-                <div class="input-group-addon">[m]</div>
-              </div>
+              <p class="form-control-static">{{runway.width}} [m]</p>
             </div>
             <div class="col-md-6 col-sm-12 form-group">
               <label
@@ -78,19 +62,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                 i18n="@@runway.detail.section.general.inputLength">
                 Length
               </label>
-              <div class="input-group">
-                <input
-                  type="number"
-                  min="1"
-                  step="0.1"
-                  name="inputLength"
-                  class="form-control"
-                  [ngModel]="runway.length"
-                  placeholder="0000.0"
-                  readonly
-                  >
-                <div class="input-group-addon">[m]</div>
-              </div>
+              <p class="form-control-static">{{runway.length}} [m]</p>
             </div>
           </div>
           <div class="row">
@@ -101,16 +73,10 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                 i18n="@@ruwnay.detail.section.general.inputSurface">
                 Surface
               </label>
-              <input
-                type="text"
-                name="inputSurface"
-                class="form-control"
-                [value]="surfaces[runway.surfaceId - 1].code + ' - ' + surfaces[runway.surfaceId -1].name "
-                readonly
-              >
+              <p class="form-control-static">{{surfaces[runway.surfaceId - 1].code + ' - ' + surfaces[runway.surfaceId -1].name}}</p>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   `
