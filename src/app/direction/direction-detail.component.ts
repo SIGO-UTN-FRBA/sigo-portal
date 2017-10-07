@@ -4,7 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   template:`
     <h1 i18n="@@direction.detail.title">
-      Airport detail
+      Direction detail
     </h1>
     <p i18n="@@direction.detail.main_description">
       This section allows users to inspect a runway direction.

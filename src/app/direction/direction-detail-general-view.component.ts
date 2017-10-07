@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {DirectionService} from './direction.service';
 import {STATUS_INDICATOR} from '../commons/status-indicator';
 import {RunwayDirection} from './runwayDirection';
+import {RunwayDirectionPosition} from "./runwayDirectionPosition";
+import {DirectionCatalogService} from "./direction-catalog.service";
 
 @Component({
   selector: 'app-direction-general-view',
@@ -44,7 +46,7 @@ import {RunwayDirection} from './runwayDirection';
               <label for="position" class="control-label" i18n="@@direction.detail.section.general.position">
                 Direction position
               </label>
-              <p class="form-control-static">{{direction.position}}</p>
+              <p class="form-control-static"> {{positions[direction.position].id}} - {{positions[direction.position].code}}</p>
             </div>
           </div>
         </div>
@@ -63,10 +65,14 @@ export class DirectionDetailGeneralViewComponent implements OnInit {
   direction: RunwayDirection;
   @Input() edit: boolean;
   @Output() editChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  positions : RunwayDirectionPosition[];
 
   constructor(
-    private directionService: DirectionService
+    private directionService: DirectionService,
+    private catalogService : DirectionCatalogService
   ){
+    this.direction = new RunwayDirection();
+    this.positions = [];
     this.indicator = STATUS_INDICATOR;
   }
 
@@ -74,12 +80,17 @@ export class DirectionDetailGeneralViewComponent implements OnInit {
 
     this.status = this.indicator.LOADING;
 
-    this.directionService
+    let p1 = this.catalogService
+      .listPositions()
+      .then(data => this.positions = data);
+
+    let p2 = this.directionService
       .get(this.airportId, this.runwayId, this.directionId)
-      .then(data => {
-        this.direction = data;
-        this.status = this.indicator.ACTIVE;
-      });
+      .then( data => this.direction = data);
+
+    Promise.all([p1, p2])
+      .then(r => this.status = this.indicator.ACTIVE);
+
   }
 
   allowEdition() {
