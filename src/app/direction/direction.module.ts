@@ -10,6 +10,9 @@ import {OlService} from "../olmap/ol.service";
 import {DirectionDetailGeneralViewComponent} from "./direction-detail-general-view.component";
 import {DirectionComponent} from "./direction.component";
 import {DirectionRoutingModule} from "./direction-routing.module";
+import {DirectionDetailGeneralEditComponent} from "./direction-detail-general-edit-component";
+import {DirectionDetailApproachViewComponent} from "./direction-detail-approach-view-component";
+import {DirectionCatalogService} from "./direction-catalog.service";
 
 @NgModule({
   imports:[
@@ -22,12 +25,15 @@ import {DirectionRoutingModule} from "./direction-routing.module";
   declarations:[
     DirectionComponent,
     DirectionDetailComponent,
-    DirectionDetailGeneralViewComponent
+    DirectionDetailGeneralViewComponent,
+    DirectionDetailGeneralEditComponent,
+    DirectionDetailApproachViewComponent
   ],
   providers:[
     DirectionService,
     OlService,
-    OlComponent
+    OlComponent,
+    DirectionCatalogService
   ],
   schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })
