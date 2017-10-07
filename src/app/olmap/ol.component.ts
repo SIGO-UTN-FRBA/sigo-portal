@@ -9,6 +9,7 @@ import LineString = ol.geom.LineString;
 import Feature = ol.Feature;
 import Style = ol.style.Style;
 import Circle = ol.style.Circle;
+import Layer = ol.layer.Layer;
 
 
 @Component({
@@ -16,47 +17,34 @@ import Circle = ol.style.Circle;
   providers: [OlService],
   template: `
     <div id="map" class="map"></div>
+    <div id="ol-popup">
+      <div id="ol-popup-content"></div>
+    </div>
   `
 
 }) export class OlComponent implements OnInit {
 
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-
-  public layers = [];
-  private airportSource;
-  private runwaySource;
+  layers = { airport: null, runway: null};
 
   constructor(private olService: OlService) {
 
   }
 
-  createMap = () => {
+  getAirportLayer() : VectorLayer {
+    if(this.layers.airport != null)
+      return this.layers.airport;
 
-    this.airportSource = new VectorSource({
+    let airportSource = new VectorSource({
       format: new GeoJSON({
         defaultDataProjection: 'EPSG:3857',
         featureProjection: 'EPSG:3857'
       })
     });
-
-    this.runwaySource = new VectorSource({
-      format: new GeoJSON({
-        defaultDataProjection: 'EPSG:3857',
-        featureProjection: 'EPSG:3857'
-      })
-    });
-
-    // define layers
-
-    let OSM = new Tile({
-      source: new ol.source.OSM()
-    });
-
-    OSM.set('name', 'Openstreetmap');
 
     let airportLayer = new VectorLayer({
-      source: this.airportSource,
+      source: airportSource,
       style: new Style({
         image: new Circle({
           radius: 7,
@@ -66,17 +54,51 @@ import Circle = ol.style.Circle;
       })
     });
 
+    this.map.addLayer(airportLayer);
+
+    return airportLayer;
+  }
+
+  getRunwayLayer() : VectorLayer {
+
+    if(this.layers.runway != null)
+      return this.layers.runway;
+
+    let runwaySource = new VectorSource({
+      format: new GeoJSON({
+        defaultDataProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857'
+      })
+    });
+
     let runwayLayer = new VectorLayer({
-      source: this.runwaySource,
+      source: runwaySource,
       style: new Style({
         stroke: new ol.style.Stroke({color: 'red', width:3})
       })
     });
 
+    this.map.addLayer(runwayLayer);
+
+    return runwayLayer;
+  }
+
+  getOMS(){
+
+    let OSM = new Tile({
+      source: new ol.source.OSM()
+    });
+
+    OSM.set('name', 'Openstreetmap');
+
+    return OSM;
+  }
+
+  createMap = () => {
+
     this.map = new Map({
       target: 'map',
-      layers: [OSM, airportLayer, runwayLayer], //TODO agregar por demanda
-
+      layers: [this.getOMS()],
       view: new ol.View({
         center: ol.proj.fromLonLat([0,0]),
         zoom: 7,
@@ -114,9 +136,9 @@ import Circle = ol.style.Circle;
     });
   };
 
-  public addRunway (geom : LineString, options :{center: boolean, zoom: number}){
+  public addRunway (geom : LineString, options : {center: boolean, zoom: number}){
 
-    //TODO dry + pasar una geometry con sus propiedades y no una coordinada.
+    //TODO pasar una geometry con sus propiedades y no una coordinada.
 
     let projectedLine = [];
 
@@ -132,18 +154,12 @@ import Circle = ol.style.Circle;
       geometry: line
     });
 
-    this.runwaySource.addFeature(feature);
-
-    if(options.center)
-      this.map.getView().setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
-
-    if(options.zoom)
-      this.map.getView().setZoom(options.zoom);
+    this.addFeature(feature, this.getRunwayLayer(), options);
   }
 
   public addAirport (coords: [number, number], options :{center: boolean, zoom: number}) {
 
-    //TODO dry + pasar una geometry con sus propiedades y no una coordinada.
+    //TODO pasar una geometry con sus propiedades y no una coordinada.
 
     let feature = new ol.Feature({
       geometry: new ol.geom.Point(ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857')),
@@ -151,21 +167,19 @@ import Circle = ol.style.Circle;
       id: 'xx',
     });
 
-    this.airportSource.addFeature(feature);
+    this.addFeature(feature, this.getAirportLayer(), options);
+  };
+
+  private addFeature(feature : Feature, layer : VectorLayer,  options :{center: boolean, zoom: number}){
+
+    layer.getSource().addFeature(feature);
 
     if(options.center)
       this.map.getView().setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
 
     if(options.zoom)
       this.map.getView().setZoom(options.zoom);
-  };
-
-
-  addLayerSwitcher = (layers: [any]) => {
-
-    this.layers = layers;
-
-  };
+  }
 
   toggleLayer = (layer, evt) => {
     evt.target.blur();
