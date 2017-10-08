@@ -46,7 +46,7 @@ import {DirectionCatalogService} from "./direction-catalog.service";
               <label for="position" class="control-label" i18n="@@direction.detail.section.general.position">
                 Direction position
               </label>
-              <p class="form-control-static"> {{positions[direction.position].id}} - {{positions[direction.position].code}}</p>
+              <p class="form-control-static">{{positions[direction.position].code}}</p>
             </div>
           </div>
         </div>
