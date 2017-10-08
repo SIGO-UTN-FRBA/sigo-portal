@@ -17,6 +17,14 @@ import {ActivatedRoute} from "@angular/router";
 
       <br>
       
+      <app-direction-approach-view *ngIf="!edit_approach" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-approach-view>
+      
+      <br>
+
+      <app-direction-takeoff-view *ngIf="!edit_takeoff" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-takeoff-view>
+      
+      <br>
+      
       <app-direction-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-geometry-view>
       <app-direction-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-geometry-edit>
       
@@ -28,6 +36,8 @@ export class DirectionDetailComponent implements OnInit{
 
   edit_general : boolean;
   edit_geometry : boolean;
+  edit_approach : boolean;
+  edit_takeoff : boolean;
   airportId : number;
   runwayId : number;
   directionId : number;
@@ -37,6 +47,8 @@ export class DirectionDetailComponent implements OnInit{
   ){
     this.edit_general = false;
     this.edit_geometry = false;
+    this.edit_approach = false;
+    this.edit_takeoff = false;
   }
 
   ngOnInit(): void {

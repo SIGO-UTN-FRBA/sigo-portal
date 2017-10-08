@@ -3,6 +3,8 @@ import {Http} from "@angular/http";
 import {RunwayDirection} from "./runwayDirection";
 import {AppSettings} from "../main/app-settings";
 import Point = ol.geom.Point;
+import {RunwayApproachSection} from "./runwayApproachSection";
+import {RunwayTakeoffSection} from "./runwayTakeoffSection";
 
 @Injectable()
 
@@ -52,5 +54,19 @@ export class DirectionService{
         .post(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/geometry`, geom)
         .toPromise()
         .then(response => response.json() as Point)
+  }
+
+  getApproachSection(airportId : number, runwayId: number, directionId : number) : Promise<RunwayApproachSection> {
+      return this.http
+        .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/approach`)
+        .toPromise()
+        .then(response => response.json() as RunwayApproachSection)
+  }
+
+  getTakeoffSection(airportId : number, runwayId: number, directionId : number) : Promise<RunwayTakeoffSection> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff`)
+      .toPromise()
+      .then(response => response.json() as RunwayTakeoffSection)
   }
 }

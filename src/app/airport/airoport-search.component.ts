@@ -48,6 +48,14 @@ import {Router} from "@angular/router";
                     title="Search">
                       <span class="glyphicon glyphicon-search"></span>
                   </button>
+                  <button
+                    type="button"
+                    (click)="onFilter()"
+                    class="btn btn-lg btn-primary"
+                    i18n-title="@@commons.button.filter"
+                    title="Filter">
+                      <span class="glyphicon glyphicon-filter"></span>
+                  </button>
                 </span>
               </div>
             </div>
@@ -114,4 +122,8 @@ export class AirportSearchComponent  {
     if(!this.router.isActive('/airports/search', true))
       this.router.navigate(['/airports/search']);
   };
+
+  onFilter = () => {
+
+  }
 }
