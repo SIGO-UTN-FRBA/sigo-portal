@@ -14,6 +14,7 @@ import {DirectionDetailGeneralEditComponent} from "./direction-detail-general-ed
 import {DirectionDetailApproachViewComponent} from "./direction-detail-approach-view-component";
 import {DirectionCatalogService} from "./direction-catalog.service";
 import {DirectionDetailGeometryViewComponent} from "./direction-detail-geometry-view.component";
+import {DirectionDetailGeometryEditComponent} from "./direction-detail-geometry-edit.component";
 
 @NgModule({
   imports:[
@@ -29,7 +30,8 @@ import {DirectionDetailGeometryViewComponent} from "./direction-detail-geometry-
     DirectionDetailGeneralViewComponent,
     DirectionDetailGeneralEditComponent,
     DirectionDetailApproachViewComponent,
-    DirectionDetailGeometryViewComponent
+    DirectionDetailGeometryViewComponent,
+    DirectionDetailGeometryEditComponent
   ],
   providers:[
     DirectionService,
