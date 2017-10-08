@@ -5,11 +5,9 @@ import GeoJSON = ol.format.GeoJSON;
 import Tile = ol.layer.Tile;
 import VectorSource = ol.source.Vector;
 import VectorLayer = ol.layer.Vector;
-import LineString = ol.geom.LineString;
 import Feature = ol.Feature;
 import Style = ol.style.Style;
 import Circle = ol.style.Circle;
-import Layer = ol.layer.Layer;
 import Polygon = ol.geom.Polygon;
 import Point = ol.geom.Point;
 
@@ -28,7 +26,7 @@ import Point = ol.geom.Point;
 
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-  layers = { airport: null, runway: null};
+  layers = { airport: null, runway: null, direction: null };
 
   constructor(private olService: OlService) {
 
@@ -84,6 +82,35 @@ import Point = ol.geom.Point;
     this.map.addLayer(runwayLayer);
 
     return runwayLayer;
+  }
+
+  getDirectionLayer() : VectorLayer {
+
+    if(this.layers.direction != null)
+      return this.layers.direction;
+
+    let directionSource = new VectorSource({
+      format: new GeoJSON({
+        defaultDataProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857'
+      })
+    });
+
+    let directionLayer = new VectorLayer({
+      source: directionSource,
+      style: new ol.style.Style({
+        image: new ol.style.RegularShape({
+          fill: new ol.style.Fill({color: 'red'}),
+          stroke: new ol.style.Stroke({color: 'black', width: 1}),
+          points: 5,
+          radius: 7
+        })
+      })
+    });
+
+    this.map.addLayer(directionLayer);
+
+    return directionLayer;
   }
 
   getOMS(){
@@ -168,6 +195,19 @@ import Point = ol.geom.Point;
 
     this.addFeature(feature, this.getAirportLayer(), options);
   };
+
+  public addDirection(geom: Point, options :{center: boolean, zoom: number}) {
+
+    let tmp = new ol.geom.Point(geom['coordinates']);
+
+    let feature = new ol.Feature({
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
+      name: 'xx',
+      id: 'xx',
+    });
+
+    this.addFeature(feature, this.getDirectionLayer(), options);
+  }
 
   private addFeature(feature : Feature, layer : VectorLayer,  options :{center: boolean, zoom: number}){
 

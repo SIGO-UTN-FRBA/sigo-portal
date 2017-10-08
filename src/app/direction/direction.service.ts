@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {RunwayDirection} from "./runwayDirection";
 import {AppSettings} from "../main/app-settings";
+import Point = ol.geom.Point;
 
 @Injectable()
 
@@ -37,5 +38,19 @@ export class DirectionService{
       .put(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${direction.id}`, direction)
       .toPromise()
       .then( response => response.json() as RunwayDirection)
+  }
+
+  getGeom(airportId : number, runwayId: number, directionId : number) : Promise<Point> {
+      return this.http
+        .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/geometry`)
+        .toPromise()
+        .then(response => response.json() as Point)
+  }
+
+  saveGeom(airportId : number, runwayId: number, directionId : number, geom : Point) : Promise<Point> {
+      return this.http
+        .post(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/geometry`, geom)
+        .toPromise()
+        .then(response => response.json() as Point)
   }
 }
