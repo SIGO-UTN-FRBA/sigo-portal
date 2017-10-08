@@ -12,7 +12,7 @@ import {DirectionCatalogService} from "./direction-catalog.service";
       <div class="panel-heading">
         <div class="row">
           <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@direction.detail.section.general.title">
-            General Information
+            General
           </h3>
           <div class="col-md-6 btn-group">
             <a
