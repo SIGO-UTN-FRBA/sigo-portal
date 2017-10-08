@@ -12,7 +12,7 @@ import {DirectionCatalogService} from "./direction-catalog.service";
     <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title" i18n="@@direction.detail.section.general.title">
-        General Information
+        General
       </h3>
     </div>
     <div class="panel-body">
@@ -23,7 +23,7 @@ import {DirectionCatalogService} from "./direction-catalog.service";
               for="number"
               class="control-label"
               i18n="@@direction.detail.section.general.number">
-              Direction number
+              Number
             </label>
             <input
               type="number"
@@ -35,14 +35,12 @@ import {DirectionCatalogService} from "./direction-catalog.service";
               [(ngModel)]="direction.number"
               required>
           </div>
-        </div>
-        <div class="row">
           <div class="col-md-6 col-sm-12 form-group">
             <label
               for="position"
               class="control-label"
               i18n="@@direction.detail.section.general.position">
-              Direction position
+              Position
             </label>
             <select
               name="inputSurface"
@@ -50,7 +48,7 @@ import {DirectionCatalogService} from "./direction-catalog.service";
               class="form-control"
               required>
               <option *ngFor="let position of positions" [value]="position.id">
-                {{position.id}} - {{position.code}}
+                {{position.code}}
               </option>
             </select>
           </div>
