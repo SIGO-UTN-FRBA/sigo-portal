@@ -36,15 +36,13 @@ import {DirectionCatalogService} from "./direction-catalog.service";
           <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
               <label for="number" class="control-label" i18n="@@direction.detail.section.general.number">
-                Direction number
+                Number
               </label>
               <p class="form-control-static">{{direction.number}}</p>
             </div>
-          </div>
-          <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
               <label for="position" class="control-label" i18n="@@direction.detail.section.general.position">
-                Direction position
+                Position
               </label>
               <p class="form-control-static">{{positions[direction.position].code}}</p>
             </div>
