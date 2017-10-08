@@ -17,11 +17,13 @@ import {ActivatedRoute} from "@angular/router";
 
       <br>
       
-      <app-direction-approach-view *ngIf="!edit_approach" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-approach-view>
+      <app-direction-approach-view *ngIf="!edit_approach" [(edit)]="edit_approach" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-approach-view>
+      <app-direction-approach-edit *ngIf="edit_approach" [(edit)]="edit_approach" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-approach-edit>
       
       <br>
 
-      <app-direction-takeoff-view *ngIf="!edit_takeoff" [(edit)]="edit_general" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-takeoff-view>
+      <app-direction-takeoff-view *ngIf="!edit_takeoff" [(edit)]="edit_takeoff" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-takeoff-view>
+      <app-direction-takeoff-edit *ngIf="edit_takeoff" [(edit)]="edit_takeoff" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-takeoff-edit>
       
       <br>
       

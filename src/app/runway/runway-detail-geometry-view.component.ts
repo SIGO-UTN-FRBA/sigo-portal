@@ -100,7 +100,7 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
 
   ngAfterViewInit(): void {
 
-    setTimeout(()=> this.locateGeom(),500);
+    setTimeout(()=> {if (this.geom != null) this.locateGeom()},500);
   }
 
   allowEdition() {

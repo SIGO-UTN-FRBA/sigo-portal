@@ -78,7 +78,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   constructor(
     private directionService : DirectionService
   ){
-
+    this.geom = null;
     this.indicator = STATUS_INDICATOR;
   }
 
@@ -93,16 +93,15 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
           this.status = this.indicator.EMPTY;
 
         } else {
-
-          this.status = this.indicator.ACTIVE;
           this.geom = point;
           this.geomText = JSON.stringify(point);
+          this.status = this.indicator.ACTIVE;
         }
       });
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {this.locateGeom(); },500);
+    setTimeout(()=> {if (this.geom != null) this.locateGeom(); },1500);
   }
 
   allowEdition() {

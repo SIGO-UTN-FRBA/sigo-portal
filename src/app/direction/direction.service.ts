@@ -63,9 +63,23 @@ export class DirectionService{
         .then(response => response.json() as RunwayApproachSection)
   }
 
+  updateApproachSection(airportId: number, runwayId: number, directionId: number, section: RunwayApproachSection) : Promise<RunwayApproachSection> {
+    return this.http
+      .put(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/approach`, section)
+      .toPromise()
+      .then(response => response.json() as RunwayApproachSection)
+  }
+
   getTakeoffSection(airportId : number, runwayId: number, directionId : number) : Promise<RunwayTakeoffSection> {
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff`)
+      .toPromise()
+      .then(response => response.json() as RunwayTakeoffSection)
+  }
+
+  updateTakeoffSection(airportId: number, runwayId: number, directionId: number, section: RunwayTakeoffSection) : Promise<RunwayTakeoffSection> {
+    return this.http
+      .put(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff`, section)
       .toPromise()
       .then(response => response.json() as RunwayTakeoffSection)
   }
