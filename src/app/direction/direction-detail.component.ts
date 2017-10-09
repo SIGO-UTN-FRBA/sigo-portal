@@ -27,6 +27,10 @@ import {ActivatedRoute} from "@angular/router";
       
       <br>
       
+      <app-direction-distances-view [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-distances-view>
+      
+      <br>
+      
       <app-direction-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-geometry-view>
       <app-direction-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId" [directionId]="directionId"></app-direction-geometry-edit>
       

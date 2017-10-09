@@ -5,6 +5,7 @@ import {AppSettings} from "../main/app-settings";
 import Point = ol.geom.Point;
 import {RunwayApproachSection} from "./runwayApproachSection";
 import {RunwayTakeoffSection} from "./runwayTakeoffSection";
+import {RunwayDistance} from "./runwayDistance";
 
 @Injectable()
 
@@ -82,5 +83,12 @@ export class DirectionService{
       .put(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff`, section)
       .toPromise()
       .then(response => response.json() as RunwayTakeoffSection)
+  }
+
+  listDistances(airportId: number, runwayId: number, directionId: number) : Promise<RunwayDistance[]> {
+      return this.http
+        .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/distances`)
+        .toPromise()
+        .then(response => response.json() as RunwayDistance[])
   }
 }
