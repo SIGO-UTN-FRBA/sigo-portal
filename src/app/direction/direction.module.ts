@@ -8,7 +8,6 @@ import {OlmapModule} from "../olmap/olmap.module";
 import {OlComponent} from "../olmap/ol.component";
 import {OlService} from "../olmap/ol.service";
 import {DirectionDetailGeneralViewComponent} from "./direction-detail-general-view.component";
-import {DirectionComponent} from "./direction.component";
 import {DirectionRoutingModule} from "./direction-routing.module";
 import {DirectionDetailGeneralEditComponent} from "./direction-detail-general-edit-component";
 import {DirectionDetailApproachViewComponent} from "./direction-detail-approach-view-component";
@@ -29,7 +28,6 @@ import {DirectionDetailDistancesViewComponent} from "./direction-detail-distance
     DirectionRoutingModule
   ],
   declarations:[
-    DirectionComponent,
     DirectionDetailComponent,
     DirectionDetailGeneralViewComponent,
     DirectionDetailGeneralEditComponent,

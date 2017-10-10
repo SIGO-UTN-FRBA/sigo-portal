@@ -1,26 +1,28 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {RunwayComponent} from './runway.component';
 import {CommonsModule} from '../commons/commons.module';
 import {RunwayNewComponent} from './runway-new-component';
 import {RunwayDetailComponent} from './runway-detail.component';
 
 const runwayRoutes: Routes = [
   {
-    path: '',
-    component: RunwayComponent,
+    path: 'new',
+    component: RunwayNewComponent
+  },
+  {
+    path: ':runwayId',
     children: [
       {
-        path: 'new',
-        component: RunwayNewComponent
-      },
-      {
-        path: ':runwayId/detail',
+        path: 'detail',
         component: RunwayDetailComponent
       },
       {
-        path: ':runwayId/directions',
+        path: 'directions',
         loadChildren: 'app/direction/direction.module#DirectionModule'
+      },
+      {
+        path: '',
+        redirectTo: 'detail'
       }
     ]
   }

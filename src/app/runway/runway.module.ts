@@ -1,5 +1,4 @@
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
-import {RunwayComponent} from './runway.component';
 import {RunwayRoutingModule} from './runway-routing.module';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
@@ -27,7 +26,6 @@ import {RunwayDetailChildren} from "./runway-detail-children";
     OlmapModule
   ],
   declarations: [
-    RunwayComponent,
     RunwayDetailComponent,
     RunwayNewComponent,
     RunwayDetailGeneralViewComponent,

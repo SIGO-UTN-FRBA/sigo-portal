@@ -23,16 +23,25 @@ const airportRoutes : Routes = [
         ]
       },
       {
-        path: ':airportId/detail',
-        component: AirportDetailComponent
-      },
-      {
         path: 'new',
         component: AirportNewComponent
       },
       {
-        path: ':airportId/runways',
-        loadChildren: 'app/runway/runway.module#RunwayModule'
+        path: ':airportId',
+        children: [
+          {
+            path: 'detail',
+            component: AirportDetailComponent
+          },
+          {
+            path: 'runways',
+            loadChildren: 'app/runway/runway.module#RunwayModule'
+          },
+          {
+            path: '',
+            redirectTo: 'search'
+          }
+        ]
       },
       {
         path: '',
