@@ -4,6 +4,8 @@ import {ActivatedRoute} from "@angular/router";
 
 @Component({
   template: `
+    <breadcrumb></breadcrumb>
+    
     <h1 i18n="@@airport.detail.title">
       Airport detail
     </h1>

@@ -28,18 +28,27 @@ const airportRoutes : Routes = [
       },
       {
         path: ':airportId',
+        data:{
+          breadcrumb: { active: true, name: 'airport'}
+        },
         children: [
           {
             path: 'detail',
-            component: AirportDetailComponent
+            component: AirportDetailComponent,
+            data:{
+              breadcrumb: { active: false}
+            },
           },
           {
             path: 'runways',
-            loadChildren: 'app/runway/runway.module#RunwayModule'
+            loadChildren: 'app/runway/runway.module#RunwayModule',
+            data:{
+              breadcrumb: { active: false}
+            },
           },
           {
             path: '',
-            redirectTo: 'search'
+            redirectTo: 'detail'
           }
         ]
       },

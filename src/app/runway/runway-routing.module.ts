@@ -11,14 +11,23 @@ const runwayRoutes: Routes = [
   },
   {
     path: ':runwayId',
+    data:{
+      breadcrumb: { name: 'runway', active: true}
+    },
     children: [
       {
         path: 'detail',
-        component: RunwayDetailComponent
+        component: RunwayDetailComponent,
+        data:{
+          breadcrumb: { name: '', active: false}
+        }
       },
       {
         path: 'directions',
-        loadChildren: 'app/direction/direction.module#DirectionModule'
+        loadChildren: 'app/direction/direction.module#DirectionModule',
+        data:{
+          breadcrumb: { name: '', active: false}
+        }
       },
       {
         path: '',

@@ -2,11 +2,16 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  template: `    
-    <h1>Runway detail
+  template: `
+    <breadcrumb></breadcrumb>
+    
+    <h1 i18n="@@runway.detail.title">
+      Runway detail
       <small></small>
     </h1>
-    <p>This section allows users to inspect a runway.</p>
+    <p i18n="@@runway.detail.main_description">
+      This section allows users to inspect a runway.
+    </p>
     <hr/>
 
     <div class="container-fluid">

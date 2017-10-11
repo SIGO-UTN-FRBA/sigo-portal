@@ -10,6 +10,9 @@ const directionRoutes : Routes = [
   },
   {
     path: ':directionId/detail',
+    data:{
+      breadcrumb: {active: true, name: 'direction'}
+    },
     component: DirectionDetailComponent
   }
 ];

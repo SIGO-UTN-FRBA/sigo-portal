@@ -3,6 +3,8 @@ import {ActivatedRoute} from "@angular/router";
 
 @Component({
   template:`
+    <breadcrumb></breadcrumb>
+    
     <h1 i18n="@@direction.detail.title">
       Direction detail
     </h1>
