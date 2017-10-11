@@ -1,7 +1,9 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, OnDestroy, OnInit} from "@angular/core";
 import {DirectionService} from "./direction.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {RunwayDistance} from "./runwayDistance";
+import {DirectionDistancesService} from "./direction-distances.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'app-direction-distances-view',
@@ -40,7 +42,7 @@ import {RunwayDistance} from "./runwayDistance";
   `
 })
 
-export class DirectionDetailDistancesViewComponent implements OnInit {
+export class DirectionDetailDistancesViewComponent implements OnInit, OnDestroy {
 
   @Input() airportId: number;
   @Input() runwayId: number;
@@ -48,14 +50,24 @@ export class DirectionDetailDistancesViewComponent implements OnInit {
   indicator;
   status: number;
   distances : RunwayDistance[];
+  subscription: Subscription;
 
   constructor(
-    private directionService : DirectionService
+    private directionService : DirectionService,
+    private distancesService : DirectionDistancesService
   ){
     this.indicator = STATUS_INDICATOR;
+
+    this.subscription = this.distancesService.lengthUpdated$.subscribe(
+      value => this.loadDistances()
+    );
   }
 
   ngOnInit(): void {
+    this.loadDistances();
+  }
+
+  loadDistances(){
     this.status = this.indicator.LOADING;
 
     this.directionService
@@ -64,5 +76,10 @@ export class DirectionDetailDistancesViewComponent implements OnInit {
         this.distances = data;
         this.status = this.indicator.ACTIVE;
       })
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.subscription.unsubscribe();
   }
 }

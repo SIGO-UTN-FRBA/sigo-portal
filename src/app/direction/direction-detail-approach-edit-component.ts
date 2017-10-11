@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {RunwayApproachSection} from "./runwayApproachSection";
 import {DirectionService} from "./direction.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {DirectionDistancesService} from "./direction-distances.service";
 
 @Component({
   selector: 'app-direction-approach-edit',
@@ -116,9 +117,11 @@ export class DirectionDetailApproachEditComponent implements OnInit {
   section: RunwayApproachSection;
   @Input() edit: boolean;
   @Output() editChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  private updates : number = 0;
 
   constructor(
-    private directionService: DirectionService
+    private directionService: DirectionService,
+    private distancesService: DirectionDistancesService
   ){
     this.indicator = STATUS_INDICATOR;
   }
@@ -135,7 +138,10 @@ export class DirectionDetailApproachEditComponent implements OnInit {
   onSubmit() : void {
     this.directionService
       .updateApproachSection(this.airportId, this.runwayId, this.directionId, this.section)
-      .then(()=> this.disallowEdition())
+      .then(()=> {
+            this.disallowEdition();
+            this.distancesService.updateLength(this.updates++)
+      })
   }
 
   onCancel(){

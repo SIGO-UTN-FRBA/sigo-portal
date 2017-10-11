@@ -1,7 +1,11 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
+import {DirectionDistancesService} from "./direction-distances.service";
 
 @Component({
+  providers:[
+    DirectionDistancesService
+  ],
   template:`
     <breadcrumb></breadcrumb>
     

@@ -19,6 +19,7 @@ import {DirectionDetailApproachEditComponent} from "./direction-detail-approach-
 import {DirectionDetailTakeoffEditComponent} from "./direction-detail-takeoff-edit.component";
 import {DirectionDetailDistancesViewComponent} from "./direction-detail-distances-view.component";
 
+
 @NgModule({
   imports:[
     CommonModule,
