@@ -12,7 +12,7 @@ export class AirportCatalogService{
 
   listRegulations() : Promise<AirportRegulation[]> {
       return this.http
-        .get(`${AppSettings.API_ENDPOINT}/catalog/airports/regulations`)
+        .get(`${AppSettings.API_ENDPOINT}/catalogs/airports/regulations`)
         .toPromise()
         .then(response => response.json() as AirportRegulation[])
   }

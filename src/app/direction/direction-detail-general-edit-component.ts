@@ -48,7 +48,7 @@ import {DirectionCatalogService} from "./direction-catalog.service";
               class="form-control"
               required>
               <option *ngFor="let position of positions" [value]="position.id">
-                {{position.code}}
+                {{position.description}}
               </option>
             </select>
           </div>

@@ -11,13 +11,9 @@ export class DirectionCatalogService{
 
   listPositions() : Promise<RunwayDirectionPosition[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/catalog/runways/directions/positions`)
+      .get(`${AppSettings.API_ENDPOINT}/catalogs/airports/runways/directions/positions`)
       .toPromise()
-      .then((response) => {
-          let list = response.json() as Array<string>;
-          return list.map((value, index, col)=> new RunwayDirectionPosition(index,value))
-        }
-      )
+      .then((response) => response.json() as RunwayDirectionPosition[])
   }
 
 }
