@@ -18,6 +18,10 @@ const appRoutes: Routes = [
     loadChildren: 'app/airport/airport.module#AirportModule'
   },
   {
+    path: 'objects',
+    loadChildren: 'app/object/object.module#PlacedObjectModule'
+  },
+  {
     path: '**',
     component: PageNotFoundComponent
   }
