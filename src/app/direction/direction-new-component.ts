@@ -32,78 +32,77 @@ import {ApiError} from "../main/apiError";
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
             <app-error-indicator [error]="onInitError"></app-error-indicator>
           </div>
-          <form #generalForm="ngForm" 
-                *ngSwitchCase="indicator.ACTIVE"
-                role="form" 
-                class="form container-fluid" 
-                (ngSubmit)="onSubmit()">
+          <div *ngSwitchCase="indicator.ACTIVE" class="container-fluid">
+            <form id="ngForm"
+                  #generalForm="ngForm"
+                  role="form"
+                  class="form container-fluid"
+                  (ngSubmit)="onSubmit()">
 
-            <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
-            
+              <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+
+              <div class="row">
+                <div class="col-md-6 col-sm-12 form-group">
+                  <label
+                    for="number"
+                    class="control-label"
+                    i18n="@@direction.detail.section.general.number">
+                    Number
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="quantity"
+                    min="1"
+                    max="36"
+                    length="2"
+                    [(ngModel)]="direction.number"
+                    required>
+                </div>
+                <div class="col-md-6 col-sm-12 form-group">
+                  <label
+                    for="position"
+                    class="control-label"
+                    i18n="@@direction.detail.section.general.position">
+                    Position
+                  </label>
+                  <select
+                    name="inputSurface"
+                    [(ngModel)]="direction.position"
+                    class="form-control"
+                    required>
+                    <option *ngFor="let position of positions" [value]="position.id">
+                      {{position.description}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </form>
+            <br>
+            <hr>
             <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
-                <label
-                  for="number"
-                  class="control-label"
-                  i18n="@@direction.detail.section.general.number">
-                  Number
-                </label>
-                <input
-                  type="number"
-                  class="form-control"
-                  name="quantity"
-                  min="1"
-                  max="36"
-                  length="2"
-                  [(ngModel)]="direction.number"
-                  required>
+              <div class="pull-right">
+                <button
+                  type="button"
+                  (click)="onCancel()"
+                  class="btn btn-default"
+                  i18n="@@commons.button.cancel">
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  form="ngForm"
+                  (click)="generalForm.ngSubmit.emit()"
+                  [disabled]="generalForm.form.invalid"
+                  class="btn btn-success"
+                  i18n="@@commons.button.create">
+                  Create
+                </button>
               </div>
-              <div class="col-md-6 col-sm-12 form-group">
-                <label
-                  for="position"
-                  class="control-label"
-                  i18n="@@direction.detail.section.general.position">
-                  Position
-                </label>
-                <select
-                  name="inputSurface"
-                  [(ngModel)]="direction.position"
-                  class="form-control"
-                  required>
-                  <option *ngFor="let position of positions" [value]="position.id">
-                    {{position.description}}
-                  </option>
-                </select>
-              </div>
-            </div>          
-          </form>
+            </div>
+          </div>
         </div>
       </div>
-
-      <br>
-
-      <hr>
-
-      <div class="row">
-        <div class="pull-right">
-          <button
-            type="button"
-            (click)="onCancel()"
-            class="btn btn-default"
-            i18n="@@commons.button.cancel">
-            Cancel
-          </button>
-          <button
-            type="button"
-            (click)="generalForm.ngSubmit.emit()"
-            [disabled]="generalForm.form.invalid"
-            class="btn btn-success"
-            i18n="@@commons.button.create">
-            Create
-          </button>
-        </div>
-      </div>
-
     </div>
     `
 })

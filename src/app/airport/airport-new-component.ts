@@ -32,105 +32,103 @@ import {ApiError} from "../main/apiError";
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
             <app-error-indicator [error]="onInitError"></app-error-indicator>
           </div>
-          <form #airportForm="ngForm" 
-                *ngSwitchCase="indicator.ACTIVE"
-                role="form" class="form container-fluid" 
-                (ngSubmit)="onSubmit()">
+          <div *ngSwitchCase="indicator.ACTIVE" class="container-fluid">
+            <form #airportForm="ngForm"
+                  role="form" class="form"
+                  (ngSubmit)="onSubmit()">
 
-            <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
-            
-            <div class="row">
-              <div class="col-md-12 col-sm-12 form-group">
-                <label
-                  for="inputRegion"
-                  class="control-label"
-                  i18n="@@airport.detail.section.general.region">
-                  Region
-                </label>
-                <select
-                  class="form-control"
-                  name="inputRegion"
-                  [(ngModel)]="airport.regionId"
-                  required>
-                  <option *ngFor="let region of regions" [value]="region.id"> {{region.codeFIR}} - {{region.name}}</option>
-                </select>
+              <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+
+              <div class="row">
+                <div class="col-md-12 col-sm-12 form-group">
+                  <label
+                    for="inputRegion"
+                    class="control-label"
+                    i18n="@@airport.detail.section.general.region">
+                    Region
+                  </label>
+                  <select
+                    class="form-control"
+                    name="inputRegion"
+                    [(ngModel)]="airport.regionId"
+                    required>
+                    <option *ngFor="let region of regions" [value]="region.id"> {{region.codeFIR}} - {{region.name}}</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 col-sm-12 form-group">
-                <label 
-                  for="inputNameFir" 
-                  class="control-label" 
-                  i18n="@@airport.detail.section.general.inputNameFir">
-                  Name ICAO
-                </label>
-                <input
-                  type="text"
-                  maxlength="140"
-                  class="form-control"
-                  name="inputNameFir"
-                  [(ngModel)]="airport.nameFIR"
-                  required>
+              <div class="row">
+                <div class="col-md-12 col-sm-12 form-group">
+                  <label
+                    for="inputNameFir"
+                    class="control-label"
+                    i18n="@@airport.detail.section.general.inputNameFir">
+                    Name ICAO
+                  </label>
+                  <input
+                    type="text"
+                    maxlength="140"
+                    class="form-control"
+                    name="inputNameFir"
+                    [(ngModel)]="airport.nameFIR"
+                    required>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
-                <label 
-                  for="inputCodeFir" 
-                  class="control-label" 
-                  i18n="@@airport.detail.section.general.inputCodeFir">
-                  Code ICAO
-                </label>
-                <input
-                  type="text"
-                  maxlength="4"
-                  minlength="4"
-                  class="form-control"
-                  name="inputCodeFir"
-                  [(ngModel)]="airport.codeFIR"
-                  required>
+              <div class="row">
+                <div class="col-md-6 col-sm-12 form-group">
+                  <label
+                    for="inputCodeFir"
+                    class="control-label"
+                    i18n="@@airport.detail.section.general.inputCodeFir">
+                    Code ICAO
+                  </label>
+                  <input
+                    type="text"
+                    maxlength="4"
+                    minlength="4"
+                    class="form-control"
+                    name="inputCodeFir"
+                    [(ngModel)]="airport.codeFIR"
+                    required>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label
+                    for="inputCodeIATA"
+                    class="control-label"
+                    i18n="@@airport.detail.section.general.inputCodeIATA">
+                    Code IATA
+                  </label>
+                  <input
+                    type="text"
+                    maxlength="3"
+                    minlength="3"
+                    class="form-control"
+                    name="inputCodeIATA"
+                    [(ngModel)]="airport.codeIATA"
+                    required>
+                </div>
               </div>
-              <div class="col-md-6 col-sm-12">
-                <label 
-                  for="inputCodeIATA" 
-                  class="control-label" 
-                  i18n="@@airport.detail.section.general.inputCodeIATA">
-                  Code IATA
-                </label>
-                <input
-                  type="text"
-                  maxlength="3"
-                  minlength="3"
-                  class="form-control"
-                  name="inputCodeIATA"
-                  [(ngModel)]="airport.codeIATA"
-                  required>
+              <div class="row">
+                <div class="col-md-12 col-sm-12 form-group">
+                  <label
+                    for="inputRegulation"
+                    class="control-label"
+                    i18n="@@airport.detail.section.general.inputRegulation">
+                    Regulation
+                  </label>
+                  <select class="form-control"
+                          name="inputRegulation"
+                          [(ngModel)]="airport.regulationId"
+                          required
+                  >
+                    <option *ngFor="let regulation of regulations" [value]="regulation.id">
+                      {{regulation.name}} - {{regulation.description}}
+                    </option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 col-sm-12 form-group">
-                <label
-                  for="inputRegulation"
-                  class="control-label"
-                  i18n="@@airport.detail.section.general.inputRegulation">
-                  Regulation
-                </label>
-                <select class="form-control"
-                        name="inputRegulation"
-                        [(ngModel)]="airport.regulationId"
-                        required
-                >
-                  <option *ngFor="let regulation of regulations" [value]="regulation.id">
-                    {{regulation.name}} - {{regulation.description}}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </form> 
-        </div>
-        <br>
-      </div>  
-        <hr>        
+            </form>
+            <br>
+            <hr>
             <div class="row">
               <div class="pull-right">
                 <button
@@ -149,8 +147,11 @@ import {ApiError} from "../main/apiError";
                   Create
                 </button>
               </div>
-            </div>            
-    
+            </div>
+          </div>
+        </div>
+        <br>
+      </div>
   `
 })
 
