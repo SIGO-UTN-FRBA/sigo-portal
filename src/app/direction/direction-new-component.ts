@@ -4,8 +4,8 @@ import {RunwayDirectionPosition} from "./runwayDirectionPosition";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {DirectionCatalogService} from "./direction-catalog.service";
 import {DirectionService} from "./direction.service";
-import {Runway} from "../runway/runway";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ApiError} from "../main/apiError";
 
 
 @Component({
@@ -25,8 +25,21 @@ import {ActivatedRoute, Router} from "@angular/router";
             General
           </h3>
         </div>
-        <div class="panel-body">
-          <form #generalForm="ngForm" role="form" class="form container-fluid" (ngSubmit)="onSubmit()">
+        <div class="panel-body" [ngSwitch]="status">
+          <div *ngSwitchCase="indicator.LOADING">
+            <app-loading-indicator></app-loading-indicator>
+          </div>
+          <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+            <app-error-indicator [error]="onInitError"></app-error-indicator>
+          </div>
+          <form #generalForm="ngForm" 
+                *ngSwitchCase="indicator.ACTIVE"
+                role="form" 
+                class="form container-fluid" 
+                (ngSubmit)="onSubmit()">
+
+            <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+            
             <div class="row">
               <div class="col-md-6 col-sm-12 form-group">
                 <label
@@ -95,8 +108,7 @@ import {ActivatedRoute, Router} from "@angular/router";
     `
 })
 
-export class DirectionNewComponent implements OnInit{
-
+export class DirectionNewComponent implements OnInit {
 
   status: number;
   indicator;
@@ -104,6 +116,8 @@ export class DirectionNewComponent implements OnInit{
   runwayId : number;
   direction: RunwayDirection;
   positions : RunwayDirectionPosition[];
+  onSubmitError: ApiError;
+  onInitError: ApiError;
 
   constructor(
     private router : Router,
@@ -118,24 +132,37 @@ export class DirectionNewComponent implements OnInit{
 
   ngOnInit(): void {
 
+    this.onInitError = null;
+
     this.airportId = +this.route.parent.parent.snapshot.params['airportId'];
 
     this.runwayId = +this.route.parent.snapshot.params['runwayId'];
 
     this.direction.runwayId = this.runwayId;
 
-    this.status = this.indicator.LOADING;
+    this.status = STATUS_INDICATOR.LOADING;
 
     this.catalogService
       .listPositions()
-      .then(data => this.positions = data);
+      .then(data => {
+        this.positions = data;
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
+      .catch(error =>{
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      });
 
   }
 
   onSubmit(){
+
+    this.onSubmitError = null;
+
     this.directionService
       .save(this.airportId, this.runwayId, this.direction)
-      .then( (data) => this.router.navigate([`/airports/${this.airportId}/runways/${this.runwayId}/directions/${data.id}/detail`]) );
+      .then( (data) => this.router.navigate([`/airports/${this.airportId}/runways/${this.runwayId}/directions/${data.id}/detail`]) )
+      .catch(error => this.onSubmitError = error);
   };
 
   onCancel(){

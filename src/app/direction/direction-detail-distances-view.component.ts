@@ -4,6 +4,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {RunwayDistance} from "./runwayDistance";
 import {DirectionDistancesService} from "./direction-distances.service";
 import {Subscription} from "rxjs/Subscription";
+import {ApiError} from "../main/apiError";
 
 @Component({
   selector: 'app-direction-distances-view',
@@ -19,6 +20,9 @@ import {Subscription} from "rxjs/Subscription";
       <div class="panel-body" [ngSwitch]="status">
         <div *ngSwitchCase="indicator.LOADING">
           <app-loading-indicator></app-loading-indicator>
+        </div>
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
         </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
@@ -51,6 +55,7 @@ export class DirectionDetailDistancesViewComponent implements OnInit, OnDestroy 
   status: number;
   distances : RunwayDistance[];
   subscription: Subscription;
+  onInitError : ApiError;
 
   constructor(
     private directionService : DirectionService,
@@ -68,13 +73,20 @@ export class DirectionDetailDistancesViewComponent implements OnInit, OnDestroy 
   }
 
   loadDistances(){
-    this.status = this.indicator.LOADING;
+
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
 
     this.directionService
       .listDistances(this.airportId, this.runwayId, this.directionId)
       .then(data => {
         this.distances = data;
-        this.status = this.indicator.ACTIVE;
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
       })
   }
 

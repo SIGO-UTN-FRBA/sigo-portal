@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import Point = ol.geom.Point;
 import {DirectionService} from "./direction.service";
+import {ApiError} from "../main/apiError";
+import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
   selector: 'app-direction-geometry-edit',
@@ -15,8 +17,21 @@ import {DirectionService} from "./direction.service";
         </div>
       </div>
 
-      <div class="panel-body">
-        <form  #geometryForm="ngForm" role="form" class="form container-fluid" (ngSubmit)="onSubmit()">
+      <div class="panel-body" [ngSwitch]="status">
+        <div *ngSwitchCase="indicator.LOADING">
+          <app-loading-indicator></app-loading-indicator>
+        </div>
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
+        <form  #geometryForm="ngForm"
+               *ngSwitchCase="indicator.ACTIVE"
+               role="form" 
+               class="form container-fluid" 
+               (ngSubmit)="onSubmit()">
+
+          <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+          
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
               <label for="inputGeoJSON" class="control-label" i18n="@@direction.detail.section.spatial.inputGeoJSON">
@@ -64,25 +79,45 @@ export class DirectionDetailGeometryEditComponent implements OnInit{
   @Input() directionId: number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
+  status: number;
+  onSubmitError: ApiError;
+  onInitError: ApiError;
+  indicator;
 
   constructor(
     private directionService : DirectionService
-  ){}
+  ){
+    this.indicator = STATUS_INDICATOR;
+  }
 
   ngOnInit(): void {
 
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
+
     this.directionService
       .getGeom(this.airportId, this.runwayId, this.directionId)
-      .then( data => this.geomText = JSON.stringify(data))
+      .then( data => {
+        this.geomText = JSON.stringify(data);
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
+      .catch( error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      })
   }
 
   onSubmit(){
+
+    this.onSubmitError = null;
 
     let point : Point = JSON.parse(this.geomText) as Point;
 
     this.directionService
       .saveGeom(this.airportId, this.runwayId, this.directionId, point)
-      .then( () => this.disallowEdition() );
+      .then( () => this.disallowEdition() )
+      .catch(error => this.onSubmitError = error);
   };
 
   onCancel(){

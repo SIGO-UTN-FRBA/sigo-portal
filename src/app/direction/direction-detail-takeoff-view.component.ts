@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {DirectionService} from "./direction.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {RunwayTakeoffSection} from "./runwayTakeoffSection";
+import {ApiError} from "../main/apiError";
 
 
 @Component({
@@ -26,11 +27,12 @@ import {RunwayTakeoffSection} from "./runwayTakeoffSection";
       </div>
       
       <div class="panel-body" [ngSwitch]="status">
-
         <div *ngSwitchCase="indicator.LOADING">
           <app-loading-indicator></app-loading-indicator>
         </div>
-
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
@@ -78,6 +80,7 @@ export class DirectionDetailTakeoffViewComponent implements OnInit {
   section: RunwayTakeoffSection;
   @Input() edit: boolean;
   @Output() editChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  onInitError: ApiError;
 
   constructor(
     private directionService: DirectionService
@@ -87,13 +90,19 @@ export class DirectionDetailTakeoffViewComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.status = this.indicator.LOADING;
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
 
     this.directionService
       .getTakeoffSection(this.airportId, this.runwayId, this.directionId)
       .then(data => {
         this.section = data;
-        this.status = this.indicator.ACTIVE;
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
       });
   }
 

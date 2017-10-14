@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from "@angular/core";
 import {RunwayService} from "../runway/runway.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {Runway} from "../runway/runway";
+import {ApiError} from "../main/apiError";
 
 @Component({
   selector: 'app-airport-children',
@@ -37,6 +38,10 @@ import {Runway} from "../runway/runway";
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
           <app-empty-indicator type="relation" entity="runways"></app-empty-indicator>
         </div>
+
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
         
       </div>
     </div>
@@ -49,6 +54,7 @@ export class AirportDetailChildren implements OnInit{
   status : number;
   indicator = STATUS_INDICATOR;
   @Input() airportId : number;
+  onInitError : ApiError;
 
   constructor(
     private runwayService : RunwayService
@@ -58,13 +64,21 @@ export class AirportDetailChildren implements OnInit{
 
   ngOnInit(): void {
 
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
+
     this.runwayService
       .list(this.airportId)
       .then( data => {
 
         this.runways = data;
 
-        (data.length == 0 )? this.status = this.indicator.EMPTY : this.status = this.indicator.ACTIVE;
+        (data.length == 0)? this.status = STATUS_INDICATOR.EMPTY : this.status = STATUS_INDICATOR.ACTIVE;
       })
+      .catch( error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      });
   }
 }

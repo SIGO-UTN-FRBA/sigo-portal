@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {RunwayService} from "./runway.service";
 import Polygon = ol.geom.Polygon;
+import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {ApiError} from "../main/apiError";
 
 @Component({
   selector: 'app-runway-geometry-edit',
@@ -15,8 +17,22 @@ import Polygon = ol.geom.Polygon;
         </div>
       </div>
 
-      <div class="panel-body">
-        <form  #geometryForm="ngForm" role="form" class="form container-fluid" (ngSubmit)="onSubmit()">
+      <div class="panel-body" [ngSwitch]="status">
+
+        <div *ngSwitchCase="indicator.LOADING">
+          <app-loading-indicator></app-loading-indicator>
+        </div>
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
+        <form  #geometryForm="ngForm"
+               *ngSwitchCase="indicator.ACTIVE"
+               role="form" 
+               class="form container-fluid" 
+               (ngSubmit)="onSubmit()">
+
+          <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+          
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
               <label for="inputGeoJSON" class="control-label" i18n="@@runway.detail.section.spatial.inputGeoJSON">
@@ -63,25 +79,45 @@ export class RunwayDetailGeometryEditComponent implements OnInit {
   @Input() runwayId : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
+  indicator;
+  status: number;
+  onInitError: ApiError;
+  onSubmitError : ApiError;
 
   constructor(
     private runwayService : RunwayService
-  ){}
+  ){
+    this.indicator = STATUS_INDICATOR;
+  }
 
   ngOnInit(): void {
 
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
+
     this.runwayService
       .getGeom(this.airportId, this.runwayId)
-      .then( data => this.geomText = JSON.stringify(data))
+      .then( data => {
+        this.geomText = JSON.stringify(data);
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      });
   }
 
   onSubmit(){
+
+    this.onSubmitError = null;
 
     let line : Polygon = JSON.parse(this.geomText) as Polygon;
 
     this.runwayService
       .saveGeom(this.airportId, this.runwayId, line)
-      .then( () => this.disallowEdition() );
+      .then( () => this.disallowEdition() )
+      .catch(error => this.onSubmitError = error);
   };
 
   onCancel(){

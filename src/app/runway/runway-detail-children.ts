@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from "@angular/core";
 import {DirectionService} from "../direction/direction.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {RunwayDirection} from "../direction/runwayDirection";
+import {ApiError} from "../main/apiError";
 
 
 @Component({
@@ -28,30 +29,31 @@ import {RunwayDirection} from "../direction/runwayDirection";
         <div *ngSwitchCase="indicator.LOADING" class="container-fluid">
           <app-loading-indicator></app-loading-indicator>
         </div>
-
+        <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
+          <app-empty-indicator type="relation" entity="directions"></app-empty-indicator>
+        </div>
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
         <ul *ngSwitchCase="indicator.ACTIVE">
           <li *ngFor="let direction of directions">
             <a routerLink="/airports/{{airportId}}/runways/{{runwayId}}/directions/{{direction.id}}/detail">{{direction.name}}</a>
           </li>
         </ul>
-        
-        <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
-          <app-empty-indicator type="relation" entity="directions"></app-empty-indicator>
-        </div>
-        
       </div>
     </div>
   `
 })
 
 
-export class RunwayDetailChildren implements OnInit{
+export class RunwayDetailChildren implements OnInit {
 
   @Input() airportId : number;
   @Input() runwayId : number;
   directions : RunwayDirection[];
   status : number;
   indicator;
+  onInitError : ApiError;
 
 
   constructor(
@@ -62,7 +64,9 @@ export class RunwayDetailChildren implements OnInit{
 
   ngOnInit(): void {
 
-    this.status = this.indicator.LOADING;
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
 
     this.directionService
       .list(this.airportId, this.runwayId)
@@ -71,9 +75,13 @@ export class RunwayDetailChildren implements OnInit{
         this.directions = data;
 
         if(data.length != 0)
-          this.status = this.indicator.ACTIVE;
+          this.status = STATUS_INDICATOR.ACTIVE;
         else
-          this.status = this.indicator.EMPTY;
+          this.status = STATUS_INDICATOR.EMPTY;
+      })
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
       })
   }
 

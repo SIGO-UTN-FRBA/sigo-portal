@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {AirportService} from "./airport.service";
 import {Airport} from "./airport";
+import {ApiError} from "../main/apiError";
+import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
   selector: 'app-airport-general-edit',
@@ -11,8 +13,22 @@ import {Airport} from "./airport";
             General
           </h3>
         </div>
-        <div class="panel-body">
-          <form #airportForm="ngForm" role="form" class="form container-fluid" (ngSubmit)="onSubmit()">
+        
+        <div class="panel-body" [ngSwitch]="status">
+          <div *ngSwitchCase="indicator.LOADING">
+            <app-loading-indicator></app-loading-indicator>
+          </div>
+          <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+            <app-error-indicator [error]="onInitError"></app-error-indicator>
+          </div>
+          <form #airportForm="ngForm"
+                *ngSwitchCase="indicator.ACTIVE"
+                role="form" 
+                class="form container-fluid" 
+                (ngSubmit)="onSubmit()">
+
+            <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+            
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
                 <label 
@@ -87,29 +103,48 @@ import {Airport} from "./airport";
 
 
 export class AirportDetailGeneralEditComponent implements OnInit{
-
+  status: number;
   airport : Airport;
   @Input() airportId : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
+  onInitError : ApiError;
+  onSubmitError : ApiError;
+  indicator;
 
   constructor(
     private airportService : AirportService
   ){
     this.airport = new Airport();
+    this.indicator = STATUS_INDICATOR;
   }
 
   ngOnInit(): void {
 
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
+
     this.airportService
       .get(this.airportId)
-      .then( data => this.airport = data)
+      .then( data => {
+        this.airport = data;
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
+      .catch(error =>{
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      })
   }
 
   onSubmit(){
+
+    this.onSubmitError = null;
+
     this.airportService
       .update(this.airport)
-      .then( () => this.disallowEdition() );
+      .then( () => this.disallowEdition() )
+      .catch(error => this.onSubmitError = error);
   };
 
   onCancel(){

@@ -3,6 +3,7 @@ import {RunwayApproachSection} from "./runwayApproachSection";
 import {DirectionService} from "./direction.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {DirectionDistancesService} from "./direction-distances.service";
+import {ApiError} from "../main/apiError";
 
 @Component({
   selector: 'app-direction-approach-edit',
@@ -20,12 +21,17 @@ import {DirectionDistancesService} from "./direction-distances.service";
         <div *ngSwitchCase="indicator.LOADING">
           <app-loading-indicator></app-loading-indicator>
         </div>
-        
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
         <form #approachSectionForm="ngForm" 
               *ngSwitchCase="indicator.ACTIVE" 
               role="form" 
               class="form container-fluid" 
               (ngSubmit)="onSubmit()">
+
+          <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+          
           <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
               <label class="control-label"
@@ -118,6 +124,8 @@ export class DirectionDetailApproachEditComponent implements OnInit {
   @Input() edit: boolean;
   @Output() editChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   private updates : number = 0;
+  onInitError: ApiError;
+  onSubmitError: ApiError;
 
   constructor(
     private directionService: DirectionService,
@@ -127,21 +135,34 @@ export class DirectionDetailApproachEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
+
     this.directionService
       .getApproachSection(this.airportId, this.runwayId, this.directionId)
       .then(data => {
         this.section = data;
-        this.status = this.indicator.ACTIVE;
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
       });
   }
 
   onSubmit() : void {
+
+    this.onSubmitError = null;
+
     this.directionService
       .updateApproachSection(this.airportId, this.runwayId, this.directionId, this.section)
       .then(()=> {
             this.disallowEdition();
             this.distancesService.updateLength(this.updates++)
       })
+      .catch(error => this.onSubmitError = error);
   }
 
   onCancel(){

@@ -4,6 +4,7 @@ import {Runway} from "./runway";
 import {RunwaySurface} from "./runwaySurface";
 import {RunwayCatalogService} from "./runway-catalog.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {ApiError} from "../main/apiError";
 
 @Component({
   selector: 'app-runway-general-view',
@@ -31,7 +32,9 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
         <div *ngSwitchCase="indicator.LOADING">
           <app-loading-indicator></app-loading-indicator>
         </div>
-        
+        <div *ngSwitchCase="indicator.ERROR">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
@@ -91,6 +94,7 @@ export class RunwayDetailGeneralViewComponent implements OnInit{
   surfaces : RunwaySurface[];
   indicator;
   status : number;
+  onInitError : ApiError;
 
   constructor(
     private runwayService : RunwayService,
@@ -103,20 +107,28 @@ export class RunwayDetailGeneralViewComponent implements OnInit{
 
   ngOnInit(): void {
 
+    this.onInitError = null;
+
     this.status = this.indicator.LOADING;
 
     let p1 = this.catalogService
       .listSurfaces()
-      .then(data => this.surfaces = data);
+      .then(data => this.surfaces = data)
+      .catch(error => Promise.reject(error));
 
     let p2 = this.runwayService
       .get(this.airportId, this.runwayId)
       .then(data => {
         this.runway = data;
-      });
+      })
+      .catch(error => Promise.reject(error));
 
     Promise.all([p1, p2])
-      .then(r => this.status = this.indicator.ACTIVE);
+      .then(r => this.status = this.indicator.ACTIVE)
+      .catch(error => {
+        this.onInitError = error;
+        this.status = this.indicator.ERROR;
+      });
   }
 
   allowEdition(){

@@ -4,6 +4,8 @@ import {RunwayService} from "./runway.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {RunwaySurface} from "./runwaySurface";
 import {RunwayCatalogService} from "./runway-catalog.service";
+import {ApiError} from "../main/apiError";
+import {STATUS_INDICATOR} from "../commons/status-indicator";
 
 @Component({
   template: `
@@ -22,8 +24,18 @@ import {RunwayCatalogService} from "./runway-catalog.service";
             General
           </h3>
         </div>
-        <div class="panel-body">
-          <form #generalForm="ngForm" role="form" class="form container-fluid" (ngSubmit)="onSubmit()">
+        <div class="panel-body" [ngSwitch]="status">
+          <div *ngSwitchCase="indicator.LOADING">
+            <app-loading-indicator></app-loading-indicator>
+          </div>
+          <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+            <app-error-indicator [error]="onInitError"></app-error-indicator>
+          </div>
+          <form #generalForm="ngForm" 
+                *ngSwitchCase="indicator.ACTIVE"
+                role="form" 
+                class="form container-fluid" 
+                (ngSubmit)="onSubmit()">
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
                 <label
@@ -138,6 +150,10 @@ export class RunwayNewComponent implements OnInit{
 
   runway : Runway;
   surfaces : RunwaySurface[];
+  onSubmitError: ApiError;
+  onInitError: ApiError;
+  status: number;
+  indicator;
 
   constructor(
     private router : Router,
@@ -147,9 +163,12 @@ export class RunwayNewComponent implements OnInit{
   ){
     this.runway = new Runway();
     this.surfaces = [];
+    this.indicator = STATUS_INDICATOR;
   }
 
   ngOnInit(): void {
+
+    this.onInitError = null;
 
     this.runway.airportId = +this.route.parent.snapshot.params['airportId'];
 
@@ -157,12 +176,20 @@ export class RunwayNewComponent implements OnInit{
 
     this.catalogService
       .listSurfaces()
-      .then(data => this.surfaces = data);
+      .then(data => this.surfaces = data)
+      .catch( error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      });
   }
 
   onSubmit(){
+
+    this.onSubmitError = null;
+
     this.runwayService.save(this.runway.airportId, this.runway)
-      .then(data => this.router.navigate([`/airports/${this.runway.airportId}/runways/${data.id}/detail`]));
+      .then(data => this.router.navigate([`/airports/${this.runway.airportId}/runways/${data.id}/detail`]))
+      .catch(error => this.onSubmitError = error);
   }
 
   onCancel(){

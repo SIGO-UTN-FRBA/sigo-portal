@@ -4,6 +4,7 @@ import {EmptyIndicatorComponent} from "./empty-indicator.component";
 import {BreadcrumbComponent} from "./breadcrumb.component";
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
+import {ErrorIndicatorComponent} from "./error-indicator.component";
 
 @NgModule({
   imports:[
@@ -13,12 +14,14 @@ import {RouterModule} from "@angular/router";
   declarations:[
     LoadingIndicatorComponent,
     EmptyIndicatorComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    ErrorIndicatorComponent
   ],
   exports: [
     LoadingIndicatorComponent,
     EmptyIndicatorComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    ErrorIndicatorComponent
   ]
 })
 

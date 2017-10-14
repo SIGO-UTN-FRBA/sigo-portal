@@ -6,6 +6,8 @@ import {AirportCatalogService} from "./airport-catalog.service";
 import {AirportRegulation} from "./airportRegulation";
 import {Region} from "../region/region";
 import {RegionService} from "../region/region.service";
+import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {ApiError} from "../main/apiError";
 
 @Component({
   template: `
@@ -23,8 +25,20 @@ import {RegionService} from "../region/region.service";
             General
           </h3>
         </div>
-        <div class="panel-body">
-          <form #airportForm="ngForm" role="form" class="form container-fluid" (ngSubmit)="onSubmit()">
+        <div class="panel-body" [ngSwitch]="status">
+          <div *ngSwitchCase="indicator.LOADING">
+            <app-loading-indicator></app-loading-indicator>
+          </div>
+          <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+            <app-error-indicator [error]="onInitError"></app-error-indicator>
+          </div>
+          <form #airportForm="ngForm" 
+                *ngSwitchCase="indicator.ACTIVE"
+                role="form" class="form container-fluid" 
+                (ngSubmit)="onSubmit()">
+
+            <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+            
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
                 <label
@@ -148,6 +162,10 @@ export class AirportNewComponent implements OnInit{
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
   regulations: AirportRegulation[];
   regions : Region[];
+  status: number;
+  onInitError: ApiError;
+  onSubmitError: ApiError;
+  indicator;
 
   constructor(
     private router : Router,
@@ -156,23 +174,39 @@ export class AirportNewComponent implements OnInit{
     private regionService : RegionService
   ){
     this.airport = new Airport();
+    this.indicator = STATUS_INDICATOR;
   }
 
   ngOnInit(): void {
 
-    this.catalogService
-      .listRegulations()
-      .then(data => this.regulations = data);
+    this.status = STATUS_INDICATOR.LOADING;
 
-    this.regionService
+    let p1 = this.catalogService
+      .listRegulations()
+      .then(data => this.regulations = data)
+      .catch(error => Promise.reject(error));
+
+    let p2 = this.regionService
       .list()
       .then(data => this.regions = data)
+      .catch(error => Promise.reject(error));
+
+    Promise.all([p1,p2])
+      .then(() => this.status = STATUS_INDICATOR.ACTIVE)
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      })
   }
 
   onSubmit(){
+
+    this.onSubmitError = null;
+
     this.airportService
-        .save(this.airport)
-        .then( (data) => this.router.navigate([`/airports/${data.id}/detail`]) );
+      .save(this.airport)
+      .then( (data) => this.router.navigate([`/airports/${data.id}/detail`]) )
+      .catch(error => this.onSubmitError = error);
   };
 
   onCancel(){

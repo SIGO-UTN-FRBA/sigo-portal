@@ -4,12 +4,15 @@ import {Airport} from "./airport";
 import "rxjs/add/operator/toPromise";
 import {AppSettings} from "../main/app-settings";
 import Point = ol.geom.Point;
+import {ApiService} from "../main/api.service";
 
 
 @Injectable()
-export class AirportService {
+export class AirportService extends ApiService {
 
-  constructor(private http: Http) {}
+  constructor (protected http : Http){
+    super(http);
+  }
 
   search(property: string, value : string) : Promise<Airport[]>{
     return this.http
@@ -57,10 +60,5 @@ export class AirportService {
       .toPromise()
       .then(response => response.json() as Point)
       .catch(this.handleError)
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
   }
 }

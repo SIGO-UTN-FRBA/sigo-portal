@@ -4,6 +4,7 @@ import {RunwayService} from "./runway.service";
 import {RunwaySurface} from "./runwaySurface";
 import {RunwayCatalogService} from "./runway-catalog.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {ApiError} from "../main/apiError";
 
 
 @Component({
@@ -17,12 +18,20 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           </h3>
         </div>
         <div [ngSwitch]="status" class="panel-body">
-          
           <div *ngSwitchCase="indicator.LOADING">
             <app-loading-indicator></app-loading-indicator>
           </div>
-          
-          <form #generalForm *ngSwitchCase="indicator.ACTIVE" role="form" class="form container-fluid" (ngSubmit)="onSubmit()">
+          <div *ngSwitchCase="indicator.ERROR">
+            <app-error-indicator [error]="onInitError"></app-error-indicator>
+          </div>
+          <form #generalForm 
+                *ngSwitchCase="indicator.ACTIVE" 
+                role="form" 
+                class="form container-fluid" 
+                (ngSubmit)="onSubmit()">
+            
+            <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+            
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
                 <label
@@ -138,6 +147,8 @@ export class RunwayDetailGeneralEditComponent implements OnInit{
   @Output() editChange : EventEmitter<boolean> = new EventEmitter<boolean>();
   runway : Runway;
   surfaces : RunwaySurface[];
+  onInitError : ApiError;
+  onSubmitError : ApiError;
 
   constructor(
     private runwayService : RunwayService,
@@ -150,24 +161,33 @@ export class RunwayDetailGeneralEditComponent implements OnInit{
 
   ngOnInit(): void {
 
+    this.onInitError = null;
+
     this.status = this.indicator.LOADING;
 
     let p1 = this.catalogService
       .listSurfaces()
-      .then(data => this.surfaces = data);
+      .then(data => this.surfaces = data)
+      .catch(error => Promise.reject(error));
 
     let p2 = this.runwayService
       .get(this.airportId, this.runwayId)
-      .then(data => this.runway = data);
+      .then(data => this.runway = data)
+      .catch(error => Promise.reject(error));
 
     Promise.all([p1, p2])
-      .then(r => this.status = this.indicator.ACTIVE);
+      .then(r => this.status = this.indicator.ACTIVE)
+      .catch(error => this.onInitError = error);
   }
 
   onSubmit(){
+
+    this.onSubmitError = null;
+
     this.runwayService
       .update(this.airportId, this.runway)
       .then(data => this.editChange.emit(false))
+      .catch(error => this.onSubmitError = error);
   }
 
   onCancel(){

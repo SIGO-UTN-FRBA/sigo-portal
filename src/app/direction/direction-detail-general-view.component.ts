@@ -4,6 +4,7 @@ import {STATUS_INDICATOR} from '../commons/status-indicator';
 import {RunwayDirection} from './runwayDirection';
 import {RunwayDirectionPosition} from "./runwayDirectionPosition";
 import {DirectionCatalogService} from "./direction-catalog.service";
+import {ApiError} from "../main/apiError";
 
 @Component({
   selector: 'app-direction-general-view',
@@ -27,11 +28,12 @@ import {DirectionCatalogService} from "./direction-catalog.service";
       </div>
 
       <div [ngSwitch]="status" class="panel-body">
-  
         <div *ngSwitchCase="indicator.LOADING">
           <app-loading-indicator></app-loading-indicator>
         </div>
-  
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
@@ -64,6 +66,7 @@ export class DirectionDetailGeneralViewComponent implements OnInit {
   @Input() edit: boolean;
   @Output() editChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   positions : RunwayDirectionPosition[];
+  onInitError : ApiError;
 
   constructor(
     private directionService: DirectionService,
@@ -76,18 +79,26 @@ export class DirectionDetailGeneralViewComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.status = this.indicator.LOADING;
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
 
     let p1 = this.catalogService
       .listPositions()
-      .then(data => this.positions = data);
+      .then(data => this.positions = data)
+      .catch(error => Promise.reject(error));
 
     let p2 = this.directionService
       .get(this.airportId, this.runwayId, this.directionId)
-      .then( data => this.direction = data);
+      .then( data => this.direction = data)
+      .catch(error => Promise.reject(error));
 
     Promise.all([p1, p2])
-      .then(r => this.status = this.indicator.ACTIVE);
+      .then(r => this.status = STATUS_INDICATOR.ACTIVE)
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      })
 
   }
 

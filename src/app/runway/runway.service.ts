@@ -1,15 +1,17 @@
 import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
 import {Runway} from "./runway";
 import {AppSettings} from "../main/app-settings";
-import LineString = ol.geom.LineString;
 import Polygon = ol.geom.Polygon;
+import {ApiService} from "../main/api.service";
+import {Http} from "@angular/http";
 
 @Injectable()
 
-export class RunwayService {
+export class RunwayService extends ApiService {
 
-  constructor(private http: Http) {}
+  constructor (protected http : Http){
+    super(http);
+  }
 
   list(airportId : number) : Promise<Runway[]>{
     return this.http
@@ -48,6 +50,7 @@ export class RunwayService {
       .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/geometry`)
       .toPromise()
       .then(response => response.json() as Polygon)
+      .catch(this.handleError)
   }
 
   saveGeom(airportId: number, runwayId: number, geom : Polygon) : Promise<Polygon>{
@@ -55,10 +58,6 @@ export class RunwayService {
       .post(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/geometry`, geom)
       .toPromise()
       .then(response => response.json() as Polygon)
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
+      .catch(this.handleError)
   }
 }

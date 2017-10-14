@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {Airport} from "./airport";
 import {AirportService} from "./airport.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {ApiError} from "../main/apiError";
 
 @Component({
   selector: 'app-airport-general-view',
@@ -25,11 +26,12 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
       </div>
       
       <div [ngSwitch]="status" class="panel-body">
-
         <div *ngSwitchCase="indicator.LOADING">
           <app-loading-indicator></app-loading-indicator>
         </div>
-        
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
@@ -59,7 +61,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
   `
 })
 
-export class AirportDetailGeneralViewComponent implements OnInit{
+export class AirportDetailGeneralViewComponent implements OnInit {
 
   airport : Airport;
   @Input() airportId : number;
@@ -67,6 +69,7 @@ export class AirportDetailGeneralViewComponent implements OnInit{
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
+  onInitError : ApiError;
 
   constructor(
     private airportService : AirportService
@@ -77,15 +80,20 @@ export class AirportDetailGeneralViewComponent implements OnInit{
 
   ngOnInit() : void {
 
-    this.status = this.indicator.LOADING;
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
 
     this.airportService
       .get(this.airportId)
       .then(data => {
         this.airport = data;
-        this.status = this.indicator.ACTIVE;
+        this.status = STATUS_INDICATOR.ACTIVE;
       })
-
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      });
   }
 
   allowEdition() {

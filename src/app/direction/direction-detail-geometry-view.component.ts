@@ -5,6 +5,7 @@ import Point = ol.geom.Point;
 import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {DirectionService} from "./direction.service";
+import {ApiError} from "../main/apiError";
 
 @Component({
   selector: 'app-direction-geometry-view',
@@ -32,7 +33,9 @@ import {DirectionService} from "./direction.service";
         <div *ngSwitchCase="indicator.LOADING" class="container-fluid">
           <app-loading-indicator></app-loading-indicator>
         </div>
-
+        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
+          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        </div>
         <div *ngSwitchCase="indicator.ACTIVE">
           <div class="form container-fluid">
             <div class="row">
@@ -64,7 +67,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   @Input() directionId : number;
   map: Map;
   private olmap: OlComponent;
-
+  onInitError: ApiError;
   @ViewChild('mapDirection') set content(content: OlComponent) {
     this.olmap = content;
   }
@@ -83,20 +86,27 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   }
 
   ngOnInit(): void {
-    this.status = this.indicator.LOADING;
+
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
 
     this.directionService
       .getGeom(this.airportId, this.runwayId, this.directionId)
       .then(point => {
 
         if(!point){
-          this.status = this.indicator.EMPTY;
+          this.status = STATUS_INDICATOR.EMPTY;
 
         } else {
           this.geom = point;
           this.geomText = JSON.stringify(point);
-          this.status = this.indicator.ACTIVE;
+          this.status = STATUS_INDICATOR.ACTIVE;
         }
+      })
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
       });
   }
 
