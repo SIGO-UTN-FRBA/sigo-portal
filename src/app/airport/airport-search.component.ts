@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
+import {Params, Router} from "@angular/router";
 
 @Component({
   template:`
@@ -82,7 +82,7 @@ import {Router} from "@angular/router";
 
 export class AirportSearchComponent  {
 
-  searchTypes : object[] = [
+  searchTypes : {name:string,property:string,placeHolder:string}[] = [
     {
       name : "ICAO Code",
       property : "codeFIR",
@@ -100,7 +100,7 @@ export class AirportSearchComponent  {
     }
   ];
 
-  searchType : object = this.searchTypes[0];
+  searchType = this.searchTypes[0];
 
   searchValue : string = "";
 
@@ -115,7 +115,15 @@ export class AirportSearchComponent  {
     };
 
   onSubmit = () => {
-    this.router.navigate(['/airports/search/list', {property: this.searchType['property'], value: this.searchValue }]);
+
+    let params = {};
+
+    params[this.searchType.property] = this.searchValue;
+
+    this.router.navigate(
+      ['/airports/search/list'],
+      {queryParams: params}
+    );
   };
 
   clearList = () =>{

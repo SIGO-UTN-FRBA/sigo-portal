@@ -5,6 +5,7 @@ import "rxjs/add/operator/toPromise";
 import {AppSettings} from "../main/app-settings";
 import Point = ol.geom.Point;
 import {ApiService} from "../main/api.service";
+import {ParamMap} from "@angular/router";
 
 
 @Injectable()
@@ -14,9 +15,12 @@ export class AirportService extends ApiService {
     super(http);
   }
 
-  search(property: string, value : string) : Promise<Airport[]>{
+  search(paramMap : ParamMap) : Promise<Airport[]>{
+
+    let queryString = paramMap.keys.reduce((total, key) => {return `${total}&${key}=${paramMap.get(key)}` }, '');
+
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports?${property}=${value}`)
+      .get(`${AppSettings.API_ENDPOINT}/airports?${queryString}`)
       .toPromise()
       .then(response => response.json() as Airport[])
       .catch(this.handleError);

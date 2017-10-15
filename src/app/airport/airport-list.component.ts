@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/catch";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {ApiError} from "../main/apiError";
 
 @Component({
   template:`
@@ -13,7 +14,12 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
       <div *ngSwitchCase="indicator.LOADING">
         <app-loading-indicator></app-loading-indicator>  
       </div>
-      
+      <div *ngSwitchCase="indicator.EMPTY">
+        <app-empty-indicator type="result" entity="airports"></app-empty-indicator>
+      </div>
+      <div *ngSwitchCase="indicator.ERROR">
+        <app-error-indicator [error]="onInitError"></app-error-indicator>
+      </div>
       
       <ul *ngSwitchCase="indicator.ACTIVE" class="media-list">
         <li *ngFor="let airport of results" class="media media-border">
@@ -28,10 +34,6 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           </div>
         </li>
       </ul>
-
-      <div *ngSwitchCase="indicator.EMPTY">
-        <app-empty-indicator type="result" entity="airports"></app-empty-indicator>
-      </div>
     </div>
   `
 })
@@ -41,6 +43,7 @@ export class AirportListComponent implements OnInit {
   results : Airport[];
   status : number;
   indicator;
+  onInitError : ApiError;
 
   constructor(
     private airportService : AirportService,
@@ -51,18 +54,21 @@ export class AirportListComponent implements OnInit {
 
   ngOnInit() : void {
 
-    this.status = this.indicator.LOADING;
+    this.onInitError = null;
+
+    this.status = STATUS_INDICATOR.LOADING;
 
     this.airportService
-      .search(
-        this.route.snapshot.paramMap.get('property'),
-        this.route.snapshot.paramMap.get('value')
-      )
+      .search(this.route.snapshot.queryParamMap)
       .then( data => {
         this.results = data;
 
-        (data.length == 0) ? this.status = this.indicator.EMPTY : this.status = this.indicator.ACTIVE;
+        (data.length == 0) ? this.status = STATUS_INDICATOR.EMPTY : this.status = STATUS_INDICATOR.ACTIVE;
 
+      })
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
       })
   }
 

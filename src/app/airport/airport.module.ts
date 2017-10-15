@@ -4,7 +4,7 @@ import { FormsModule }   from '@angular/forms';
 
 import {AirportRoutingModule} from "./airport-routing.module";
 import {AirportComponent} from "./airport.component";
-import {AirportSearchComponent} from "./airoport-search.component";
+import {AirportSearchComponent} from "./airport-search.component";
 import {AirportService} from "./airport.service";
 import {AirportListComponent} from "./airport-list.component";
 import {AirportDetailComponent} from "./airport-detail.component";

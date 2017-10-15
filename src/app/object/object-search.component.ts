@@ -61,12 +61,11 @@ import {Router} from "@angular/router";
               </div>
             </div>
             <div class="col-md-2">
-              <a
-                type="button"
-                routerLink="/objects/new"
-                class="btn btn-primary btn-lg"
-                i18n-title="@@commons.button.new"
-                title="New">
+              <a type="button"
+                 routerLink="/objects/new"
+                 class="btn btn-primary btn-lg"
+                 i18n-title="@@commons.button.new"
+                 title="New">
                 <span class="glyphicon glyphicon-plus"></span>
               </a>
             </div>
@@ -74,6 +73,9 @@ import {Router} from "@angular/router";
         </form>
       </div>
     </div>
+    <br>
+    <br>
+    <router-outlet></router-outlet>
   `
 })
 
@@ -115,7 +117,9 @@ export class PlacedObjectSearchComponent implements OnInit {
   };
 
   onSubmit = () => {
-    this.router.navigate(['/objects/search/list', {type: this.searchType['value'], name: this.searchName }]);
+    this.router.navigate(
+      ['/objects/search/list'],
+      {queryParams: {type: this.searchType['value'], name: this.searchName }});
   };
 
   clearList = () =>{

@@ -2,7 +2,7 @@ import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import {AirportComponent} from "./airport.component";
-import {AirportSearchComponent} from "./airoport-search.component";
+import {AirportSearchComponent} from "./airport-search.component";
 import {AirportListComponent} from "./airport-list.component";
 import {AirportDetailComponent} from "./airport-detail.component";
 import {AirportNewComponent} from "./airport-new-component";

@@ -10,6 +10,7 @@ import {OlService} from "../olmap/ol.service";
 import {OlComponent} from "../olmap/ol.component";
 import {PlacedObjectListComponent} from "./object-list.component";
 import {PlacedObjectDetailComponent} from "./object-detail.component";
+import {PlacedObjectService} from "./object.service";
 
 @NgModule({
 
@@ -28,7 +29,8 @@ import {PlacedObjectDetailComponent} from "./object-detail.component";
   ],
   providers: [
     OlService,
-    OlComponent
+    OlComponent,
+    PlacedObjectService
   ]
 })
 
