@@ -6,6 +6,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {RunwayDirectionPosition} from "./runwayDirectionPosition";
 import {DirectionCatalogService} from "./direction-catalog.service";
 import {ApiError} from "../main/apiError";
+import {DirectionDistancesService} from "./direction-distances.service";
 
 @Component({
   selector: 'app-direction-general-edit',
@@ -123,10 +124,12 @@ export class DirectionDetailGeneralEditComponent implements OnInit {
   positions : RunwayDirectionPosition[];
   onInitError: ApiError;
   onSubmitError: ApiError;
+  private updates : number = 0;
 
   constructor(
     private directionService : DirectionService,
-    private catalogService : DirectionCatalogService
+    private catalogService : DirectionCatalogService,
+    private distancesService: DirectionDistancesService
   ){
     this.direction = new RunwayDirection();
     this.positions = [];
@@ -162,7 +165,10 @@ export class DirectionDetailGeneralEditComponent implements OnInit {
 
     this.directionService
       .update(this.airportId, this.runwayId, this.direction)
-      .then( () => this.disallowEdition() )
+      .then( () => {
+        this.distancesService.updateLength(this.updates++);
+        this.disallowEdition()
+      } )
       .catch(error => this.onSubmitError = error);
   };
 

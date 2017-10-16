@@ -1,5 +1,6 @@
 import {
-  AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
+  AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
+} from "@angular/core";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import Point = ol.geom.Point;
 import Map = ol.Map;
@@ -7,6 +8,8 @@ import {OlComponent} from "../olmap/ol.component";
 import {DirectionService} from "./direction.service";
 import {ApiError} from "../main/apiError";
 import Polygon = ol.geom.Polygon;
+import {DirectionDistancesService} from "./direction-distances.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'app-direction-geometry-view',
@@ -61,7 +64,7 @@ import Polygon = ol.geom.Polygon;
   `
 })
 
-export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewInit{
+export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewInit, OnDestroy{
 
   @Input() airportId : number;
   @Input() runwayId : number;
@@ -79,12 +82,21 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   geom  : Point;
   geomText : string;
   thresholdGeom : Polygon;
+  subscription: Subscription;
 
   constructor(
-    private directionService : DirectionService
+    private directionService : DirectionService,
+    private distancesService : DirectionDistancesService
   ){
     this.geom = null;
     this.indicator = STATUS_INDICATOR;
+
+    this.subscription = this.distancesService.lengthUpdated$.subscribe(
+      () => this.loadGeometries()
+        .then(()=> this.olmap.clearDirectionLayer())
+        .then(()=> this.olmap.clearDisplacedThresholdLayer())
+        .then(()=> this.locateGeometries())
+    );
   }
 
   ngOnInit(): void {
@@ -92,48 +104,62 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
     this.geom = null;
     this.onInitError = null;
 
-    this.directionService
+    this.loadGeometries()
+      .then(() => {
+        if(this.geom != null)
+          this.status = STATUS_INDICATOR.ACTIVE;
+        else
+          this.status = STATUS_INDICATOR.EMPTY;
+      })
+      .catch(error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      })
+  }
+
+  private loadGeometries() : Promise<any> {
+
+    return this.directionService
       .getGeom(this.airportId, this.runwayId, this.directionId)
       .then(point => {
 
-        if(!point){
-          this.status = STATUS_INDICATOR.EMPTY;
-        } else {
+        if(point != null){
           this.geom = point;
           this.geomText = JSON.stringify(point);
         }
 
         return point;
       })
-      .catch(error => this.status = STATUS_INDICATOR.ERROR)
+      .catch(error => Promise.reject(error))
       .then(point => {
 
         if(point != null)
           return this.directionService
-            .getDisplacedThresholdGeom(this.airportId, this.runwayId, this.directionId)
+            .getDisplacedThresholdGeom(this.airportId, this.runwayId, this.directionId);
         else
           return null;
 
       })
       .catch(error => Promise.reject(error))
-      .then(polygon => {
-        if(polygon != null){
-          this.thresholdGeom = polygon;
-          this.status = STATUS_INDICATOR.ACTIVE;
-        }
-      })
+      .then(polygon => this.thresholdGeom = polygon);
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> this.locateGeom(),1500);
+    setTimeout(()=> this.locateGeometries(),1500);
   }
 
   allowEdition() {
     this.editChange.emit(true);
   }
 
-  locateGeom(){
-      this.olmap.addDirection(this.geom, {center: true, zoom: 15});
-      this.olmap.addThreshold(this.thresholdGeom);
+  private locateGeometries(){
+      this.olmap
+        .addDirection(this.geom, {center: true, zoom: 15})
+        .addThreshold(this.thresholdGeom);
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.subscription.unsubscribe();
   }
 }

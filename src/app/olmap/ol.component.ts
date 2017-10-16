@@ -26,10 +26,16 @@ import Point = ol.geom.Point;
 
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-  layers = { airport: null, runway: null, direction: null, threshold: null };
+  layers : { airport: VectorLayer, runway: VectorLayer, direction: VectorLayer, threshold: VectorLayer};
 
-  constructor(private olService: OlService) {
+  constructor() {
+    this.layers = { airport: null, runway: null, direction: null, threshold: null};
+  }
 
+  clearAiportLayer() : OlComponent {
+    this.getAirportLayer().getSource().clear();
+
+    return this;
   }
 
   getAirportLayer() : VectorLayer {
@@ -54,9 +60,17 @@ import Point = ol.geom.Point;
       })
     });
 
+    this.layers.airport = airportLayer;
+
     this.map.addLayer(airportLayer);
 
     return airportLayer;
+  }
+
+  clearRunwayLayer() : OlComponent {
+    this.getRunwayLayer().getSource().clear();
+
+    return this;
   }
 
   getRunwayLayer() : VectorLayer {
@@ -79,9 +93,17 @@ import Point = ol.geom.Point;
       })
     });
 
+    this.layers.runway = runwayLayer;
+
     this.map.addLayer(runwayLayer);
 
     return runwayLayer;
+  }
+
+  clearDirectionLayer() : OlComponent {
+    this.getDirectionLayer().getSource().clear();
+
+    return this;
   }
 
   getDirectionLayer() : VectorLayer {
@@ -98,19 +120,26 @@ import Point = ol.geom.Point;
 
     let directionLayer = new VectorLayer({
       source: directionSource,
-      style: new ol.style.Style({
-        image: new ol.style.RegularShape({
+      style: new Style({
+        image: new Circle({
+          radius: 3,
           fill: new ol.style.Fill({color: 'red'}),
-          stroke: new ol.style.Stroke({color: 'black', width: 1}),
-          points: 5,
-          radius: 7
+          stroke: new ol.style.Stroke({ color: 'gray', width:2})
         })
       })
     });
 
+    this.layers.direction = directionLayer;
+
     this.map.addLayer(directionLayer);
 
     return directionLayer;
+  }
+
+  clearDisplacedThresholdLayer() : OlComponent {
+    this.getDisplacedThresholdLayer().getSource().clear();
+
+    return this;
   }
 
   getDisplacedThresholdLayer() : VectorLayer {
@@ -121,7 +150,8 @@ import Point = ol.geom.Point;
       format: new GeoJSON({
         defaultDataProjection: 'EPSG:3857',
         featureProjection: 'EPSG:3857'
-      })
+      }),
+      features: []
     });
 
     let thresholdLayer = new VectorLayer({
@@ -129,8 +159,11 @@ import Point = ol.geom.Point;
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
         fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.75)' })
-      })
+      }),
+      map: this.map
     });
+
+    this.layers.threshold = thresholdLayer;
 
     this.map.addLayer(thresholdLayer);
 
@@ -213,24 +246,26 @@ import Point = ol.geom.Point;
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'xx',
-      id: 'xx',
+      name: 'x',
+      id: 'x',
     });
 
     this.addFeature(feature, this.getAirportLayer(), options);
   };
 
-  public addDirection(geom: Point, options :{center?: boolean, zoom?: number}) {
+  public addDirection(geom: Point, options :{center?: boolean, zoom?: number}) : OlComponent {
 
     let tmp = new ol.geom.Point(geom['coordinates']);
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'xx',
-      id: 'xx',
+      name: 'w',
+      id: 'w',
     });
 
     this.addFeature(feature, this.getDirectionLayer(), options);
+
+    return this;
   }
 
   public addThreshold(geom: Polygon, options? : {center?: boolean, zoom?: number}){
@@ -240,7 +275,7 @@ import Point = ol.geom.Point;
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
       name: 'Displaced Threshold',
-      id: 'xx',
+      id: 'z',
     });
 
     this.addFeature(feature, this.getDisplacedThresholdLayer(), options);
