@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, Optional} from '@angular/core';
 import { OlService } from './ol.service';
 import Map = ol.Map;
 import GeoJSON = ol.format.GeoJSON;
@@ -26,7 +26,7 @@ import Point = ol.geom.Point;
 
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-  layers = { airport: null, runway: null, direction: null };
+  layers = { airport: null, runway: null, direction: null, threshold: null };
 
   constructor(private olService: OlService) {
 
@@ -113,6 +113,30 @@ import Point = ol.geom.Point;
     return directionLayer;
   }
 
+  getDisplacedThresholdLayer() : VectorLayer {
+    if(this.layers.threshold != null)
+      return this.layers.threshold;
+
+    let source = new VectorSource({
+      format: new GeoJSON({
+        defaultDataProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857'
+      })
+    });
+
+    let thresholdLayer = new VectorLayer({
+      source: source,
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
+        fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.75)' })
+      })
+    });
+
+    this.map.addLayer(thresholdLayer);
+
+    return thresholdLayer;
+  }
+
   getOMS(){
 
     let OSM = new Tile({
@@ -166,7 +190,7 @@ import Point = ol.geom.Point;
     });
   };
 
-  public addRunway (geom : Polygon, options : {center: boolean, zoom: number}){
+  public addRunway (geom : Polygon, options? : {center?: boolean, zoom?: number}){
 
     //TODO pasar una geometry con sus propiedades y no una coordinada.
 
@@ -181,7 +205,7 @@ import Point = ol.geom.Point;
     this.addFeature(feature, this.getRunwayLayer(), options);
   }
 
-  public addAirport (geom: Point, options :{center: boolean, zoom: number}) {
+  public addAirport (geom: Point, options? :{center?: boolean, zoom?: number}) {
 
     //TODO pasar una geometry con sus propiedades y no una coordinada.
 
@@ -196,7 +220,7 @@ import Point = ol.geom.Point;
     this.addFeature(feature, this.getAirportLayer(), options);
   };
 
-  public addDirection(geom: Point, options :{center: boolean, zoom: number}) {
+  public addDirection(geom: Point, options :{center?: boolean, zoom?: number}) {
 
     let tmp = new ol.geom.Point(geom['coordinates']);
 
@@ -209,14 +233,27 @@ import Point = ol.geom.Point;
     this.addFeature(feature, this.getDirectionLayer(), options);
   }
 
-  private addFeature(feature : Feature, layer : VectorLayer,  options :{center: boolean, zoom: number}){
+  public addThreshold(geom: Polygon, options? : {center?: boolean, zoom?: number}){
+
+    let tmp = new ol.geom.Polygon(geom['coordinates']);
+
+    let feature = new ol.Feature({
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
+      name: 'Displaced Threshold',
+      id: 'xx',
+    });
+
+    this.addFeature(feature, this.getDisplacedThresholdLayer(), options);
+  }
+
+  private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
 
     layer.getSource().addFeature(feature);
 
-    if(options.center)
+    if(options != null && options.center)
       this.map.getView().setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
 
-    if(options.zoom)
+    if(options != null && options.zoom)
       this.map.getView().setZoom(options.zoom);
   }
 

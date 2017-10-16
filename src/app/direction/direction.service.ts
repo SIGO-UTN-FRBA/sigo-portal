@@ -7,6 +7,7 @@ import {RunwayApproachSection} from "./runwayApproachSection";
 import {RunwayTakeoffSection} from "./runwayTakeoffSection";
 import {RunwayDistance} from "./runwayDistance";
 import {ApiService} from "../main/api.service";
+import Polygon = ol.geom.Polygon;
 
 @Injectable()
 
@@ -99,6 +100,14 @@ export class DirectionService extends ApiService {
       .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/distances`)
       .toPromise()
       .then(response => response.json() as RunwayDistance[])
+      .catch(this.handleError)
+  }
+
+  getDisplacedThresholdGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/approach/geometries/threshold`)
+      .toPromise()
+      .then(response => response.json() as Polygon)
       .catch(this.handleError)
   }
 }

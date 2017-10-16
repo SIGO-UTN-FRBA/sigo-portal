@@ -6,6 +6,7 @@ import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {DirectionService} from "./direction.service";
 import {ApiError} from "../main/apiError";
+import Polygon = ol.geom.Polygon;
 
 @Component({
   selector: 'app-direction-geometry-view',
@@ -77,6 +78,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
   geom  : Point;
   geomText : string;
+  thresholdGeom : Polygon;
 
   constructor(
     private directionService : DirectionService
@@ -91,23 +93,30 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
 
     this.status = STATUS_INDICATOR.LOADING;
 
-    this.directionService
+    let p1 = this.directionService
       .getGeom(this.airportId, this.runwayId, this.directionId)
       .then(point => {
 
         if(!point){
           this.status = STATUS_INDICATOR.EMPTY;
-
         } else {
           this.geom = point;
           this.geomText = JSON.stringify(point);
-          this.status = STATUS_INDICATOR.ACTIVE;
         }
       })
+      .catch(error => Promise.reject(error));
+
+    let p2 = this.directionService
+      .getDisplacedThresholdGeom(this.airportId, this.runwayId, this.directionId)
+      .then(polygon => this.thresholdGeom = polygon)
+      .catch(error => Promise.reject(error));
+
+    Promise.all([p1,p2])
+      .then(()=> this.status = STATUS_INDICATOR.ACTIVE)
       .catch(error => {
         this.onInitError = error;
         this.status = STATUS_INDICATOR.ERROR;
-      });
+      })
   }
 
   ngAfterViewInit(): void {
@@ -119,7 +128,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   }
 
   locateGeom(){
-
-    this.olmap.addDirection(this.geom, {center: true, zoom: 20});
+    this.olmap.addDirection(this.geom, {center: true, zoom: 13});
+    this.olmap.addThreshold(this.thresholdGeom)
   }
 }
