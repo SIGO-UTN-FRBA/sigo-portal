@@ -3,6 +3,7 @@ import {Airport} from "./airport";
 import {AirportService} from "./airport.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-airport-general-view',
@@ -13,13 +14,25 @@ import {ApiError} from "../main/apiError";
           <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@airport.detail.section.general.title">
             General
           </h3>
-          <div class="col-md-6 btn-group">
-            <a
-              (click)="allowEdition();"
-              class="btn btn-default pull-right"
-              i18n="@@commons.button.edit">
-              Edit
-            </a>
+          <div class="col-md-6">
+            <div class="pull-right">
+              <div class="btn-group">
+                <button
+                  (click)="delete();"
+                  class="btn btn-default"
+                  i18n="@@commons.button.delete">
+                  Delete
+                </button>
+              </div>
+              <div class="btn-group">
+                <button
+                  (click)="allowEdition();"
+                  class="btn btn-default"
+                  i18n="@@commons.button.edit">
+                  Edit
+                </button>
+              </div>
+            </div>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -72,7 +85,8 @@ export class AirportDetailGeneralViewComponent implements OnInit {
   onInitError : ApiError;
 
   constructor(
-    private airportService : AirportService
+    private airportService : AirportService,
+    private router : Router
   ){
     this.airport = new Airport();
     this.indicator = STATUS_INDICATOR;
@@ -98,5 +112,15 @@ export class AirportDetailGeneralViewComponent implements OnInit {
 
   allowEdition() {
     this.editChange.emit(true);
+  }
+
+  delete() {
+      this.airportService
+        .delete(this.airportId)
+        .then(()=> this.router.navigate(['/airports']))
+        .catch( error => {
+          this.onInitError = error;
+          this.status = STATUS_INDICATOR.ERROR;
+        })
   }
 }

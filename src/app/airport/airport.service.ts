@@ -50,6 +50,14 @@ export class AirportService extends ApiService {
       .catch(this.handleError)
   }
 
+  delete(airportId: number) : Promise<void> {
+    return this.http
+      .delete(`${AppSettings.API_ENDPOINT}/airports/${airportId}`)
+      .toPromise()
+      .then(()=> null)
+      .catch(this.handleError);
+  }
+
   getGeom(airportId : number) : Promise<Point> {
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/geometry`)
