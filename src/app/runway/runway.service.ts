@@ -60,4 +60,12 @@ export class RunwayService extends ApiService {
       .then(response => response.json() as Polygon)
       .catch(this.handleError)
   }
+
+  delete(airportId: number, runwayId : number) : Promise<void> {
+    return this.http
+      .delete(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}`)
+      .toPromise()
+      .then(()=> null)
+      .catch(this.handleError)
+  }
 }

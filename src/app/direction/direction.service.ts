@@ -39,6 +39,14 @@ export class DirectionService extends ApiService {
       .catch(this.handleError)
   }
 
+  delete(airportId: number, runwayId: number, directionId: number) {
+    return this.http
+      .delete(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}`)
+      .toPromise()
+      .then(response => null)
+      .catch(this.handleError)
+  }
+
   update(airportId : number, runwayId: number, direction: RunwayDirection) : Promise<RunwayDirection> {
     return this.http
       .put(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${direction.id}`, direction)

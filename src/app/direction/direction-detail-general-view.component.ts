@@ -5,6 +5,7 @@ import {RunwayDirection} from './runwayDirection';
 import {RunwayDirectionPosition} from "./runwayDirectionPosition";
 import {DirectionCatalogService} from "./direction-catalog.service";
 import {ApiError} from "../main/apiError";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-direction-general-view',
@@ -15,13 +16,25 @@ import {ApiError} from "../main/apiError";
           <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@direction.detail.section.general.title">
             General
           </h3>
-          <div class="col-md-6 btn-group">
-            <a
-              (click)="allowEdition();"
-              class="btn btn-default pull-right"
-              i18n="@@commons.button.edit">
-              Edit
-            </a>
+          <div class="col-md-6">
+            <div class="pull-right">
+              <div class="btn-group">
+                <button
+                  (click)="delete();"
+                  class="btn btn-default"
+                  i18n="@@commons.button.delete">
+                  Delete
+                </button>
+              </div>
+              <div class="btn-group">
+                <button
+                  (click)="allowEdition();"
+                  class="btn btn-default"
+                  i18n="@@commons.button.edit">
+                  Edit
+                </button>
+              </div>
+            </div>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -84,7 +97,8 @@ export class DirectionDetailGeneralViewComponent implements OnInit {
 
   constructor(
     private directionService: DirectionService,
-    private catalogService : DirectionCatalogService
+    private catalogService : DirectionCatalogService,
+    private router : Router
   ){
     this.direction = new RunwayDirection();
     this.positions = [];
@@ -118,5 +132,15 @@ export class DirectionDetailGeneralViewComponent implements OnInit {
 
   allowEdition() {
     this.editChange.emit(true);
+  }
+
+  delete() {
+    this.directionService
+      .delete(this.airportId, this.runwayId, this.directionId)
+      .then(()=> this.router.navigate([`/airports/${this.airportId}/runways/${this.runwayId}/detail`]))
+      .catch( error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      })
   }
 }

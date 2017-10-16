@@ -5,6 +5,7 @@ import {RunwaySurface} from "./runwaySurface";
 import {RunwayCatalogService} from "./runway-catalog.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-runway-general-view',
@@ -15,13 +16,25 @@ import {ApiError} from "../main/apiError";
           <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@runway.detail.section.general.title">
             General
           </h3>
-          <div class="col-md-6 btn-group">
-            <a
-              (click)="allowEdition();"
-              class="btn btn-default pull-right"
-              i18n="@@commons.button.edit">
-              Edit
-            </a>
+          <div class="col-md-6">
+            <div class="pull-right">
+              <div class="btn-group">
+                <button
+                  (click)="delete();"
+                  class="btn btn-default"
+                  i18n="@@commons.button.delete">
+                  Delete
+                </button>
+              </div>
+              <div class="btn-group">
+                <button
+                  (click)="allowEdition();"
+                  class="btn btn-default"
+                  i18n="@@commons.button.edit">
+                  Edit
+                </button>
+              </div>
+            </div>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -98,7 +111,8 @@ export class RunwayDetailGeneralViewComponent implements OnInit{
 
   constructor(
     private runwayService : RunwayService,
-    private catalogService : RunwayCatalogService
+    private catalogService : RunwayCatalogService,
+    private router : Router
   ){
     this.runway = new Runway();
     this.surfaces = [];
@@ -133,5 +147,15 @@ export class RunwayDetailGeneralViewComponent implements OnInit{
 
   allowEdition(){
     this.editChange.emit(true);
+  }
+
+  delete() {
+    this.runwayService
+      .delete(this.airportId, this.runwayId)
+      .then(()=> this.router.navigate([`/airports/${this.airportId}/detail`]))
+      .catch( error => {
+        this.onInitError = error;
+        this.status = STATUS_INDICATOR.ERROR;
+      })
   }
 }
