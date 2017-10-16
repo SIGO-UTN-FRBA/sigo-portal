@@ -34,7 +34,7 @@ import {ApiError} from "../main/apiError";
         <div class="row">
           <div class="col-md-6 col-sm-12 form-group">
             <label
-              for="number"
+              for="inputNumber"
               class="control-label"
               i18n="@@direction.detail.section.general.number">
               Number
@@ -42,7 +42,7 @@ import {ApiError} from "../main/apiError";
             <input
               type="number"
               class="form-control"
-              name="quantity"
+              name="inputNumber"
               min="1"
               max="36"
               length="2"
@@ -51,13 +51,13 @@ import {ApiError} from "../main/apiError";
           </div>
           <div class="col-md-6 col-sm-12 form-group">
             <label
-              for="position"
+              for="inputPosition"
               class="control-label"
               i18n="@@direction.detail.section.general.position">
               Position
             </label>
             <select
-              name="inputSurface"
+              name="inputPosition"
               [(ngModel)]="direction.position"
               class="form-control"
               required>
@@ -65,6 +65,24 @@ import {ApiError} from "../main/apiError";
                 {{position.description}}
               </option>
             </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12 form-group">
+            <label
+              for="inputAzimuth"
+              class="control-label"
+              i18n="@@direction.detail.section.general.azimuth">
+              Azimuth
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              name="inputAzimuth"
+              min="0"
+              max="360"
+              [(ngModel)]="direction.azimuth"
+              required>
           </div>
         </div>
         <hr>

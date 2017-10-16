@@ -7,4 +7,5 @@ export class RunwayDirection {
   number: number;
   position: number;
   name : string;
+  azimuth : number;
 }

@@ -37,16 +37,30 @@ import {ApiError} from "../main/apiError";
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
-              <label for="number" class="control-label" i18n="@@direction.detail.section.general.number">
+              <label for="number" 
+                     class="control-label" 
+                     i18n="@@direction.detail.section.general.number">
                 Number
               </label>
               <p class="form-control-static">{{direction.number}}</p>
             </div>
             <div class="col-md-6 col-sm-12 form-group">
-              <label for="position" class="control-label" i18n="@@direction.detail.section.general.position">
+              <label for="position" 
+                     class="control-label"
+                     i18n="@@direction.detail.section.general.position">
                 Position
               </label>
               <p class="form-control-static">{{positions[direction.position].description}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12 form-group">
+              <label for="azimuth" 
+                     class="control-label" 
+                     i18n="@@direction.detail.section.general.azimuth">
+                Azimuth
+              </label>
+              <p class="form-control-static">{{direction.azimuth}}</p>
             </div>
           </div>
         </div>

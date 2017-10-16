@@ -88,12 +88,11 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   }
 
   ngOnInit(): void {
-
+    this.status = STATUS_INDICATOR.LOADING;
+    this.geom = null;
     this.onInitError = null;
 
-    this.status = STATUS_INDICATOR.LOADING;
-
-    let p1 = this.directionService
+    this.directionService
       .getGeom(this.airportId, this.runwayId, this.directionId)
       .then(point => {
 
@@ -103,24 +102,30 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
           this.geom = point;
           this.geomText = JSON.stringify(point);
         }
+
+        return point;
       })
-      .catch(error => Promise.reject(error));
+      .catch(error => this.status = STATUS_INDICATOR.ERROR)
+      .then(point => {
 
-    let p2 = this.directionService
-      .getDisplacedThresholdGeom(this.airportId, this.runwayId, this.directionId)
-      .then(polygon => this.thresholdGeom = polygon)
-      .catch(error => Promise.reject(error));
+        if(point != null)
+          return this.directionService
+            .getDisplacedThresholdGeom(this.airportId, this.runwayId, this.directionId)
+        else
+          return null;
 
-    Promise.all([p1,p2])
-      .then(()=> this.status = STATUS_INDICATOR.ACTIVE)
-      .catch(error => {
-        this.onInitError = error;
-        this.status = STATUS_INDICATOR.ERROR;
+      })
+      .catch(error => Promise.reject(error))
+      .then(polygon => {
+        if(polygon != null){
+          this.thresholdGeom = polygon;
+          this.status = STATUS_INDICATOR.ACTIVE;
+        }
       })
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {if (this.geom != null) this.locateGeom(); },1500);
+    setTimeout(()=> this.locateGeom(),1500);
   }
 
   allowEdition() {
@@ -128,7 +133,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   }
 
   locateGeom(){
-    this.olmap.addDirection(this.geom, {center: true, zoom: 13});
-    this.olmap.addThreshold(this.thresholdGeom)
+      this.olmap.addDirection(this.geom, {center: true, zoom: 15});
+      this.olmap.addThreshold(this.thresholdGeom);
   }
 }

@@ -77,6 +77,24 @@ import {ApiError} from "../main/apiError";
                   </select>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12 form-group">
+                  <label
+                    for="inputAzimuth"
+                    class="control-label"
+                    i18n="@@direction.detail.section.general.azimuth">
+                    Azimuth
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="inputAzimuth"
+                    min="0"
+                    max="360"
+                    [(ngModel)]="direction.azimuth"
+                    required>
+                </div>
+              </div>
             </form>
             <br>
             <hr>
