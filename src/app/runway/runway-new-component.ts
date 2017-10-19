@@ -36,6 +36,9 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                   role="form"
                   class="form"
                   (ngSubmit)="onSubmit()">
+
+              <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+              
               <div class="row">
                 <div class="col-md-12 col-sm-12 form-group">
                   <label
@@ -167,13 +170,18 @@ export class RunwayNewComponent implements OnInit{
 
     this.onInitError = null;
 
+    this.status = STATUS_INDICATOR.LOADING;
+
     this.runway.airportId = +this.route.parent.snapshot.params['airportId'];
 
     this.runway.name = "RNW XX/XX";
 
     this.catalogService
       .listSurfaces()
-      .then(data => this.surfaces = data)
+      .then(data => {
+        this.surfaces = data;
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
       .catch( error => {
         this.onInitError = error;
         this.status = STATUS_INDICATOR.ERROR;
