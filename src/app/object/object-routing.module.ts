@@ -4,12 +4,14 @@ import {PlacedObjectSearchComponent} from "./object-search.component";
 import {PlacedObjectComponent} from "./object.component";
 import {PlacedObjectListComponent} from "./object-list.component";
 import {PlacedObjectDetailComponent} from "./object-detail.component";
+import {PlacedObjectNewComponent} from "./object-new.component";
 
 const objectRoutes : Routes = [
   {
     path: '',
     component: PlacedObjectComponent,
     children: [
+
       {
         path: 'search',
         component: PlacedObjectSearchComponent,
@@ -19,6 +21,10 @@ const objectRoutes : Routes = [
             component: PlacedObjectListComponent
           }
         ]
+      },
+      {
+        path: 'new',
+        component: PlacedObjectNewComponent
       },
       {
         path: ':objectId',

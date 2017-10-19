@@ -159,8 +159,6 @@ import {ApiError} from "../main/apiError";
 export class AirportNewComponent implements OnInit{
 
   airport : Airport;
-  @Input() edit : boolean;
-  @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
   regulations: AirportRegulation[];
   regions : Region[];
   status: number;

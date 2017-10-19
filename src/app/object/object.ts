@@ -1,15 +1,14 @@
 export class PlacedObject {
   id : number;
   name : string;
-  type : number;
+  typeId : number;
   subtype : string;
   verified : boolean;
-  politicalLocationId : number;
-  regionId : number;
+  locationId : number;
   ownerId : number;
   heightAgl : number;
   heightAmls : number;
   temporary : boolean;
   lightingId : number;
-  markIndicator : number;
+  markIndicatorId : number;
 }

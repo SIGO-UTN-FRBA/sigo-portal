@@ -1,4 +1,4 @@
-import {NgModule} from "@angular/core";
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {OlmapModule} from "../olmap/olmap.module";
 import {FormsModule} from "@angular/forms";
@@ -11,6 +11,10 @@ import {OlComponent} from "../olmap/ol.component";
 import {PlacedObjectListComponent} from "./object-list.component";
 import {PlacedObjectDetailComponent} from "./object-detail.component";
 import {PlacedObjectService} from "./object.service";
+import {PlacedObjectCatalogService} from "./object-catalog.service";
+import {PlacedObjectNewComponent} from "./object-new.component";
+import {ObjectOwnerService} from "../owner/owner.service";
+import {LocationService} from "../location/location.service";
 
 @NgModule({
 
@@ -25,13 +29,18 @@ import {PlacedObjectService} from "./object.service";
     PlacedObjectComponent,
     PlacedObjectSearchComponent,
     PlacedObjectListComponent,
-    PlacedObjectDetailComponent
+    PlacedObjectDetailComponent,
+    PlacedObjectNewComponent
   ],
   providers: [
     OlService,
     OlComponent,
-    PlacedObjectService
-  ]
+    PlacedObjectService,
+    PlacedObjectCatalogService,
+    ObjectOwnerService,
+    LocationService
+  ],
+  schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })
 
 export class PlacedObjectModule {
