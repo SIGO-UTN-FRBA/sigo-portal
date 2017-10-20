@@ -5,6 +5,7 @@ import {ObjectMarkIndicator} from "./objectMarkIndicator";
 import {ObjectLighting} from "./objectLighting";
 import {PlacedObjectType} from "./objectType";
 import {Http} from "@angular/http";
+import "rxjs/add/operator/toPromise";
 
 @Injectable()
 export class PlacedObjectCatalogService extends ApiService {

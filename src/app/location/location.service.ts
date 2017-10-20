@@ -3,6 +3,8 @@ import {ApiService} from "../main/api.service";
 import {ListItem} from "../commons/listItem";
 import {Http} from "@angular/http";
 import {AppSettings} from "../main/app-settings";
+import "rxjs/add/operator/toPromise";
+import {PoliticalLocation} from "./location";
 
 @Injectable()
 
@@ -10,11 +12,19 @@ export class LocationService extends ApiService {
 
   constructor(http:Http){super(http)}
 
-  list(type: string) : Promise<ListItem[]>{
+  list(locationType: string) : Promise<ListItem[]>{
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/locations?type=${type}`)
+      .get(`${AppSettings.API_ENDPOINT}/locations?type=${locationType}`)
       .toPromise()
       .then(response => response.json() as ListItem[])
+      .catch(this.handleError);
+  }
+
+  get(locationId: number) : Promise<PoliticalLocation> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/locations/${locationId}`)
+      .toPromise()
+      .then(response => response.json() as PoliticalLocation)
       .catch(this.handleError);
   }
 

@@ -4,6 +4,7 @@ import {AppSettings} from "../main/app-settings";
 import Polygon = ol.geom.Polygon;
 import {ApiService} from "../main/api.service";
 import {Http} from "@angular/http";
+import "rxjs/add/operator/toPromise";
 
 @Injectable()
 

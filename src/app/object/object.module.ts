@@ -15,6 +15,8 @@ import {PlacedObjectCatalogService} from "./object-catalog.service";
 import {PlacedObjectNewComponent} from "./object-new.component";
 import {ObjectOwnerService} from "../owner/owner.service";
 import {LocationService} from "../location/location.service";
+import {PlacedObjectDetailGeneralEditComponent} from "./object-detail-general-edit.component";
+import {PlacedObjectDetailGeneralViewComponent} from "./object-detail-general-view.component";
 
 @NgModule({
 
@@ -30,7 +32,9 @@ import {LocationService} from "../location/location.service";
     PlacedObjectSearchComponent,
     PlacedObjectListComponent,
     PlacedObjectDetailComponent,
-    PlacedObjectNewComponent
+    PlacedObjectNewComponent,
+    PlacedObjectDetailGeneralEditComponent,
+    PlacedObjectDetailGeneralViewComponent
   ],
   providers: [
     OlService,

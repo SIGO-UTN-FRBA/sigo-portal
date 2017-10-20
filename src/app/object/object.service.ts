@@ -5,6 +5,7 @@ import {PlacedObject} from "./object";
 import {AppSettings} from "../main/app-settings";
 import {ParamMap} from "@angular/router";
 import Geometry = ol.geom.Geometry;
+import "rxjs/add/operator/toPromise";
 
 @Injectable()
 export class PlacedObjectService extends ApiService {

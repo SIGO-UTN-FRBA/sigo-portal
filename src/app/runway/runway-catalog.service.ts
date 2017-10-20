@@ -3,6 +3,7 @@ import {Http} from "@angular/http";
 import {RunwaySurface} from "./runwaySurface";
 import {AppSettings} from "../main/app-settings";
 import {ApiService} from "../main/api.service";
+import "rxjs/add/operator/toPromise";
 
 @Injectable()
 
