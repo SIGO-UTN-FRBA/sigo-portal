@@ -27,9 +27,9 @@ const objectRoutes : Routes = [
         component: PlacedObjectNewComponent
       },
       {
-        path: ':objectId',
+        path: ':objectType/:objectId',
         data:{
-          breadcrumb: { active: true, name: 'airport'}
+          breadcrumb: { active: true, name: 'object'}
         },
         children:[
           {
@@ -38,6 +38,10 @@ const objectRoutes : Routes = [
             data:{
               breadcrumb: { active: false }
             },
+          },
+          {
+            path: '',
+            redirectTo: 'detail'
           }
         ]
       },

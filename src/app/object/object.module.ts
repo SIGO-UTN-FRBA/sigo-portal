@@ -17,6 +17,8 @@ import {ObjectOwnerService} from "../owner/owner.service";
 import {LocationService} from "../location/location.service";
 import {PlacedObjectDetailGeneralEditComponent} from "./object-detail-general-edit.component";
 import {PlacedObjectDetailGeneralViewComponent} from "./object-detail-general-view.component";
+import {PlacedObjectDetailGeometryEditComponent} from "./object-detail-geometry-edit.component";
+import {PlacedObjectDetailGeometryViewComponent} from "./object-detail-geometry-view.component";
 
 @NgModule({
 
@@ -34,7 +36,9 @@ import {PlacedObjectDetailGeneralViewComponent} from "./object-detail-general-vi
     PlacedObjectDetailComponent,
     PlacedObjectNewComponent,
     PlacedObjectDetailGeneralEditComponent,
-    PlacedObjectDetailGeneralViewComponent
+    PlacedObjectDetailGeneralViewComponent,
+    PlacedObjectDetailGeometryEditComponent,
+    PlacedObjectDetailGeometryViewComponent
   ],
   providers: [
     OlService,

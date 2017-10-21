@@ -26,7 +26,7 @@ import {PlacedObjectService} from "./object.service";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/objects/{{result.id}}/detail">{{result.name}}</a>
+              <a routerLink="/objects/{{result.typeId}}/{{result.id}}/detail">{{result.name}}</a>
             </h4>
             <p>{{result.subtype}}</p>
           </div>

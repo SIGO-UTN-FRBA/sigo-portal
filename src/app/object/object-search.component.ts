@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
+import PlacedObjectTypes, {PlacedObjectType} from './objectType';
 
 @Component({
   template: `
@@ -18,14 +19,14 @@ import {Router} from "@angular/router";
             <div class="col-lg-8 col-lg-offset-2">
               <div class="input-group input-group-lg">
                 <div class="input-group-btn">
-                  <button type="button" class="btn btn-default" tabindex="-1">{{searchType['name']}}</button>
+                  <button type="button" class="btn btn-default" tabindex="-1">{{searchType.description}}</button>
                   <button type="button" tabindex="-1" data-toggle="dropdown" class="btn btn-default dropdown-toggle">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu">
                     <li *ngFor="let type of searchTypes">
-                      <a (click)="setSearchType(type)" *ngIf="type != searchType">{{type['name']}}</a>
+                      <a (click)="setSearchType(type)" *ngIf="type != searchType">{{type.description}}</a>
                     </li>
                   </ul>
                 </div>
@@ -81,22 +82,9 @@ import {Router} from "@angular/router";
 
 export class PlacedObjectSearchComponent implements OnInit {
 
-  searchTypes : object[] = [
-    {
-      name : 'Building',
-      value: 0
-    },
-    {
-      name : 'Individual',
-      value: 1
-    },
-    {
-      name : 'Overhead wired',
-      value: 2
-    }
-  ];
+  searchTypes : PlacedObjectType[];
 
-  searchType : object = this.searchTypes[0];
+  searchType : PlacedObjectType;
 
   searchName : string = '';
 
@@ -105,6 +93,9 @@ export class PlacedObjectSearchComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
+
+    this.searchTypes = PlacedObjectTypes;
+
     this.searchType = this.searchTypes[0];
 
     this.searchName = '';
@@ -119,7 +110,7 @@ export class PlacedObjectSearchComponent implements OnInit {
   onSubmit = () => {
     this.router.navigate(
       ['/objects/search/list'],
-      {queryParams: {type: this.searchType['value'], name: this.searchName }});
+      {queryParams: {type: this.searchType.id, name: this.searchName }});
   };
 
   clearList = () =>{

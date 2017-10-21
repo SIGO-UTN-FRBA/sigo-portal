@@ -10,6 +10,7 @@ import Style = ol.style.Style;
 import Circle = ol.style.Circle;
 import Polygon = ol.geom.Polygon;
 import Point = ol.geom.Point;
+import Geometry = ol.geom.Geometry;
 
 
 @Component({
@@ -26,10 +27,35 @@ import Point = ol.geom.Point;
 
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-  layers : { airport: VectorLayer, runway: VectorLayer, direction: VectorLayer, threshold: VectorLayer};
+  layers : {
+    airport: VectorLayer,
+    runway: VectorLayer,
+    direction: VectorLayer,
+    threshold: VectorLayer,
+    individual: VectorLayer,
+    building: VectorLayer,
+    wiring: VectorLayer
+  };
 
   constructor() {
-    this.layers = { airport: null, runway: null, direction: null, threshold: null};
+    this.layers = {
+      airport: null,
+      runway: null,
+      direction: null,
+      threshold: null,
+      individual: null,
+      building: null,
+      wiring: null
+    };
+  }
+
+  private createVectorSource() {
+    return new VectorSource({
+      format: new GeoJSON({
+        defaultDataProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857'
+      })
+    });
   }
 
   clearAiportLayer() : OlComponent {
@@ -42,15 +68,8 @@ import Point = ol.geom.Point;
     if(this.layers.airport != null)
       return this.layers.airport;
 
-    let airportSource = new VectorSource({
-      format: new GeoJSON({
-        defaultDataProjection: 'EPSG:3857',
-        featureProjection: 'EPSG:3857'
-      })
-    });
-
     let airportLayer = new VectorLayer({
-      source: airportSource,
+      source: this.createVectorSource(),
       style: new Style({
         image: new Circle({
           radius: 7,
@@ -78,15 +97,8 @@ import Point = ol.geom.Point;
     if(this.layers.runway != null)
       return this.layers.runway;
 
-    let runwaySource = new VectorSource({
-      format: new GeoJSON({
-        defaultDataProjection: 'EPSG:3857',
-        featureProjection: 'EPSG:3857'
-      })
-    });
-
     let runwayLayer = new VectorLayer({
-      source: runwaySource,
+      source: this.createVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
         fill: new ol.style.Fill({color: 'black'})
@@ -111,15 +123,8 @@ import Point = ol.geom.Point;
     if(this.layers.direction != null)
       return this.layers.direction;
 
-    let directionSource = new VectorSource({
-      format: new GeoJSON({
-        defaultDataProjection: 'EPSG:3857',
-        featureProjection: 'EPSG:3857'
-      })
-    });
-
     let directionLayer = new VectorLayer({
-      source: directionSource,
+      source: this.createVectorSource(),
       style: new Style({
         image: new Circle({
           radius: 3,
@@ -146,16 +151,8 @@ import Point = ol.geom.Point;
     if(this.layers.threshold != null)
       return this.layers.threshold;
 
-    let source = new VectorSource({
-      format: new GeoJSON({
-        defaultDataProjection: 'EPSG:3857',
-        featureProjection: 'EPSG:3857'
-      }),
-      features: []
-    });
-
     let thresholdLayer = new VectorLayer({
-      source: source,
+      source: this.createVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
         fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.75)' })
@@ -168,6 +165,85 @@ import Point = ol.geom.Point;
     this.map.addLayer(thresholdLayer);
 
     return thresholdLayer;
+  }
+
+  clearIndividualObjectLayer() : OlComponent {
+    this.getIndividualObjectLayer().getSource().clear();
+
+    return this;
+  }
+
+  getIndividualObjectLayer() : VectorLayer {
+    if(this.layers.individual != null)
+      return this.layers.individual;
+
+    let layer = new VectorLayer({
+      source: this.createVectorSource(),
+      style: new ol.style.Style({
+        image: new ol.style.RegularShape({
+          stroke: new ol.style.Stroke({color: 'black', width: 2}),
+          points: 4,
+          radius: 10,
+          radius2: 0,
+          angle: Math.PI / 4
+        })
+      })
+    });
+
+    this.layers.individual = layer;
+
+    this.map.addLayer(layer);
+
+    return layer;
+  }
+
+  clearBuildingObjectLayer() : OlComponent{
+    this.getBuildingObjectLayer().getSource().clear();
+
+    return this;
+  }
+
+  getBuildingObjectLayer() : VectorLayer {
+    if(this.layers.building != null)
+      return this.layers.building;
+
+    let layer = new VectorLayer({
+      source: this.createVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
+        fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.85)' })
+      }),
+    });
+
+    this.layers.building = layer;
+
+    this.map.addLayer(layer);
+
+    return layer;
+  }
+
+  clearWiringObjectLayer() : OlComponent {
+    this.getWiringObjectLayer().getSource().clear();
+
+    return this;
+  }
+
+  getWiringObjectLayer() : VectorLayer {
+    if(this.layers.wiring != null)
+      return this.layers.wiring;
+
+    let layer = new VectorLayer({
+      source: this.createVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'darkgray', width:1})
+      }),
+    });
+
+    this.layers.wiring = layer;
+
+    this.map.addLayer(layer);
+
+    return layer;
   }
 
   getOMS(){
@@ -225,7 +301,7 @@ import Point = ol.geom.Point;
 
   public addRunway (geom : Polygon, options? : {center?: boolean, zoom?: number}){
 
-    //TODO pasar una geometry con sus propiedades y no una coordinada.
+    //TODO para una feature y no solo una geom
 
     let tmp = new ol.geom.Polygon(geom['coordinates']);
 
@@ -240,7 +316,7 @@ import Point = ol.geom.Point;
 
   public addAirport (geom: Point, options? :{center?: boolean, zoom?: number}) {
 
-    //TODO pasar una geometry con sus propiedades y no una coordinada.
+    //TODO para una feature y no solo una geom
 
     let tmp = new ol.geom.Point(geom['coordinates']);
 
@@ -254,6 +330,8 @@ import Point = ol.geom.Point;
   };
 
   public addDirection(geom: Point, options :{center?: boolean, zoom?: number}) : OlComponent {
+
+    //TODO para una feature y no solo una geom
 
     let tmp = new ol.geom.Point(geom['coordinates']);
 
@@ -270,6 +348,8 @@ import Point = ol.geom.Point;
 
   public addThreshold(geom: Polygon, options? : {center?: boolean, zoom?: number}){
 
+    //TODO para una feature y no solo una geom
+
     let tmp = new ol.geom.Polygon(geom['coordinates']);
 
     let feature = new ol.Feature({
@@ -279,6 +359,51 @@ import Point = ol.geom.Point;
     });
 
     this.addFeature(feature, this.getDisplacedThresholdLayer(), options);
+  }
+
+  public addIndividualObject(geom: Geometry, options?: { center?: boolean; zoom?: number }) {
+
+    //TODO para una feature y no solo una geom
+
+    let tmp = new ol.geom.Point(geom['coordinates']);
+
+    let feature = new ol.Feature({
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
+      name: 'Individual Objects',
+      id: 'i',
+    });
+
+    this.addFeature(feature, this.getIndividualObjectLayer(), options);
+  }
+
+  public addBuildingObject(geom: Geometry, options? : {center?: boolean, zoom?: number}){
+
+    //TODO para una feature y no solo una geom
+
+    let tmp = new ol.geom.MultiPolygon(geom['coordinates']);
+
+    let feature = new ol.Feature({
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
+      name: 'Building Objects',
+      id: 'b',
+    });
+
+    this.addFeature(feature, this.getBuildingObjectLayer(), options);
+  }
+
+  public addWiringObject(geom: Geometry, options? : {center?: boolean, zoom?: number}){
+
+    //TODO para una feature y no solo una geom
+
+    let tmp = new ol.geom.LineString(geom['coordinates']);
+
+    let feature = new ol.Feature({
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
+      name: 'Wiring Objects',
+      id: 'w',
+    });
+
+    this.addFeature(feature, this.getWiringObjectLayer(), options);
   }
 
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
