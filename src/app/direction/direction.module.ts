@@ -10,15 +10,21 @@ import {OlService} from "../olmap/ol.service";
 import {DirectionDetailGeneralViewComponent} from "./direction-detail-general-view.component";
 import {DirectionRoutingModule} from "./direction-routing.module";
 import {DirectionDetailGeneralEditComponent} from "./direction-detail-general-edit-component";
-import {DirectionDetailApproachViewComponent} from "./direction-detail-approach-view-component";
+import {DirectionDetailApproachViewComponent} from "./direction-detail-approach-view.component";
 import {DirectionCatalogService} from "./direction-catalog.service";
 import {DirectionDetailGeometryViewComponent} from "./direction-detail-geometry-view.component";
 import {DirectionDetailGeometryEditComponent} from "./direction-detail-geometry-edit.component";
 import {DirectionDetailTakeoffViewComponent} from "./direction-detail-takeoff-view.component";
-import {DirectionDetailApproachEditComponent} from "./direction-detail-approach-edit-component";
+import {DirectionDetailApproachEditComponent} from "./direction-detail-approach-edit.component";
 import {DirectionDetailTakeoffEditComponent} from "./direction-detail-takeoff-edit.component";
 import {DirectionDetailDistancesViewComponent} from "./direction-detail-distances-view.component";
 import {DirectionNewComponent} from "./direction-new-component";
+import {DirectionDetailClassificationViewComponent} from "./direction-detail-classification-view.component";
+import {DirectionDetailClassificationEditComponent} from "./direction-detail-classification-edit.component";
+import {DirectionClassificationService} from "./direction-classification.service";
+import {RegulationIcaoService} from "../regulation/regulation-icao.service";
+import {RegulationFaaService} from "../regulation/regulation-faa.service";
+
 
 
 @NgModule({
@@ -40,13 +46,18 @@ import {DirectionNewComponent} from "./direction-new-component";
     DirectionDetailGeometryViewComponent,
     DirectionDetailGeometryEditComponent,
     DirectionDetailDistancesViewComponent,
+    DirectionDetailClassificationViewComponent,
+    DirectionDetailClassificationEditComponent,
     DirectionNewComponent
   ],
   providers:[
     DirectionService,
     OlService,
     OlComponent,
-    DirectionCatalogService
+    DirectionCatalogService,
+    DirectionClassificationService,
+    RegulationIcaoService,
+    RegulationFaaService
   ],
   schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })

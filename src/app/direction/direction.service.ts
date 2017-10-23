@@ -8,6 +8,7 @@ import {RunwayTakeoffSection} from "./runwayTakeoffSection";
 import {RunwayDistance} from "./runwayDistance";
 import {ApiService} from "../main/api.service";
 import Polygon = ol.geom.Polygon;
+import "rxjs/add/operator/toPromise";
 
 @Injectable()
 

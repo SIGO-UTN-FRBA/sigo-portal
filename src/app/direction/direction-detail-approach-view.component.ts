@@ -27,7 +27,7 @@ import {ApiError} from "../main/apiError";
       </div>
       <div class="panel-body" [ngSwitch]="status">
 
-        <div *ngSwitchCase="indicator.LOADING">
+        <div *ngSwitchCase="indicator.LOADING" class="container-fluid">
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">

@@ -145,7 +145,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> this.locateGeometries(),1500);
+    setTimeout(()=> {if(this.geom) this.locateGeometries()},1500);
   }
 
   allowEdition() {
