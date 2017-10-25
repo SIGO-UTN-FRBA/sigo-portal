@@ -19,8 +19,8 @@ import {AirportDetailGeometryViewComponent} from "./airport-detail-geometry-view
 import {OlService} from "../olmap/ol.service";
 import {OlComponent} from "../olmap/ol.component";
 import {OlmapModule} from "../olmap/olmap.module";
-import {AirportCatalogService} from "./airport-catalog.service";
 import {RegionService} from "../region/region.service";
+import {RegulationService} from "../regulation/regulation.service";
 
 @NgModule({
   imports: [
@@ -44,7 +44,7 @@ import {RegionService} from "../region/region.service";
   ],
   providers: [
     AirportService,
-    AirportCatalogService,
+    RegulationService,
     RunwayService,
     RegionService,
     OlService,

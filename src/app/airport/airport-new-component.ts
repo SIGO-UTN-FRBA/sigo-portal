@@ -2,12 +2,12 @@ import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {AirportService} from "./airport.service";
 import {Airport} from "./airport";
 import {Router} from "@angular/router";
-import {AirportCatalogService} from "./airport-catalog.service";
-import {AirportRegulation} from "./airportRegulation";
 import {Region} from "../region/region";
 import {RegionService} from "../region/region.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
+import {RegulationService} from "../regulation/regulation.service";
+import {EnumItem} from "../commons/enumItem";
 
 @Component({
   template: `
@@ -121,7 +121,7 @@ import {ApiError} from "../main/apiError";
                           required
                   >
                     <option *ngFor="let regulation of regulations" [value]="regulation.id">
-                      {{regulation.name}} - {{regulation.description}}
+                      {{regulation.description}}
                     </option>
                   </select>
                 </div>
@@ -159,7 +159,7 @@ import {ApiError} from "../main/apiError";
 export class AirportNewComponent implements OnInit{
 
   airport : Airport;
-  regulations: AirportRegulation[];
+  regulations: EnumItem[];
   regions : Region[];
   status: number;
   onInitError: ApiError;
@@ -169,7 +169,7 @@ export class AirportNewComponent implements OnInit{
   constructor(
     private router : Router,
     private airportService : AirportService,
-    private catalogService : AirportCatalogService,
+    private regulationService : RegulationService,
     private regionService : RegionService
   ){
     this.airport = new Airport();
@@ -180,8 +180,8 @@ export class AirportNewComponent implements OnInit{
 
     this.status = STATUS_INDICATOR.LOADING;
 
-    let p1 = this.catalogService
-      .listRegulations()
+    let p1 = this.regulationService
+      .list()
       .then(data => this.regulations = data)
       .catch(error => Promise.reject(error));
 

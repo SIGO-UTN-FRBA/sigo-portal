@@ -2,10 +2,10 @@ import {Component, OnInit} from "@angular/core";
 import {Runway} from "./runway";
 import {RunwayService} from "./runway.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {RunwaySurface} from "./runwaySurface";
 import {RunwayCatalogService} from "./runway-catalog.service";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {EnumItem} from "../commons/enumItem";
 
 @Component({
   template: `
@@ -112,7 +112,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                     class="form-control"
                     required>
                     <option *ngFor="let surface of surfaces" [value]="surface.id">
-                      {{surface.code}} - {{surface.name}}
+                      {{surface.name}} - {{surface.description}}
                     </option>
                   </select>
                 </div>
@@ -149,7 +149,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 export class RunwayNewComponent implements OnInit{
 
   runway : Runway;
-  surfaces : RunwaySurface[];
+  surfaces : EnumItem[];
   onSubmitError: ApiError;
   onInitError: ApiError;
   status: number;

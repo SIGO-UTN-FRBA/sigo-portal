@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {Runway} from "./runway";
 import {RunwayService} from "./runway.service";
-import {RunwaySurface} from "./runwaySurface";
 import {RunwayCatalogService} from "./runway-catalog.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
+import {EnumItem} from "../commons/enumItem";
 
 
 @Component({
@@ -105,7 +105,7 @@ import {ApiError} from "../main/apiError";
                   class="form-control"
                   required>
                   <option *ngFor="let surface of surfaces" [value]="surface.id">
-                    {{surface.code}} - {{surface.name}}
+                    {{surface.name}} - {{surface.description}}
                   </option>
                 </select>
               </div>
@@ -146,7 +146,7 @@ export class RunwayDetailGeneralEditComponent implements OnInit{
   @Input() edit : boolean;
   @Output() editChange : EventEmitter<boolean> = new EventEmitter<boolean>();
   runway : Runway;
-  surfaces : RunwaySurface[];
+  surfaces : EnumItem[];
   onInitError : ApiError;
   onSubmitError : ApiError;
 

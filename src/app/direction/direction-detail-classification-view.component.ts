@@ -110,6 +110,8 @@ export class DirectionDetailClassificationViewComponent implements OnInit {
 
     this.status = STATUS_INDICATOR.LOADING;
 
+    this.onInitError = null;
+
     this.classificationService
       .get(this.airportId, this.runwayId, this.directionId)
       .then(data => {

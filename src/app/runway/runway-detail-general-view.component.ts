@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {RunwayService} from "./runway.service";
 import {Runway} from "./runway";
-import {RunwaySurface} from "./runwaySurface";
 import {RunwayCatalogService} from "./runway-catalog.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
 import {Router} from "@angular/router";
+import {EnumItem} from "../commons/enumItem";
 
 @Component({
   selector: 'app-runway-general-view',
@@ -89,7 +89,7 @@ import {Router} from "@angular/router";
                 i18n="@@ruwnay.detail.section.general.inputSurface">
                 Surface
               </label>
-              <p class="form-control-static">{{surfaces[runway.surfaceId - 1].code + ' - ' + surfaces[runway.surfaceId -1].name}}</p>
+              <p class="form-control-static">{{surfaces[runway.surfaceId - 1].name + ' - ' + surfaces[runway.surfaceId -1].description}}</p>
             </div>
           </div>
         </div>
@@ -104,7 +104,7 @@ export class RunwayDetailGeneralViewComponent implements OnInit{
   @Input() edit : boolean;
   @Output() editChange : EventEmitter<boolean> = new EventEmitter<boolean>();
   runway : Runway;
-  surfaces : RunwaySurface[];
+  surfaces : EnumItem[];
   indicator;
   status : number;
   onInitError : ApiError;
