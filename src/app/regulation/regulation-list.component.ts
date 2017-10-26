@@ -27,7 +27,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/airports/{{regulation.id}}/detail">{{regulation.name}}</a>
+              <a routerLink="/regulations/{{regulation.id}}/detail">{{regulation.name}}</a>
             </h4>
             <p>{{regulation.authority}}</p>
             <p>{{regulation.description}}</p>

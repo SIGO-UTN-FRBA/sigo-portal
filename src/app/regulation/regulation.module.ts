@@ -7,11 +7,13 @@ import {CommonsModule} from "../commons/commons.module";
 import {CommonModule} from "@angular/common";
 import {RegulationComponent} from "./regulation.component";
 import {RegulationListComponent} from "./regulation-list.component";
-import {RegulationDetailComponent} from "./regulation-detail.component";
+import {FilterRulesBySurface, RegulationDetailICAOComponent} from "./regulation-detail-icao.component";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
 
   imports: [
+    FormsModule,
     CommonModule,
     CommonsModule,
     RegulationRoutingModule
@@ -19,7 +21,8 @@ import {RegulationDetailComponent} from "./regulation-detail.component";
   declarations: [
     RegulationComponent,
     RegulationListComponent,
-    RegulationDetailComponent
+    RegulationDetailICAOComponent,
+    FilterRulesBySurface
   ],
   providers:[
     RegulationService,

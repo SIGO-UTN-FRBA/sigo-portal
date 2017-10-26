@@ -3,6 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {RegulationComponent} from "./regulation.component";
 import {RegulationListComponent} from "./regulation-list.component";
 import {CommonsModule} from "../commons/commons.module";
+import {RegulationDetailICAOComponent} from "./regulation-detail-icao.component";
 
 const regulationRoutes : Routes = [
   {
@@ -17,10 +18,10 @@ const regulationRoutes : Routes = [
         }
       },
       {
-        path: ':regulationId/detail',
-        component: RegulationListComponent,
+        path: '0/detail',
+        component: RegulationDetailICAOComponent,
         data:{
-          breadcrumb: {active: true, name: 'Regulation'}
+          breadcrumb: {active: true, name: 'ICAO Annex 14'}
         }
       },
       {
