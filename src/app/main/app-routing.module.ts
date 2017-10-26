@@ -22,6 +22,10 @@ const appRoutes: Routes = [
     loadChildren: 'app/object/object.module#PlacedObjectModule'
   },
   {
+    path: 'regulations',
+    loadChildren: 'app/regulation/regulation.module#RegulationModule'
+  },
+  {
     path: '**',
     component: PageNotFoundComponent
   }

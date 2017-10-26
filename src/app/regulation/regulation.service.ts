@@ -4,6 +4,7 @@ import {Http} from "@angular/http";
 import {AppSettings} from "../main/app-settings";
 import {EnumItem} from "../commons/enumItem";
 import "rxjs/add/operator/toPromise";
+import {Regulation} from "./regulation";
 
 @Injectable()
 
@@ -19,4 +20,11 @@ export class RegulationService extends ApiService {
       .catch(this.handleError)
   }
 
+  get(regulationId:number): Promise<Regulation> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/regulations/${regulationId}`)
+      .toPromise()
+      .then(response => response.json() as Regulation)
+      .catch(this.handleError)
+  }
 }
