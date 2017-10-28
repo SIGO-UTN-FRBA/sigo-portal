@@ -11,9 +11,7 @@ import {ParamMap} from "@angular/router";
 @Injectable()
 export class AirportService extends ApiService {
 
-  constructor (protected http : Http){
-    super(http);
-  }
+  constructor (http : Http){super(http);}
 
   search(paramMap : ParamMap) : Promise<Airport[]>{
 

@@ -8,6 +8,11 @@ import {OlmapModule} from "../olmap/olmap.module";
 import {AnalysisRoutingModule} from "./analysis-routing.module";
 import {AnalysisCaseSearchComponent} from "./analysis-search.component";
 import {AnalysisCaseListComponent} from "./analysis-list.component";
+import {AirportService} from "../airport/airport.service";
+import {AnalysisWizardAnalysisComponent} from "./analysis-wizard-analysis.component";
+import {AnalysisWizardExceptionComponent} from "./analysis-wizard-exception.component";
+import {AnalysisWizardInformComponent} from "./analysis-wizard-inform.component";
+import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component";
 
 @NgModule({
   imports:[
@@ -20,10 +25,15 @@ import {AnalysisCaseListComponent} from "./analysis-list.component";
   declarations: [
     AnalysisComponent,
     AnalysisCaseSearchComponent,
-    AnalysisCaseListComponent
+    AnalysisCaseListComponent,
+    AnalysisWizardObjectComponent,
+    AnalysisWizardExceptionComponent,
+    AnalysisWizardAnalysisComponent,
+    AnalysisWizardInformComponent
   ],
   providers: [
-    AnalysisCaseService
+    AnalysisCaseService,
+    AirportService
   ]
 })
 
