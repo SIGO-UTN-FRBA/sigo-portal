@@ -10,6 +10,7 @@ import {ApiError} from "../main/apiError";
 import Polygon = ol.geom.Polygon;
 import {DirectionDistancesService} from "./direction-distances.service";
 import {Subscription} from "rxjs/Subscription";
+import {RunwayService} from "../runway/runway.service";
 
 @Component({
   selector: 'app-direction-geometry-view',
@@ -82,11 +83,15 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   geom  : Point;
   geomText : string;
   thresholdGeom : Polygon;
+  stopwayGeom : Polygon;
+  clearwayGeom : Polygon;
+  runwayGeom : Polygon;
   subscription: Subscription;
 
   constructor(
     private directionService : DirectionService,
-    private distancesService : DirectionDistancesService
+    private distancesService : DirectionDistancesService,
+    private runwayService : RunwayService
   ){
     this.geom = null;
     this.indicator = STATUS_INDICATOR;
@@ -95,6 +100,8 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
       () => this.loadGeometries()
         .then(()=> this.olmap.clearDirectionLayer())
         .then(()=> this.olmap.clearDisplacedThresholdLayer())
+        .then(()=> this.olmap.getStopwayLayer())
+        .then(()=> this.olmap.getClearwayLayer())
         .then(()=> this.locateGeometries())
     );
   }
@@ -130,18 +137,35 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
 
         return point;
       })
-      .catch(error => Promise.reject(error))
-      .then(point => {
+      .then(() => {
 
-        if(point != null)
+        if(this.geom != null)
           return this.directionService
             .getDisplacedThresholdGeom(this.airportId, this.runwayId, this.directionId);
         else
           return null;
 
       })
-      .catch(error => Promise.reject(error))
-      .then(polygon => this.thresholdGeom = polygon);
+      .then(polygon => this.thresholdGeom = polygon)
+      .then(()=> {
+        if(this.geom != null)
+          return this.directionService
+            .getStopwayGeom(this.airportId, this.runwayId, this.directionId);
+        else
+          return null;
+      })
+      .then(polygon => this.stopwayGeom = polygon)
+      .then(()=> {
+        if(this.geom != null)
+          return this.directionService
+            .getClearwayGeom(this.airportId, this.runwayId, this.directionId);
+        else
+          return null;
+      })
+      .then(polygon => this.clearwayGeom = polygon)
+      .then(()=> this.runwayService.getGeom(this.airportId, this.runwayId))
+      .then(polygon => this.runwayGeom = polygon)
+      .catch(error => Promise.reject(error));
   }
 
   ngAfterViewInit(): void {
@@ -154,8 +178,11 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
 
   private locateGeometries(){
       this.olmap
-        .addDirection(this.geom, {center: true, zoom: 15})
-        .addThreshold(this.thresholdGeom);
+        .addRunway(this.runwayGeom, {center: true, zoom: 14})
+        .addThreshold(this.thresholdGeom)
+        .addDirection(this.geom)
+        .addClearway(this.clearwayGeom)
+        .addStopway(this.stopwayGeom);
   }
 
   ngOnDestroy() {

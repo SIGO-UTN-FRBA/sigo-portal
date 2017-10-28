@@ -119,4 +119,20 @@ export class DirectionService extends ApiService {
       .then(response => response.json() as Polygon)
       .catch(this.handleError)
   }
+
+  getStopwayGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/geometries/stopway`)
+      .toPromise()
+      .then(response => response.json() as Polygon)
+      .catch(this.handleError)
+  }
+
+  getClearwayGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/geometries/clearway`)
+      .toPromise()
+      .then(response => response.json() as Polygon)
+      .catch(this.handleError)
+  }
 }

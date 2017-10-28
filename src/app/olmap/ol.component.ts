@@ -11,6 +11,7 @@ import Circle = ol.style.Circle;
 import Polygon = ol.geom.Polygon;
 import Point = ol.geom.Point;
 import Geometry = ol.geom.Geometry;
+import {OlLayers} from "./olLayers";
 
 
 @Component({
@@ -27,26 +28,10 @@ import Geometry = ol.geom.Geometry;
 
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-  layers : {
-    airport: VectorLayer,
-    runway: VectorLayer,
-    direction: VectorLayer,
-    threshold: VectorLayer,
-    individual: VectorLayer,
-    building: VectorLayer,
-    wiring: VectorLayer
-  };
+  layers : OlLayers;
 
   constructor() {
-    this.layers = {
-      airport: null,
-      runway: null,
-      direction: null,
-      threshold: null,
-      individual: null,
-      building: null,
-      wiring: null
-    };
+    this.layers = new OlLayers();
   }
 
   private createVectorSource() {
@@ -154,8 +139,8 @@ import Geometry = ol.geom.Geometry;
     let thresholdLayer = new VectorLayer({
       source: this.createVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
-        fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.75)' })
+        stroke: new ol.style.Stroke({color: 'darkred', width:1}),
+        fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.6)' })
       }),
       map: this.map
     });
@@ -165,6 +150,56 @@ import Geometry = ol.geom.Geometry;
     this.map.addLayer(thresholdLayer);
 
     return thresholdLayer;
+  }
+
+  clearStopwayLayer() : OlComponent {
+    this.getStopwayLayer().getSource().clear();
+
+    return this;
+  }
+
+  getStopwayLayer() : VectorLayer {
+    if(this.layers.stopway != null)
+      return this.layers.stopway;
+
+    let layer = new VectorLayer({
+      source: this.createVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'darkblue', width:1}),
+        fill: new ol.style.Fill({color: 'rgba(0, 0, 255, 0.75)' })
+      })
+    });
+
+    this.layers.stopway = layer;
+
+    this.map.addLayer(layer);
+
+    return layer;
+  }
+
+  clearClearwayLayer() : OlComponent {
+    this.getClearwayLayer().getSource().clear();
+
+    return this;
+  }
+
+  getClearwayLayer() : VectorLayer {
+    if(this.layers.clearway != null)
+      return this.layers.clearway;
+
+    let layer = new VectorLayer({
+      source: this.createVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'darkgreen', width:1}),
+        fill: new ol.style.Fill({color: 'rgba(0, 255, 0, 0.6)' })
+      })
+    });
+
+    this.layers.clearway = layer;
+
+    this.map.addLayer(layer);
+
+    return layer;
   }
 
   clearIndividualObjectLayer() : OlComponent {
@@ -246,6 +281,7 @@ import Geometry = ol.geom.Geometry;
     return layer;
   }
 
+
   getOMS(){
 
     let OSM = new Tile({
@@ -299,7 +335,7 @@ import Geometry = ol.geom.Geometry;
     });
   };
 
-  public addRunway (geom : Polygon, options? : {center?: boolean, zoom?: number}){
+  public addRunway (geom : Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     //TODO para una feature y no solo una geom
 
@@ -312,9 +348,11 @@ import Geometry = ol.geom.Geometry;
     });
 
     this.addFeature(feature, this.getRunwayLayer(), options);
+
+    return this;
   }
 
-  public addAirport (geom: Point, options? :{center?: boolean, zoom?: number}) {
+  public addAirport (geom: Point, options? :{center?: boolean, zoom?: number}) : OlComponent {
 
     //TODO para una feature y no solo una geom
 
@@ -327,9 +365,11 @@ import Geometry = ol.geom.Geometry;
     });
 
     this.addFeature(feature, this.getAirportLayer(), options);
+
+    return this;
   };
 
-  public addDirection(geom: Point, options :{center?: boolean, zoom?: number}) : OlComponent {
+  public addDirection(geom: Point, options? :{center?: boolean, zoom?: number}) : OlComponent {
 
     //TODO para una feature y no solo una geom
 
@@ -346,7 +386,7 @@ import Geometry = ol.geom.Geometry;
     return this;
   }
 
-  public addThreshold(geom: Polygon, options? : {center?: boolean, zoom?: number}){
+  public addThreshold(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     //TODO para una feature y no solo una geom
 
@@ -359,9 +399,45 @@ import Geometry = ol.geom.Geometry;
     });
 
     this.addFeature(feature, this.getDisplacedThresholdLayer(), options);
+
+    return this;
   }
 
-  public addIndividualObject(geom: Geometry, options?: { center?: boolean; zoom?: number }) {
+  public addStopway(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
+
+    //TODO para una feature y no solo una geom
+
+    let tmp = new ol.geom.Polygon(geom['coordinates']);
+
+    let feature = new ol.Feature({
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
+      name: 'Stopway',
+      id: 's',
+    });
+
+    this.addFeature(feature, this.getStopwayLayer(), options);
+
+    return this;
+  }
+
+  public addClearway(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
+
+    //TODO para una feature y no solo una geom
+
+    let tmp = new ol.geom.Polygon(geom['coordinates']);
+
+    let feature = new ol.Feature({
+      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
+      name: 'Clearway',
+      id: 's',
+    });
+
+    this.addFeature(feature, this.getClearwayLayer(), options);
+
+    return this;
+  }
+
+  public addIndividualObject(geom: Geometry, options?: { center?: boolean; zoom?: number }) : OlComponent {
 
     //TODO para una feature y no solo una geom
 
@@ -374,9 +450,11 @@ import Geometry = ol.geom.Geometry;
     });
 
     this.addFeature(feature, this.getIndividualObjectLayer(), options);
+
+    return this;
   }
 
-  public addBuildingObject(geom: Geometry, options? : {center?: boolean, zoom?: number}){
+  public addBuildingObject(geom: Geometry, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     //TODO para una feature y no solo una geom
 
@@ -389,9 +467,11 @@ import Geometry = ol.geom.Geometry;
     });
 
     this.addFeature(feature, this.getBuildingObjectLayer(), options);
+
+    return this;
   }
 
-  public addWiringObject(geom: Geometry, options? : {center?: boolean, zoom?: number}){
+  public addWiringObject(geom: Geometry, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     //TODO para una feature y no solo una geom
 
@@ -404,6 +484,8 @@ import Geometry = ol.geom.Geometry;
     });
 
     this.addFeature(feature, this.getWiringObjectLayer(), options);
+
+    return this;
   }
 
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
