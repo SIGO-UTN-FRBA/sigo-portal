@@ -1,22 +1,21 @@
 import {Component} from "@angular/core";
-import {Params, Router} from "@angular/router";
-import {AirportSearchFilter, default as AirportSearchFilters} from "./airportSearchFilters";
+import {Router} from "@angular/router";
+import {AirportSearchFilter, default as AirportSearchFilters} from "../airport/airportSearchFilters";
 
 @Component({
   template:`
-    <h1 i18n="@@airport.search.title">
-      Airports
+    <h1 i18n="@@analysis.search.title">
+      Analysis cases
     </h1>
-    <p i18n="@@airport.search.main_description">
-      This section allows users to manage airports.
+    <p i18n="@@analysis.search.main_description">
+      This section allows users to manage analysis cases.
     </p>
     <hr/>
-
     <div class="container-fluid">
       <div class="row">
         <form #searchForm="ngForm" class="form" role="form" (ngSubmit)="onSubmit()">
           <div class="row form-group">
-            <div class="col-lg-8 col-lg-offset-2">
+            <div class="col-md-8 col-md-offset-2">
               <div class="input-group input-group-lg">
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default" tabindex="-1">{{searchType['name']}}</button>
@@ -60,16 +59,6 @@ import {AirportSearchFilter, default as AirportSearchFilters} from "./airportSea
                 </span>
               </div>
             </div>
-            <div class="col-md-2">
-              <a
-                type="button"
-                routerLink="/airports/new"
-                class="btn btn-primary btn-lg"
-                i18n-title="@@commons.button.new"
-                title="New">
-                <span class="glyphicon glyphicon-plus"></span>
-              </a>
-            </div>
           </div>
         </form>
       </div>
@@ -78,10 +67,9 @@ import {AirportSearchFilter, default as AirportSearchFilters} from "./airportSea
     <br>
     <router-outlet></router-outlet>
   `
-
 })
 
-export class AirportSearchComponent  {
+export class AnalysisCaseSearchComponent {
 
   searchTypes : AirportSearchFilter[];
 
@@ -97,10 +85,10 @@ export class AirportSearchComponent  {
   }
 
   setSearchType = (type) => {
-      this.searchType = type;
-      this.searchValue = '';
-      this.clearList();
-    };
+    this.searchType = type;
+    this.searchValue = '';
+    this.clearList();
+  };
 
   onSubmit = () => {
 
@@ -109,14 +97,14 @@ export class AirportSearchComponent  {
     params[this.searchType.property] = this.searchValue;
 
     this.router.navigate(
-      ['/airports/search/list'],
+      ['/analysis/search/list'],
       {queryParams: params}
     );
   };
 
   clearList = () =>{
-    if(!this.router.isActive('/airports/search', true))
-      this.router.navigate(['/airports/search']);
+    if(!this.router.isActive('/analysis/search', true))
+      this.router.navigate(['/analysis/search']);
   };
 
   onFilter = () => {

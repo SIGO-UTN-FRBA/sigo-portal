@@ -26,6 +26,10 @@ const appRoutes: Routes = [
     loadChildren: 'app/regulation/regulation.module#RegulationModule'
   },
   {
+    path: 'analysis',
+    loadChildren: 'app/analysis/analysis.module#AnalysisModule'
+  },
+  {
     path: '**',
     component: PageNotFoundComponent
   }
