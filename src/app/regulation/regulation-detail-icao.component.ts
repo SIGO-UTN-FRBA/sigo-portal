@@ -216,7 +216,7 @@ export class RegulationDetailICAOComponent implements OnInit {
     this.onSubmitStatus=STATUS_INDICATOR.LOADING;
 
     this.regulationService
-      .searchSurfaces(this.filter.classification, this.filter.category)
+      .searchSurfaces(this.filter.classification, this.filter.category, this.filter.code)
       .then(data => {
         this.surfaces=data;
         this.onSubmitStatus=STATUS_INDICATOR.ACTIVE;
@@ -229,6 +229,7 @@ export class RegulationDetailICAOComponent implements OnInit {
 
   onReset(): void {
       this.initializeFilters();
+      this.surfaces = null;
   }
 
   private initializeFilters() {

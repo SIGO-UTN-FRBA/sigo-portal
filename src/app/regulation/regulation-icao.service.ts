@@ -52,9 +52,9 @@ export class RegulationIcaoService extends ApiService {
       .catch(this.handleError)
   }
 
-  searchSurfaces(classification: number, category: number) : Promise<ListItem[]>{
+  searchSurfaces(classification: number, category: number, code:number) : Promise<ListItem[]>{
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/0/surfaces?classification=${classification}&category=${category}&recommendations=false`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/0/surfaces?classification=${classification}&category=${category}&number=${code}&recommendations=false`)
       .toPromise()
       .then(response => response.json() as ListItem[])
       .catch(this.handleError)
