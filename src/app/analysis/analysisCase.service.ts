@@ -22,4 +22,12 @@ export class AnalysisCaseService extends ApiService {
       .catch(this.handleError)
 
   }
+
+  create(baseCaseId:number) : Promise<AnalysisCase> {
+    return this.http
+      .post(`${AppSettings.API_ENDPOINT}/analysis/cases`, {baseId: baseCaseId})
+      .toPromise()
+      .then(response => response.json() as AnalysisCase)
+      .catch(this.handleError)
+  }
 }

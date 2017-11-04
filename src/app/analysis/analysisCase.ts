@@ -7,4 +7,6 @@ export class AnalysisCase {
   regulationId:number;
   areaId:number;
   status:number;
+  stage:number;
+  creationDate:number;
 }

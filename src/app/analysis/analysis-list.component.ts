@@ -6,6 +6,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ActivatedRoute} from "@angular/router";
 import {AirportService} from "../airport/airport.service";
 import AnalysisWizardStages from "./analysisWizardStages";
+import { DatePipe } from '@angular/common';
 
 @Component({
   template:`
@@ -31,6 +32,17 @@ import AnalysisWizardStages from "./analysisWizardStages";
               <a routerLink="/analysis/{{analysis.id}}/wizard/{{stages[analysis.status]}}">{{analysis.airport.codeFIR}}</a>
             </h4>
             <p>{{analysis.airport.nameFIR}}</p>
+            <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
+            <p>User: <i>Mark Otto</i></p>
+          </div>
+          <div class="media-right">
+            <button type="button" 
+                    (click)="cloneCase(analysis)"
+                    *ngIf="analysis.status == 1"
+                    class="btn btn-default btn-sm" 
+                    i18n="@@commons.button.new">
+              New
+            </button>
           </div>
         </li>
       </ul>
@@ -67,6 +79,10 @@ export class AnalysisCaseListComponent implements OnInit {
       .then(()=> Promise.all(this.results.map(r => this.airportService.get(r.airportId).then((airport) => r.airport = airport))))
       .then(()=> this.status = STATUS_INDICATOR.ACTIVE)
       .catch(error => this.status=STATUS_INDICATOR.ERROR);
+
+  }
+
+  cloneCase(analysis: AnalysisCase) {
 
   }
 }
