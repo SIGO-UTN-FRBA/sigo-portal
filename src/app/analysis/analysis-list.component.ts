@@ -1,12 +1,12 @@
 import {Component, OnInit} from "@angular/core";
 import {AnalysisCase} from "./analysisCase";
 import {ApiError} from "../main/apiError";
-import {AnalysisCaseService} from "./analysisCase.service";
+import {AnalysisService} from "./analysis.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AirportService} from "../airport/airport.service";
-import AnalysisWizardStages from "./analysisWizardStages";
-import { DatePipe } from '@angular/common';
+import AnalysisStages from "./analysisStages";
+import {Analysis} from "./analysis";
 
 @Component({
   template:`
@@ -29,7 +29,7 @@ import { DatePipe } from '@angular/common';
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/analysis/{{analysis.id}}/wizard/{{stages[analysis.status]}}">{{analysis.airport.codeFIR}}</a>
+              <a routerLink="/analysis/{{analysis.id}}/wizard/{{stages[analysis.statusId]}}">{{analysis.airport.codeFIR}}</a>
             </h4>
             <p>{{analysis.airport.nameFIR}}</p>
             <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
@@ -37,8 +37,8 @@ import { DatePipe } from '@angular/common';
           </div>
           <div class="media-right">
             <button type="button" 
-                    (click)="cloneCase(analysis)"
-                    *ngIf="analysis.status == 1"
+                    (click)="cloneCase(analysis.id)"
+                    *ngIf="analysis.statusId == 2"
                     class="btn btn-default btn-sm" 
                     i18n="@@commons.button.new">
               New
@@ -52,20 +52,22 @@ import { DatePipe } from '@angular/common';
 
 export class AnalysisCaseListComponent implements OnInit {
 
-  results : AnalysisCase[];
+  results : Analysis[];
   status : number;
   indicator;
   onInitError : ApiError;
   stages: Array<string>;
 
   constructor(
-    private caseService : AnalysisCaseService,
+    private caseService : AnalysisService,
     private airportService : AirportService,
-    private route: ActivatedRoute
+    private analysisService : AnalysisService,
+    private route: ActivatedRoute,
+    private router : Router
   ){
     this.results = [];
     this.indicator = STATUS_INDICATOR;
-    this.stages = AnalysisWizardStages;
+    this.stages = AnalysisStages;
   }
 
   ngOnInit(): void {
@@ -82,7 +84,10 @@ export class AnalysisCaseListComponent implements OnInit {
 
   }
 
-  cloneCase(analysis: AnalysisCase) {
-
+  cloneCase(caseId: number) {
+    this.analysisService
+      .create(caseId)
+      .then(data => this.router.navigate([`/analysis/${data.id}/stages/object`]))
+    //TODO catch and show error
   }
 }

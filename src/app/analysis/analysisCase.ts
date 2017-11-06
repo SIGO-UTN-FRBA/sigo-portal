@@ -6,7 +6,4 @@ export class AnalysisCase {
   airport:Airport;
   regulationId:number;
   areaId:number;
-  status:number;
-  stage:number;
-  creationDate:number;
 }

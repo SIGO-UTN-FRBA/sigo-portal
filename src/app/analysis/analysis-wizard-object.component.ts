@@ -8,26 +8,32 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
 import {PlacedObjectType} from "../object/objectType";
 import {PlacedObjectCatalogService} from "../object/object-catalog.service";
+import {AnalysisService} from "./analysis.service";
 
 @Component({
   template:`
-    
-    
+    <h1 i18n="@@analysis.wizard.object.title">
+      Analysis: Define objects <small>Stage 1/4</small>
+    </h1>
+    <p i18n="@@wizard.object.main_description">
+      This section allows users to define which objects are going to be analyzed.
+    </p>
+    <hr/>
     
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@analysis.wizard.object.title">
+        <h3 class="panel-title" i18n="@@analysis.wizard.object.section.objects.title">
           Objects
         </h3>
       </div>
       <div [ngSwitch]="status" class="panel-body">
-        <div *ngSwitchCase="indicator.LOADING">
-          <app-loading-indicator></app-loading-indicator>
+        <div *ngSwitchCase="indicator.LOADING" >
+            <app-loading-indicator></app-loading-indicator>
         </div>
-        <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+        <div *ngSwitchCase="indicator.ERROR">
+            <app-error-indicator [error]="onInitError"></app-error-indicator>
         </div>
-        <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
+        <div *ngSwitchCase="indicator.ACTIVE">
           <table class="table table-hover">
             <thead>
               <th>Name</th>
@@ -62,6 +68,7 @@ export class AnalysisWizardObjectComponent implements OnInit {
   types:PlacedObjectType[];
 
   constructor(
+    private analysisService: AnalysisService,
     private analysisObjectService : AnalysisObjectService,
     private objectService:PlacedObjectService,
     private objectCatalogService: PlacedObjectCatalogService,
@@ -75,7 +82,7 @@ export class AnalysisWizardObjectComponent implements OnInit {
 
   ngOnInit(): void {
 
-    let caseId : number = this.route.snapshot.params['caseId'];
+    let analysisId : number = this.route.snapshot.params['analysisId'];
     this.status = STATUS_INDICATOR.LOADING;
     this.onInitError = null;
 
@@ -84,8 +91,9 @@ export class AnalysisWizardObjectComponent implements OnInit {
       .then(data => this.types = data)
       .catch(error => Promise.reject(error));
 
-    let p2 = this.analysisObjectService
-      .getList(caseId)
+    let p2 = this.analysisService
+      .get(analysisId)
+      .then(data =>  this.analysisObjectService.getList(data.caseId))
       .then(data => this.analysisObjects = data)
       .then(data => Promise.all(data.map(a => this.objectService.get(a.objectId).then(o => this.placedObjects.push(o)))))
       .catch(error => Promise.reject(error));

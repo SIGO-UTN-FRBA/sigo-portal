@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {AnalysisCaseService} from "./analysisCase.service";
+import {AnalysisService} from "./analysis.service";
 import {AnalysisComponent} from "./analysis.component";
 import {CommonModule} from "@angular/common";
 import { FormsModule }   from '@angular/forms';
@@ -13,6 +13,9 @@ import {AnalysisWizardAnalysisComponent} from "./analysis-wizard-analysis.compon
 import {AnalysisWizardExceptionComponent} from "./analysis-wizard-exception.component";
 import {AnalysisWizardInformComponent} from "./analysis-wizard-inform.component";
 import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component";
+import {AnalysisObjectService} from "./analysis-object.service";
+import {PlacedObjectService} from "../object/object.service";
+import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 
 @NgModule({
   imports:[
@@ -32,8 +35,11 @@ import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component"
     AnalysisWizardInformComponent
   ],
   providers: [
-    AnalysisCaseService,
-    AirportService
+    AnalysisObjectService,
+    AnalysisService,
+    AirportService,
+    PlacedObjectService,
+    PlacedObjectCatalogService
   ]
 })
 
