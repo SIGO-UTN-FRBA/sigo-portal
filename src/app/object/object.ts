@@ -1,3 +1,5 @@
+import Geometry = ol.geom.Geometry;
+
 export class PlacedObject {
   id : number;
   name : string;
@@ -11,4 +13,5 @@ export class PlacedObject {
   temporary : boolean;
   lightingId : number;
   markIndicatorId : number;
+  geom:Geometry;
 }

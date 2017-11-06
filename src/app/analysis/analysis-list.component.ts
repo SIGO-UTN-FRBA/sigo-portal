@@ -29,7 +29,7 @@ import {Analysis} from "./analysis";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/analysis/{{analysis.id}}/wizard/{{stages[analysis.statusId]}}">{{analysis.airport.codeFIR}}</a>
+              <a routerLink="/analysis/{{analysis.id}}/stages/{{stages[analysis.statusId]}}">{{analysis.airport.codeFIR}}</a>
             </h4>
             <p>{{analysis.airport.nameFIR}}</p>
             <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>

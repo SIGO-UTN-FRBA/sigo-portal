@@ -7,4 +7,5 @@ export class AnalysisObject {
   analysisCase:AnalysisCase;
   objectId:number;
   object:PlacedObject;
+  included:boolean;
 }
