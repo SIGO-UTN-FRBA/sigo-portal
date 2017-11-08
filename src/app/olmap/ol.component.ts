@@ -302,6 +302,9 @@ import {OlLayers} from "./olLayers";
     this.map = new Map({
       target: 'map',
       layers: [this.getOMS()],
+      controls: ol.control.defaults().extend([
+        new ol.control.FullScreen()
+      ]),
       view: new ol.View({
         center: ol.proj.fromLonLat([0,0]),
         zoom: 7,
@@ -379,16 +382,7 @@ import {OlLayers} from "./olLayers";
   }
 
   public addAirport (feature: Feature, options? :{center?: boolean, zoom?: number}) : OlComponent {
-/*
-    let tmp = new ol.geom.Point(geometry['coordinates']);
 
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: properties.name,
-      id: properties.id,
-      dtype: 'Airport'
-    });
-*/
     feature.set("dtype", 'Airport');
 
     feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
