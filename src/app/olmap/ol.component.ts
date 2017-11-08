@@ -19,8 +19,9 @@ import {OlLayers} from "./olLayers";
   providers: [OlService],
   template: `
     <div id="map" class="map"></div>
-    <div id="ol-popup">
-      <div id="ol-popup-content"></div>
+    <div id="ol-popup" class="ol-popup">
+      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+      <div id="popup-content"></div>
     </div>
   `
 
@@ -281,7 +282,6 @@ import {OlLayers} from "./olLayers";
     return layer;
   }
 
-
   getOMS(){
 
     let OSM = new Tile({
@@ -294,6 +294,10 @@ import {OlLayers} from "./olLayers";
   }
 
   createMap = () => {
+
+    /**
+     * Create the map.
+     */
 
     this.map = new Map({
       target: 'map',
@@ -309,11 +313,18 @@ import {OlLayers} from "./olLayers";
 
     this.map.addInteraction(select_interaction);
 
-    // add popup for all features
+    /**
+     * Elements that make up the popup.
+     */
     let container = document.getElementById('ol-popup');
-    let content = document.getElementById('ol-popup-content');
+    let content = document.getElementById('popup-content');
+    let closer = document.getElementById('popup-closer');
 
-    let popup = new ol.Overlay({
+
+    /**
+     * Create an overlay to anchor the popup to the map.
+     */
+    let overlay = new ol.Overlay({
       element: container,
       autoPan: true,
       positioning: 'bottom-center',
@@ -321,29 +332,44 @@ import {OlLayers} from "./olLayers";
       offset: [0, -5]
     });
 
-    this.map.addOverlay(popup);
+    this.map.addOverlay(overlay);
 
-    this.map.on('click', (evt) => {
+    /**
+     * Add a click handler to hide the popup.
+     * @return {boolean} Don't follow the href.
+     */
+    closer.onclick = function() {
+      overlay.setPosition(undefined);
+      closer.blur();
+      return false;
+    };
+
+    /**
+     * Add a click handler to the map to render the popup.
+     */
+
+    this.map.on('singleclick', (evt) => {
       let feature = this.map.forEachFeatureAtPixel(evt.pixel, (feat) => {
         return feat;
       });
       if (feature) {
         let coordinate = evt.coordinate;
-        content.innerHTML = feature.get('name');
-        popup.setPosition(coordinate);
+        content.innerHTML = `
+          <p><strong>${feature.get('dtype')}</strong></p>
+          <p>${feature.get('name')}</p>`;
+        overlay.setPosition(coordinate);
       }
     });
   };
 
-  public addRunway (geom : Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
+  public addRunway (geom : Polygon, properties: { id: number, name: string, [k: string]: any }, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     let tmp = new ol.geom.Polygon(geom['coordinates']);
 
     let feature = new Feature({
-      id: 'y',
-      name: 'y',
+      id: properties.id,
+      name: properties.name,
+      dtype: 'Runway',
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857')
     });
 
@@ -352,17 +378,20 @@ import {OlLayers} from "./olLayers";
     return this;
   }
 
-  public addAirport (geom: Point, options? :{center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.Point(geom['coordinates']);
+  public addAirport (feature: Feature, options? :{center?: boolean, zoom?: number}) : OlComponent {
+/*
+    let tmp = new ol.geom.Point(geometry['coordinates']);
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'x',
-      id: 'x',
+      name: properties.name,
+      id: properties.id,
+      dtype: 'Airport'
     });
+*/
+    feature.set("dtype", 'Airport');
+
+    feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
 
     this.addFeature(feature, this.getAirportLayer(), options);
 
@@ -371,7 +400,7 @@ import {OlLayers} from "./olLayers";
 
   public addDirection(geom: Point, options? :{center?: boolean, zoom?: number}) : OlComponent {
 
-    //TODO para una feature y no solo una geom
+    //TODO pasar properties
 
     let tmp = new ol.geom.Point(geom['coordinates']);
 
@@ -379,6 +408,7 @@ import {OlLayers} from "./olLayers";
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
       name: 'w',
       id: 'w',
+      dtype: 'Direction'
     });
 
     this.addFeature(feature, this.getDirectionLayer(), options);
@@ -388,14 +418,15 @@ import {OlLayers} from "./olLayers";
 
   public addThreshold(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
-    //TODO para una feature y no solo una geom
+    //TODO pasar properties
 
     let tmp = new ol.geom.Polygon(geom['coordinates']);
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Displaced Threshold',
+      dtype: 'Displaced Threshold',
       id: 'z',
+      name: ''
     });
 
     this.addFeature(feature, this.getDisplacedThresholdLayer(), options);
@@ -405,14 +436,15 @@ import {OlLayers} from "./olLayers";
 
   public addStopway(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
-    //TODO para una feature y no solo una geom
+    //TODO pasar properties
 
     let tmp = new ol.geom.Polygon(geom['coordinates']);
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Stopway',
-      id: 's',
+      name: "",
+      id: "",
+      dtype: 'Stopway'
     });
 
     this.addFeature(feature, this.getStopwayLayer(), options);
@@ -422,14 +454,15 @@ import {OlLayers} from "./olLayers";
 
   public addClearway(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
-    //TODO para una feature y no solo una geom
+    //TODO pasar properties
 
     let tmp = new ol.geom.Polygon(geom['coordinates']);
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Clearway',
+      dtype: 'Clearway',
       id: 's',
+      name: ''
     });
 
     this.addFeature(feature, this.getClearwayLayer(), options);
@@ -439,14 +472,15 @@ import {OlLayers} from "./olLayers";
 
   public addIndividualObject(geom: Geometry, options?: { center?: boolean; zoom?: number }) : OlComponent {
 
-    //TODO para una feature y no solo una geom
+    //TODO pasar properties
 
     let tmp = new ol.geom.Point(geom['coordinates']);
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Individual Objects',
-      id: 'i',
+      dtype: 'Individual Object',
+      id: '',
+      name: ''
     });
 
     this.addFeature(feature, this.getIndividualObjectLayer(), options);
@@ -456,14 +490,15 @@ import {OlLayers} from "./olLayers";
 
   public addBuildingObject(geom: Geometry, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
-    //TODO para una feature y no solo una geom
+    //TODO pasar properties
 
     let tmp = new ol.geom.MultiPolygon(geom['coordinates']);
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Building Objects',
-      id: 'b',
+      dtype: 'Building Object',
+      id: '',
+      name: ''
     });
 
     this.addFeature(feature, this.getBuildingObjectLayer(), options);
@@ -473,14 +508,15 @@ import {OlLayers} from "./olLayers";
 
   public addWiringObject(geom: Geometry, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
-    //TODO para una feature y no solo una geom
+    //TODO pasar properties
 
     let tmp = new ol.geom.LineString(geom['coordinates']);
 
     let feature = new ol.Feature({
       geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Wiring Objects',
-      id: 'w',
+      dtype: 'Wiring Objects',
+      id: '',
+      name: ''
     });
 
     this.addFeature(feature, this.getWiringObjectLayer(), options);

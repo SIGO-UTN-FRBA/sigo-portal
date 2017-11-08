@@ -3,6 +3,8 @@ import {AirportService} from "./airport.service";
 import Point = ol.geom.Point;
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import Coordinate = ol.Coordinate;
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-airport-geometry-edit',
@@ -36,14 +38,14 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
-              <label for="inputGeoJSON" class="control-label" i18n="@@airport.detail.section.spatial.inputGeoJSON">
+              <label for="inputCoordinates" class="control-label" i18n="@@airport.detail.section.spatial.inputCoordinates">
                 Point
               </label>
               <textarea
-                name="inputGeoJSON"
-                [(ngModel)]="geomText"
+                name="inputCoordinates"
+                [(ngModel)]="coordinateText"
                 class="form-control"
-                placeholder='{ "type": "Point", "coordinates": [0.0, 0.0] }'
+                placeholder='[0.0, 0.0]'
                 rows="3"
                 required>
               </textarea>
@@ -75,7 +77,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 })
 
 export class AirportDetailGeometryEditComponent implements OnInit{
-  geomText : string;
+  coordinateText : string;
   @Input() airportId : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -97,13 +99,15 @@ export class AirportDetailGeometryEditComponent implements OnInit{
     this.status = STATUS_INDICATOR.LOADING;
 
     this.airportService
-      .getGeom(this.airportId)
+      .getFeature(this.airportId)
       .then( data => {
-        this.geomText = JSON.stringify(data);
+        let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+        this.coordinateText = JSON.stringify(jsonFeature.geometry.coordinates);
         this.status = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
         this.onInitError = error;
+        console.error(error);
         this.status = STATUS_INDICATOR.ERROR;
       })
   }
@@ -112,10 +116,10 @@ export class AirportDetailGeometryEditComponent implements OnInit{
 
     this.onSubmitError = null;
 
-    let point : Point = JSON.parse(this.geomText) as Point;
+    let point : Point = new Point(JSON.parse(this.coordinateText) as Coordinate); //TODO validate
 
     this.airportService
-      .saveGeom(this.airportId, point)
+      .updateFeature(this.airportId, point)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError= error);
   };

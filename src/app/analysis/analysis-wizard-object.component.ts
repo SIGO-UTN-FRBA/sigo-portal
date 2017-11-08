@@ -158,9 +158,13 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   private resolveGeometries() : Promise<any> {
 
     let p1 = this.airportService
-      .getGeom(this.analysis.airportId)
+      .get(this.analysis.airportId)
+      .then(data => this.analysis.airport=data)
+/* TODO
+    let p3 = this.airportService
+      .getFeature(this.analysis.airportId)
       .then(data => this.airportGeom = data);
-
+*/
     let p2 = Promise.all(
       this.analysisObjects.map(a =>
         this.objectService
@@ -191,8 +195,13 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
           break;
       }
     });
-
-    this.olmap.addAirport(this.airportGeom, {center:true, zoom:13});
+/* TODO
+    this.olmap.addAirport(
+      this.airportGeom,
+      {id: this.analysis.airportId, name: this.analysis.airport.codeFIR},
+      {center:true, zoom:13}
+    );
+    */
   }
 
   locateObject(placedObject: PlacedObject) {

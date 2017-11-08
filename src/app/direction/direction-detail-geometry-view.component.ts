@@ -178,7 +178,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
 
   private locateGeometries(){
       this.olmap
-        .addRunway(this.runwayGeom, {center: true, zoom: 14})
+        .addRunway(this.runwayGeom, {id: this.runwayId, name: ""},{center: true, zoom: 14})
         .addThreshold(this.thresholdGeom)
         .addDirection(this.geom)
         .addClearway(this.clearwayGeom)

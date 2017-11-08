@@ -6,6 +6,11 @@ import Point = ol.geom.Point;
 import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {ApiError} from "../main/apiError";
+import Feature = ol.Feature;
+import GeoJSONFeature = ol.format.GeoJSONFeature;
+import JSONFeature = ol.format.JSONFeature;
+import Coordinate = ol.Coordinate;
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-airport-geometry-view',
@@ -43,10 +48,11 @@ import {ApiError} from "../main/apiError";
           <div class="form container-fluid">
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
-                <label for="inputGeoJSON" class="control-label" i18n="@@airport.detail.section.spatial.inputGeoJSON">
+                <label for="inputGeoJSON" class="control-label"
+                       i18n="@@airport.detail.section.spatial.inputCoordinates">
                   Point
                 </label>
-                <p class="form-control-static">{{geomText}}</p>
+                <p class="form-control-static">{{coordinateText}}</p>
               </div>
             </div>
           </div>
@@ -54,7 +60,7 @@ import {ApiError} from "../main/apiError";
           <app-map #mapAirport (map)="map"></app-map>
         </div>
       </div>
-      
+
     </div>
   `
 })
@@ -73,8 +79,8 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
-  geom  : Point;
-  geomText : string;
+  feature  : Feature;
+  coordinateText : string;
 
   constructor(
     private airportService : AirportService
@@ -87,26 +93,28 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
     this.status = STATUS_INDICATOR.LOADING;
 
     this.airportService
-      .getGeom(this.airportId)
-      .then(point => {
+      .getFeature(this.airportId)
+      .then(data => {
 
-        if(!point){
+        if(!data){
           this.status = STATUS_INDICATOR.EMPTY;
 
         } else {
-          this.geom = point;
-          this.geomText = JSON.stringify(point);
+          this.feature = data;
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinateText = JSON.stringify(jsonFeature.geometry.coordinates);
           this.status = STATUS_INDICATOR.ACTIVE;
         }
       })
       .catch(error => {
         this.onInitError = error;
+        console.error(error);
         this.status = STATUS_INDICATOR.ERROR;
       });
   }
 
   ngAfterViewInit(): void {
-      setTimeout(()=> {if (this.geom != null) this.locateGeom(); },500);
+      setTimeout(()=> {if (this.feature != null) this.locateGeom(); },1500);
   }
 
   allowEdition() {
@@ -115,6 +123,6 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
 
   locateGeom(){
 
-    this.olmap.addAirport(this.geom, {center: true, zoom: 12});
+    this.olmap.addAirport(this.feature,{center: true, zoom: 12});
   }
 }

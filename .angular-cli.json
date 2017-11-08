@@ -21,6 +21,7 @@
       "styles": [
         "./styles/styles.css",
         "./styles/forms.css",
+        "./app/olmap/olmap.css",
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "../node_modules/font-awesome/css/font-awesome.min.css",
         "../node_modules/openlayers/dist/ol.css"

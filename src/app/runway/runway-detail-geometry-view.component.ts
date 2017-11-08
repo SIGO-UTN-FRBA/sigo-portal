@@ -116,7 +116,10 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
   }
 
   locateGeom(){
-
-    this.olmap.addRunway(this.geom as Polygon,{center: true, zoom: 15});
+    this.olmap.addRunway(
+      this.geom as Polygon,
+      {id: this.runwayId, name: ""},
+      {center: true, zoom: 15}
+    );
   }
 }
