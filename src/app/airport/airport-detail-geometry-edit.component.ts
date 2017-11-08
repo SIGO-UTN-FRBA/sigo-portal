@@ -116,7 +116,7 @@ export class AirportDetailGeometryEditComponent implements OnInit{
 
     this.onSubmitError = null;
 
-    let point : Point = new Point(JSON.parse(this.coordinateText) as Coordinate); //TODO validate
+    let point : Point = new Point(JSON.parse(this.coordinateText)); //TODO validate
 
     this.airportService
       .updateFeature(this.airportId, point)

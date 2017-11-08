@@ -3,6 +3,8 @@ import {RunwayService} from "./runway.service";
 import Polygon = ol.geom.Polygon;
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
+import GeoJSON = ol.format.GeoJSON;
+import Coordinate = ol.Coordinate;
 
 @Component({
   selector: 'app-runway-geometry-edit',
@@ -36,13 +38,13 @@ import {ApiError} from "../main/apiError";
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
               <label for="inputGeoJSON" class="control-label" i18n="@@runway.detail.section.spatial.inputGeoJSON">
-                LineString
+                Polygon
               </label>
               <textarea
                 name="inputGeoJSON"
-                [(ngModel)]="geomText"
+                [(ngModel)]="coordinatesText"
                 class="form-control"
-                placeholder='{"type":"LineString","coordinates":[[100.0,0.0],[101.0,1.0]]}'
+                placeholder='[[0.0,0.0],...,[0.0,0.0]]'
                 rows="3"
                 required>
               </textarea>
@@ -74,7 +76,7 @@ import {ApiError} from "../main/apiError";
 })
 
 export class RunwayDetailGeometryEditComponent implements OnInit {
-  geomText : string;
+  coordinatesText : string;
   @Input() airportId : number;
   @Input() runwayId : number;
   @Input() edit : boolean;
@@ -97,9 +99,10 @@ export class RunwayDetailGeometryEditComponent implements OnInit {
     this.status = STATUS_INDICATOR.LOADING;
 
     this.runwayService
-      .getGeom(this.airportId, this.runwayId)
+      .getFeature(this.airportId, this.runwayId)
       .then( data => {
-        this.geomText = JSON.stringify(data);
+        let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+        this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
         this.status = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
@@ -112,10 +115,10 @@ export class RunwayDetailGeometryEditComponent implements OnInit {
 
     this.onSubmitError = null;
 
-    let line : Polygon = JSON.parse(this.geomText) as Polygon;
+    let polygon : Polygon = new Polygon(JSON.parse(this.coordinatesText)); //TODO validate
 
     this.runwayService
-      .saveGeom(this.airportId, this.runwayId, line)
+      .updateFeature(this.airportId, this.runwayId, polygon)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError = error);
   };

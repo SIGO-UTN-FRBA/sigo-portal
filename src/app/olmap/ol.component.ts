@@ -358,23 +358,14 @@ import {OlLayers} from "./olLayers";
       if (feature) {
         let coordinate = evt.coordinate;
         content.innerHTML = `
-          <p><strong>${feature.get('dtype')}</strong></p>
+          <p><strong>${feature.get('class')}</strong></p>
           <p>${feature.get('name')}</p>`;
         overlay.setPosition(coordinate);
       }
     });
   };
 
-  public addRunway (geom : Polygon, properties: { id: number, name: string, [k: string]: any }, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    let tmp = new ol.geom.Polygon(geom['coordinates']);
-
-    let feature = new Feature({
-      id: properties.id,
-      name: properties.name,
-      dtype: 'Runway',
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857')
-    });
+  public addRunway (feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getRunwayLayer(), options);
 
@@ -382,10 +373,6 @@ import {OlLayers} from "./olLayers";
   }
 
   public addAirport (feature: Feature, options? :{center?: boolean, zoom?: number}) : OlComponent {
-
-    feature.set("dtype", 'Airport');
-
-    feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
 
     this.addFeature(feature, this.getAirportLayer(), options);
 
@@ -519,6 +506,8 @@ import {OlLayers} from "./olLayers";
   }
 
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
+
+    feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
 
     layer.getSource().addFeature(feature);
 

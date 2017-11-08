@@ -11,6 +11,7 @@ import Polygon = ol.geom.Polygon;
 import {DirectionDistancesService} from "./direction-distances.service";
 import {Subscription} from "rxjs/Subscription";
 import {RunwayService} from "../runway/runway.service";
+import {Feature} from "openlayers";
 
 @Component({
   selector: 'app-direction-geometry-view',
@@ -85,7 +86,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   thresholdGeom : Polygon;
   stopwayGeom : Polygon;
   clearwayGeom : Polygon;
-  runwayGeom : Polygon;
+  runwayFeature : Feature;
   subscription: Subscription;
 
   constructor(
@@ -163,8 +164,8 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
           return null;
       })
       .then(polygon => this.clearwayGeom = polygon)
-      .then(()=> this.runwayService.getGeom(this.airportId, this.runwayId))
-      .then(polygon => this.runwayGeom = polygon)
+      .then(()=> this.runwayService.getFeature(this.airportId, this.runwayId))
+      .then(data => this.runwayFeature = data)
       .catch(error => Promise.reject(error));
   }
 
@@ -178,7 +179,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
 
   private locateGeometries(){
       this.olmap
-        .addRunway(this.runwayGeom, {id: this.runwayId, name: ""},{center: true, zoom: 14})
+        .addRunway(this.runwayFeature, {center: true, zoom: 14})
         .addThreshold(this.thresholdGeom)
         .addDirection(this.geom)
         .addClearway(this.clearwayGeom)

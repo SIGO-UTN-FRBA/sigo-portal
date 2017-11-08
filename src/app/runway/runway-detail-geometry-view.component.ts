@@ -5,6 +5,8 @@ import {RunwayService} from "./runway.service";
 import Map = ol.Map;
 import Polygon = ol.geom.Polygon;
 import {ApiError} from "../main/apiError";
+import Feature = ol.Feature;
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-runway-geometry-view',
@@ -45,7 +47,7 @@ import {ApiError} from "../main/apiError";
                 <label for="inputGeoJSON" class="control-label" i18n="@@runway.detail.section.spatial.inputGeoJSON">
                   Polygon
                 </label>
-                <p class="form-control-static">{{geomText}}</p>
+                <p class="form-control-static">{{coordinatesText}}</p>
               </div>
             </div>
           </div>
@@ -71,8 +73,8 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
-  geom  : Polygon;
-  geomText : string;
+  feature  : Feature;
+  coordinatesText : string;
 
   constructor(
     private runwayService : RunwayService
@@ -87,17 +89,17 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
     this.status = STATUS_INDICATOR.LOADING;
 
     this.runwayService
-      .getGeom(this.airportId, this.runwayId)
-      .then(line => {
+      .getFeature(this.airportId, this.runwayId)
+      .then(data => {
 
-        if(!line){
+        if(!data){
           this.status = STATUS_INDICATOR.EMPTY;
 
         } else {
-
+          this.feature = data;
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
           this.status = STATUS_INDICATOR.ACTIVE;
-          this.geom = line;
-          this.geomText = JSON.stringify(line);
         }
       })
       .catch(error =>{
@@ -108,7 +110,7 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
 
   ngAfterViewInit(): void {
 
-    setTimeout(()=> {if (this.geom != null) this.locateGeom()},500);
+    setTimeout(()=> {if (this.feature != null) this.locateGeom()},500);
   }
 
   allowEdition() {
@@ -116,10 +118,6 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
   }
 
   locateGeom(){
-    this.olmap.addRunway(
-      this.geom as Polygon,
-      {id: this.runwayId, name: ""},
-      {center: true, zoom: 15}
-    );
+    this.olmap.addRunway(this.feature,{center: true, zoom: 15});
   }
 }
