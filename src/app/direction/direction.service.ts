@@ -117,27 +117,27 @@ export class DirectionService extends ApiService {
       .catch(this.handleError)
   }
 
-  getDisplacedThresholdGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+  getDisplacedThresholdFeature(airportId: number, runwayId: number, directionId: number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/approach/geometries/threshold`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/approach/threshold/feature`)
       .toPromise()
-      .then(response => response.json() as Polygon)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  getStopwayGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+  getStopwayFeature(airportId: number, runwayId: number, directionId: number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/geometries/stopway`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/stopway/feature`)
       .toPromise()
-      .then(response => response.json() as Polygon)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  getClearwayGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+  getClearwayFeature(airportId: number, runwayId: number, directionId: number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/geometries/clearway`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/clearway/feature`)
       .toPromise()
-      .then(response => response.json() as Polygon)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 }

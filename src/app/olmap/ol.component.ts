@@ -386,54 +386,21 @@ import {OlLayers} from "./olLayers";
     return this;
   }
 
-  public addThreshold(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO pasar properties
-
-    let tmp = new ol.geom.Polygon(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      dtype: 'Displaced Threshold',
-      id: 'z',
-      name: ''
-    });
+  public addThreshold(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getDisplacedThresholdLayer(), options);
 
     return this;
   }
 
-  public addStopway(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO pasar properties
-
-    let tmp = new ol.geom.Polygon(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: "",
-      id: "",
-      dtype: 'Stopway'
-    });
+  public addStopway(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getStopwayLayer(), options);
 
     return this;
   }
 
-  public addClearway(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO pasar properties
-
-    let tmp = new ol.geom.Polygon(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      dtype: 'Clearway',
-      id: 's',
-      name: ''
-    });
+  public addClearway(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getClearwayLayer(), options);
 
