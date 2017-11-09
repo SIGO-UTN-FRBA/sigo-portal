@@ -97,7 +97,7 @@ export class DirectionDetailGeometryEditComponent implements OnInit{
     this.status = STATUS_INDICATOR.LOADING;
 
     this.directionService
-      .getGeom(this.airportId, this.runwayId, this.directionId)
+      .getFeature(this.airportId, this.runwayId, this.directionId)
       .then( data => {
         this.geomText = JSON.stringify(data);
         this.status = STATUS_INDICATOR.ACTIVE;
@@ -115,7 +115,7 @@ export class DirectionDetailGeometryEditComponent implements OnInit{
     let point : Point = JSON.parse(this.geomText) as Point;
 
     this.directionService
-      .saveGeom(this.airportId, this.runwayId, this.directionId, point)
+      .updateFeature(this.airportId, this.runwayId, this.directionId, point)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError = error);
   };

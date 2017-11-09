@@ -12,6 +12,7 @@ import {DirectionDistancesService} from "./direction-distances.service";
 import {Subscription} from "rxjs/Subscription";
 import {RunwayService} from "../runway/runway.service";
 import {Feature} from "openlayers";
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-direction-geometry-view',
@@ -49,7 +50,7 @@ import {Feature} from "openlayers";
                 <label for="inputGeoJSON" class="control-label" i18n="@@direction.detail.section.spatial.inputGeoJSON">
                   Point
                 </label>
-                <p class="form-control-static">{{geomText}}</p>
+                <p class="form-control-static">{{coordinatesText}}</p>
               </div>
             </div>
           </div>
@@ -81,8 +82,8 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
-  geom  : Point;
-  geomText : string;
+  feature  : Feature;
+  coordinatesText : string;
   thresholdGeom : Polygon;
   stopwayGeom : Polygon;
   clearwayGeom : Polygon;
@@ -94,7 +95,6 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
     private distancesService : DirectionDistancesService,
     private runwayService : RunwayService
   ){
-    this.geom = null;
     this.indicator = STATUS_INDICATOR;
 
     this.subscription = this.distancesService.lengthUpdated$.subscribe(
@@ -109,12 +109,12 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
 
   ngOnInit(): void {
     this.status = STATUS_INDICATOR.LOADING;
-    this.geom = null;
+    this.feature = null;
     this.onInitError = null;
 
     this.loadGeometries()
       .then(() => {
-        if(this.geom != null)
+        if(this.feature != null)
           this.status = STATUS_INDICATOR.ACTIVE;
         else
           this.status = STATUS_INDICATOR.EMPTY;
@@ -128,19 +128,18 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   private loadGeometries() : Promise<any> {
 
     return this.directionService
-      .getGeom(this.airportId, this.runwayId, this.directionId)
-      .then(point => {
+      .getFeature(this.airportId, this.runwayId, this.directionId)
+      .then(data => {
 
-        if(point != null){
-          this.geom = point;
-          this.geomText = JSON.stringify(point);
+        if(data != null){
+          this.feature = data;
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
         }
-
-        return point;
       })
       .then(() => {
 
-        if(this.geom != null)
+        if(this.feature != null)
           return this.directionService
             .getDisplacedThresholdGeom(this.airportId, this.runwayId, this.directionId);
         else
@@ -149,7 +148,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
       })
       .then(polygon => this.thresholdGeom = polygon)
       .then(()=> {
-        if(this.geom != null)
+        if(this.feature != null)
           return this.directionService
             .getStopwayGeom(this.airportId, this.runwayId, this.directionId);
         else
@@ -157,7 +156,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
       })
       .then(polygon => this.stopwayGeom = polygon)
       .then(()=> {
-        if(this.geom != null)
+        if(this.feature != null)
           return this.directionService
             .getClearwayGeom(this.airportId, this.runwayId, this.directionId);
         else
@@ -170,7 +169,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {if(this.geom) this.locateGeometries()},1500);
+    setTimeout(()=> {if(this.feature) this.locateGeometries()},1500);
   }
 
   allowEdition() {
@@ -181,7 +180,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
       this.olmap
         .addRunway(this.runwayFeature, {center: true, zoom: 14})
         .addThreshold(this.thresholdGeom)
-        .addDirection(this.geom)
+        .addDirection(this.feature)
         .addClearway(this.clearwayGeom)
         .addStopway(this.stopwayGeom);
   }

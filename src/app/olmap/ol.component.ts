@@ -379,18 +379,7 @@ import {OlLayers} from "./olLayers";
     return this;
   };
 
-  public addDirection(geom: Point, options? :{center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO pasar properties
-
-    let tmp = new ol.geom.Point(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'w',
-      id: 'w',
-      dtype: 'Direction'
-    });
+  public addDirection(feature: Feature, options? :{center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getDirectionLayer(), options);
 
