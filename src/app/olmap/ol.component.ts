@@ -352,15 +352,22 @@ import {OlLayers} from "./olLayers";
      */
 
     this.map.on('singleclick', (evt) => {
+
       let feature = this.map.forEachFeatureAtPixel(evt.pixel, (feat) => {
         return feat;
       });
+
       if (feature) {
-        let coordinate = evt.coordinate;
-        content.innerHTML = `
-          <p><strong>${feature.get('class')}</strong></p>
-          <p>${feature.get('name')}</p>`;
-        overlay.setPosition(coordinate);
+
+        let properties = '';
+
+        Object.keys(feature.getProperties()).filter(k => { return !(k == 'geometry' || k == 'class') }).forEach( p => {
+          properties += `<p>${p}: <i>${feature.get(p)}</i></p>`
+        });
+
+        content.innerHTML = `<p><strong>${feature.get('class')}</strong></p> ${properties}`;
+
+        overlay.setPosition(evt.coordinate);
       }
     });
   };
