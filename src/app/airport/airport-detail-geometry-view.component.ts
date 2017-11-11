@@ -95,12 +95,10 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
     this.airportService
       .getFeature(this.airportId)
       .then(data => {
-
-        if(!data){
+        this.feature = data;
+        if(!this.feature.getGeometry()){
           this.status = STATUS_INDICATOR.EMPTY;
-
         } else {
-          this.feature = data;
           let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
           this.coordinateText = JSON.stringify(jsonFeature.geometry.coordinates);
           this.status = STATUS_INDICATOR.ACTIVE;
@@ -114,15 +112,14 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-      setTimeout(()=> {if (this.feature != null) this.locateGeom(); },1500);
+      setTimeout(()=> {if (this.feature.getGeometry()) this.locateFeature(); },1500);
   }
 
   allowEdition() {
     this.editChange.emit(true);
   }
 
-  locateGeom(){
-
+  locateFeature(){
     this.olmap.addAirport(this.feature,{center: true, zoom: 12});
   }
 }

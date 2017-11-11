@@ -95,14 +95,17 @@ export class AirportDetailGeometryEditComponent implements OnInit{
   ngOnInit(): void {
 
     this.onInitError = null;
-
+    this.coordinateText = '';
     this.status = STATUS_INDICATOR.LOADING;
 
     this.airportService
       .getFeature(this.airportId)
       .then( data => {
-        let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
-        this.coordinateText = JSON.stringify(jsonFeature.geometry.coordinates);
+
+        if(data.getGeometry()){
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinateText = JSON.stringify(jsonFeature.geometry.coordinates);
+        }
         this.status = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
