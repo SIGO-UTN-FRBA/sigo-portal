@@ -85,18 +85,16 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
   ngOnInit(): void {
 
     this.onInitError = null;
-
+    this.coordinatesText = '';
     this.status = STATUS_INDICATOR.LOADING;
 
     this.runwayService
       .getFeature(this.airportId, this.runwayId)
       .then(data => {
-
-        if(!data){
+        this.feature=data;
+        if(!this.feature.getGeometry())
           this.status = STATUS_INDICATOR.EMPTY;
-
-        } else {
-          this.feature = data;
+        else {
           let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
           this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
           this.status = STATUS_INDICATOR.ACTIVE;
@@ -110,14 +108,14 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
 
   ngAfterViewInit(): void {
 
-    setTimeout(()=> {if (this.feature != null) this.locateGeom()},500);
+    setTimeout(()=> {if (this.feature.getGeometry()) this.locateFeature()},500);
   }
 
   allowEdition() {
     this.editChange.emit(true);
   }
 
-  locateGeom(){
+  locateFeature(){
     this.olmap.addRunway(this.feature,{center: true, zoom: 15});
   }
 }
