@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from "@angular/core";
-import {AnalysisObjectService} from "./analysis-object.service";
+import {AnalysisCaseService} from "./analysis-case.service";
 import {ActivatedRoute} from "@angular/router";
 import {AnalysisObject} from "./analysisObject";
 import {PlacedObjectService} from "../object/object.service";
@@ -11,10 +11,10 @@ import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 import {AnalysisService} from "./analysis.service";
 import {Analysis} from "./analysis";
 import {AirportService} from "../airport/airport.service";
-import Point = ol.geom.Point;
 import {OlComponent} from "../olmap/ol.component";
 import Map = ol.Map;
 import Feature = ol.Feature;
+import {AnalysisCase} from "./analysisCase";
 
 @Component({
   providers: [ OlComponent ],
@@ -34,51 +34,105 @@ import Feature = ol.Feature;
           Objects
         </h3>
       </div>
-      <div [ngSwitch]="status" class="panel-body">
+      <div [ngSwitch]="initStatus" class="panel-body">
         <div *ngSwitchCase="indicator.LOADING" >
             <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR">
             <app-error-indicator [error]="onInitError"></app-error-indicator>
         </div>
-        <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
-          <app-empty-indicator type="include" entity="objects"></app-empty-indicator>
-        </div>
-        <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
-          <table class="table table-hover">
-            <tr>
-              <th>#</th>
-              <th i18n="@@commons.label.name">Name</th>
-              <th i18n="@@commons.label.type">Type</th>
-              <th i18n="@@commons.label.included">Included</th>
-            </tr>
-            <tbody>
-              <tr *ngFor="let analysisObject of analysisObjects; index as i;">
-                <td><strong>{{i+1}}</strong></td>
-                <td>
-                  <a [routerLink]="['/objects', analysisObject.object.typeId, analysisObject.object.id]">
-                    {{analysisObject.object.name}}
-                  </a>
-                </td>
-                <td>
-                  {{types[analysisObject.object.typeId].description}}
-                </td>
-                <td>
-                  <input type="checkbox" [ngModel]="analysisObject.included">
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <ng-container *ngSwitchCase="indicator.ACTIVE">
+          <form #caseForm 
+                class="form-inline"
+                (ngSubmit)="onUpdateRadius()"
+          >
+            <div class="form-group">
+              <label for="inputSearchRadius" 
+                     i18n="@@analysis.wizard.object.section.objects.searchRadius"
+              >
+                Search Radius
+              </label>
+              <div class="input-group">
+                
+                <input type="number" 
+                       class="form-control" 
+                       name="inputSearchRadius" 
+                       [(ngModel)]="searchRadius"
+                       required>
+                <div class="input-group-addon">[km]</div>
+              </div>
+            </div>
+            <button type="submit"
+                    [disabled]="caseForm.invalid"
+                    class="btn btn-default"
+                    i18n="@commons.button.update"
+            >
+              Update
+            </button>
+          </form>
           <br>
+          <ng-container [ngSwitch]="updateStatus">
+
+            <div *ngSwitchCase="indicator.LOADING" >
+              <app-loading-indicator></app-loading-indicator>
+            </div>
+            
+            <app-error-indicator *ngSwitchCase="indicator.ERROR" [error]="onUpdateError"></app-error-indicator>
+
+            <div *ngSwitchCase="indicator.EMPTY" >
+              <app-empty-indicator entity="placed objects" type="included"></app-empty-indicator>
+            </div>
+            
+            
+            <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
+              <table class="table table-hover">
+                <tr>
+                  <th>#</th>
+                  <th i18n="@@analysis.wizard.object.section.objects.name">Name</th>
+                  <th i18n="@@analysis.wizard.object.section.objects.type">Type</th>
+                  <th i18n="@@analysis.wizard.object.section.objects.included">Included</th>
+                </tr>
+                <tbody>
+                  <tr *ngFor="let analysisObject of analysisObjects; index as i;">
+                    <td><strong>{{i+1}}</strong></td>
+                    <td>
+                      <a [routerLink]="['/objects', analysisObject.object.typeId, analysisObject.object.id]">
+                        {{analysisObject.object.name}}
+                      </a>
+                    </td>
+                    <td>
+                      {{types[analysisObject.object.typeId].description}}
+                    </td>
+                    <td>
+                      <input type="checkbox" [ngModel]="analysisObject.included">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+            </div>
+          </ng-container>
           <app-map #mapObjects (map)="map"></app-map>
-        </div>
+        </ng-container>
       </div>
     </div>
+   
     <br>
+    
     <nav>
       <ul class="pager">
-        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Previous</a></li>
-        <li class="next"><a href="#">Next <span aria-hidden="true">&rarr;</span></a></li>
+        <li class="previous disabled">
+          <a href="#">
+            <span aria-hidden="true">&larr;</span>
+            <ng-container i18n="@@commons.wizard.previus"> Previous</ng-container>
+          </a>
+        </li>
+        <li class="next">
+          <a href="#">
+            <ng-container i18n="@@commons.wizard.next">Next </ng-container>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
       </ul>
     </nav>
   `
@@ -86,11 +140,17 @@ import Feature = ol.Feature;
 
 export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
-  status:number;
+  initStatus:number;
+  updateStatus:number;
+  submitStatus:number;
   indicator;
   analysis:Analysis;
+  analysisId:number;
+  analysisCase:AnalysisCase;
   analysisObjects:AnalysisObject[];
   onInitError:ApiError;
+  onUpdateError:ApiError;
+  onSubmitError:ApiError;
   types:PlacedObjectType[];
   airportFeature: Feature;
   private olmap: OlComponent;
@@ -98,10 +158,11 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     this.olmap = content;
   }
   map:Map;
+  searchRadius:number;
 
   constructor(
     private analysisService: AnalysisService,
-    private analysisObjectService : AnalysisObjectService,
+    private caseService : AnalysisCaseService,
     private objectService:PlacedObjectService,
     private objectCatalogService: PlacedObjectCatalogService,
     private airportService:AirportService,
@@ -114,35 +175,45 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-    let analysisId : number = this.route.snapshot.params['analysisId'];
-    this.status = STATUS_INDICATOR.LOADING;
+    this.analysisId = this.route.snapshot.params['analysisId'];
+    this.initStatus = STATUS_INDICATOR.LOADING;
     this.onInitError = null;
+    this.updateStatus = null;
 
     let p1 = this.objectCatalogService
       .listTypeObject()
       .then(data => this.types = data)
       .catch(error => Promise.reject(error));
 
-    let p2 = this.analysisService
-      .get(analysisId)
-      .then(data => this.analysis = data)
-      .then(() =>  this.analysisObjectService.getList(this.analysis.caseId))
-      .then(data => this.analysisObjects = data)
-      .then(() => this.resolveDataObjects())
-      .then(()=> this.resolveGeometries())
+    let p2 = this.resolveAnalysis()
+      .then(() => this.resolveAnalysisCase())
+      .then(() => this.resolveObjects())
       .catch(error => Promise.reject(error));
 
     Promise.all([p1, p2])
-      .then(()=> {
-        if(this.analysisObjects.length == 0 )
-          this.status = STATUS_INDICATOR.EMPTY;
-        else
-          this.status = STATUS_INDICATOR.ACTIVE;
+      .then(() => {
+        this.initStatus = STATUS_INDICATOR.ACTIVE;
+        this.updateStatus = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
         this.onInitError = error;
-        this.status = STATUS_INDICATOR.ERROR;
+        this.initStatus = STATUS_INDICATOR.ERROR;
       });
+  }
+
+  private resolveAnalysis() : Promise<any> {
+      return this.analysisService
+        .get(this.analysisId)
+        .then(data => this.analysis = data)
+  }
+
+  private resolveAnalysisCase() : Promise<any> {
+    return this.caseService
+      .get(this.analysis.id, this.analysis.caseId)
+      .then(data => {
+        this.analysisCase = data;
+        this.searchRadius = data.searchRadius * 100;
+      })
   }
 
   private resolveDataObjects() : Promise<any> {
@@ -156,11 +227,11 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
       );
   }
 
-  private resolveGeometries() : Promise<any> {
+  private resolveFeatureObjects() : Promise<any> {
 
     let p1 = this.airportService
       .get(this.analysis.airportId)
-      .then(data => this.analysis.airport=data)
+      .then(data => this.analysis.airport=data);
 
     let p3 = this.airportService
       .getFeature(this.analysis.airportId)
@@ -178,33 +249,59 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {this.locateFeatures()},1500);
+    setTimeout(()=> {this.locateFeatures()},3500);
   }
 
   private locateFeatures() {
 
-    this.analysisObjects.forEach(a => {
-      switch (a.object.typeId){
-        case 0:
-          this.olmap.addBuildingObject(a.object.feature);
-          break;
-        case 1:
-          this.olmap.addIndividualObject(a.object.feature);
-          break;
-        case 2:
-          this.olmap.addWiringObject(a.object.feature);
-          break;
-      }
-    });
-
-    this.olmap.addAirport(
-      this.airportFeature,
-      {center:true, zoom:13}
+    this.analysisObjects.forEach(
+      a => this.olmap.addObject(a.object.feature)
     );
 
+    this.olmap.addAirport(this.airportFeature,{center:true, zoom:13});
   }
 
   locateObject(placedObject: PlacedObject) {
 
+  }
+
+  onUpdateRadius(){
+
+    this.updateStatus = STATUS_INDICATOR.LOADING;
+    this.onUpdateError=null;
+    this.analysisObjects = [];
+
+    this.caseService
+      .update(this.analysis.id, this.analysisCase.id, this.searchRadius / 100)
+      .then(data => this.analysisCase = data)
+      .then(() => this.clearMapLayers())
+      .then(() => this.resolveObjects())
+      .then(()=> this.locateFeatures())
+      .then(() => {
+        if(this.analysisObjects.length > 0)
+          this.updateStatus = STATUS_INDICATOR.ACTIVE;
+        else
+          this.updateStatus = STATUS_INDICATOR.EMPTY;
+      })
+      .catch(error => {
+        this.onUpdateError = error;
+        this.updateStatus = STATUS_INDICATOR.ERROR;
+      })
+  }
+
+  private resolveObjects() : Promise<any> {
+
+    return this.caseService
+      .getObjects(this.analysis.id, this.analysisCase.id)
+      .then(data => this.analysisObjects = data)
+      .then(() => this.resolveDataObjects())
+      .then(() => this.resolveFeatureObjects())
+  }
+
+  private clearMapLayers() : OlComponent {
+    return this.olmap
+      .clearObjectLayers()
+      .clearAirportLayer()
+      .clearRunwayLayer();
   }
 }

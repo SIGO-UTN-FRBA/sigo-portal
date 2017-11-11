@@ -13,7 +13,7 @@ import {AnalysisWizardAnalysisComponent} from "./analysis-wizard-analysis.compon
 import {AnalysisWizardExceptionComponent} from "./analysis-wizard-exception.component";
 import {AnalysisWizardInformComponent} from "./analysis-wizard-inform.component";
 import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component";
-import {AnalysisObjectService} from "./analysis-object.service";
+import {AnalysisCaseService} from "./analysis-case.service";
 import {PlacedObjectService} from "../object/object.service";
 import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 
@@ -35,7 +35,7 @@ import {PlacedObjectCatalogService} from "../object/object-catalog.service";
     AnalysisWizardInformComponent
   ],
   providers: [
-    AnalysisObjectService,
+    AnalysisCaseService,
     AnalysisService,
     AirportService,
     PlacedObjectService,

@@ -44,7 +44,7 @@ import {OlLayers} from "./olLayers";
     });
   }
 
-  clearAiportLayer() : OlComponent {
+  clearAirportLayer() : OlComponent {
     this.getAirportLayer().getSource().clear();
 
     return this;
@@ -201,6 +201,15 @@ import {OlLayers} from "./olLayers";
     this.map.addLayer(layer);
 
     return layer;
+  }
+
+  clearObjectLayers() : OlComponent {
+
+    this.getIndividualObjectLayer().getSource().clear();
+    this.getBuildingObjectLayer().getSource().clear();
+    this.getWiringObjectLayer().getSource().clear();
+
+    return this;
   }
 
   clearIndividualObjectLayer() : OlComponent {
@@ -431,6 +440,23 @@ import {OlLayers} from "./olLayers";
   public addWiringObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getWiringObjectLayer(), options);
+
+    return this;
+  }
+
+  public addObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+
+    switch (feature.get("class")){
+      case "Building":
+        this.addBuildingObject(feature, options);
+        break;
+      case "Individual Object":
+        this.addIndividualObject(feature, options);
+        break;
+      case "Overhead Wire":
+        this.addWiringObject(feature, options);
+        break;
+    }
 
     return this;
   }
