@@ -1,4 +1,4 @@
-import Geometry = ol.geom.Geometry;
+import Feature = ol.Feature;
 
 export class PlacedObject {
   id : number;
@@ -13,5 +13,5 @@ export class PlacedObject {
   temporary : boolean;
   lightingId : number;
   markIndicatorId : number;
-  geom:Geometry;
+  feature:Feature;
 }

@@ -414,54 +414,21 @@ import {OlLayers} from "./olLayers";
     return this;
   }
 
-  public addIndividualObject(geom: Geometry, options?: { center?: boolean; zoom?: number }) : OlComponent {
-
-    //TODO pasar properties
-
-    let tmp = new ol.geom.Point(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      dtype: 'Individual Object',
-      id: '',
-      name: ''
-    });
+  public addIndividualObject(feature: Feature, options?: { center?: boolean; zoom?: number }) : OlComponent {
 
     this.addFeature(feature, this.getIndividualObjectLayer(), options);
 
     return this;
   }
 
-  public addBuildingObject(geom: Geometry, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO pasar properties
-
-    let tmp = new ol.geom.MultiPolygon(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      dtype: 'Building Object',
-      id: '',
-      name: ''
-    });
+  public addBuildingObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getBuildingObjectLayer(), options);
 
     return this;
   }
 
-  public addWiringObject(geom: Geometry, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO pasar properties
-
-    let tmp = new ol.geom.LineString(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      dtype: 'Wiring Objects',
-      id: '',
-      name: ''
-    });
+  public addWiringObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getWiringObjectLayer(), options);
 

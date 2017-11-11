@@ -7,6 +7,8 @@ import {ApiError} from "../main/apiError";
 import Geometry = ol.geom.Geometry;
 import {PlacedObjectService} from "./object.service";
 import PlacedObjectTypes from "./objectType";
+import Feature = ol.Feature;
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-object-geometry-view',
@@ -47,7 +49,7 @@ import PlacedObjectTypes from "./objectType";
                 <label for="inputGeoJSON" class="control-label">
                   {{geometryType}}
                 </label>
-                <p class="form-control-static">{{geomText}}</p>
+                <p class="form-control-static">{{coordinatesText}}</p>
               </div>
             </div>
           </div>
@@ -73,8 +75,8 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
-  geom  : Geometry;
-  geomText : string;
+  feature  : Feature;
+  coordinatesText : string;
 
   constructor(
     private placedObjectService : PlacedObjectService,
@@ -89,14 +91,15 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
-      .getGeom(this.placedObjectId)
-      .then((geometry : Geometry) => {
+      .getFeature(this.placedObjectId)
+      .then((data) => {
 
-        if(!geometry)
+        if(!data)
           this.status = STATUS_INDICATOR.EMPTY;
         else {
-          this.geom = geometry;
-          this.geomText = JSON.stringify(geometry);
+          this.feature = data;
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
           this.status = STATUS_INDICATOR.ACTIVE;
         }
       })
@@ -107,7 +110,7 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {if (this.geom != null) this.locateGeom(); },1500);
+    setTimeout(()=> {if (this.feature != null) this.locateGeom(); },1500);
   }
 
   allowEdition() {
@@ -118,13 +121,13 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
 
     switch (this.placedObjectType){
       case 1:
-        this.olmap.addIndividualObject(this.geom, {center: true, zoom: 16});
+        this.olmap.addIndividualObject(this.feature, {center: true, zoom: 16});
         break;
       case 2:
-        this.olmap.addWiringObject(this.geom, {center: true, zoom: 16});
+        this.olmap.addWiringObject(this.feature, {center: true, zoom: 16});
         break;
       case 0:
-        this.olmap.addBuildingObject(this.geom, {center: true, zoom: 16});
+        this.olmap.addBuildingObject(this.feature, {center: true, zoom: 16});
         break;
     }
 

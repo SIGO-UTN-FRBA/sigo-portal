@@ -14,6 +14,7 @@ import {AirportService} from "../airport/airport.service";
 import Point = ol.geom.Point;
 import {OlComponent} from "../olmap/ol.component";
 import Map = ol.Map;
+import Feature = ol.Feature;
 
 @Component({
   providers: [ OlComponent ],
@@ -91,7 +92,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   analysisObjects:AnalysisObject[];
   onInitError:ApiError;
   types:PlacedObjectType[];
-  airportGeom: Point;
+  airportFeature: Feature;
   private olmap: OlComponent;
   @ViewChild('mapObjects') set content(content: OlComponent) {
     this.olmap = content;
@@ -160,48 +161,47 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     let p1 = this.airportService
       .get(this.analysis.airportId)
       .then(data => this.analysis.airport=data)
-/* TODO
+
     let p3 = this.airportService
       .getFeature(this.analysis.airportId)
-      .then(data => this.airportGeom = data);
-*/
+      .then(data => this.airportFeature = data);
+
     let p2 = Promise.all(
       this.analysisObjects.map(a =>
         this.objectService
-          .getGeom(a.object.id)
-          .then(g => a.object.geom = g)
+          .getFeature(a.object.id)
+          .then(f => a.object.feature = f)
       )
     );
 
-    return Promise.all([p1,p2]);
+    return Promise.all([p1,p2,p3]);
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {this.locateGeometries()},1500);
+    setTimeout(()=> {this.locateFeatures()},1500);
   }
 
-  private locateGeometries() {
+  private locateFeatures() {
 
     this.analysisObjects.forEach(a => {
       switch (a.object.typeId){
         case 0:
-          this.olmap.addBuildingObject(a.object.geom);
+          this.olmap.addBuildingObject(a.object.feature);
           break;
         case 1:
-          this.olmap.addIndividualObject(a.object.geom);
+          this.olmap.addIndividualObject(a.object.feature);
           break;
         case 2:
-          this.olmap.addWiringObject(a.object.geom);
+          this.olmap.addWiringObject(a.object.feature);
           break;
       }
     });
-/* TODO
+
     this.olmap.addAirport(
-      this.airportGeom,
-      {id: this.analysis.airportId, name: this.analysis.airport.codeFIR},
+      this.airportFeature,
       {center:true, zoom:13}
     );
-    */
+
   }
 
   locateObject(placedObject: PlacedObject) {

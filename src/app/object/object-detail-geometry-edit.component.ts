@@ -4,6 +4,11 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {PlacedObjectService} from "./object.service";
 import Geometry = ol.geom.Geometry;
 import PlacedObjectTypes, {PlacedObjectType} from './objectType';
+import {Feature} from "openlayers";
+import Polygon = ol.geom.Polygon;
+import Point = ol.geom.Point;
+import LineString = ol.geom.LineString;
+import MultiPolygon = ol.geom.MultiPolygon;
 
 @Component({
   selector: 'app-object-geometry-edit',
@@ -41,7 +46,7 @@ import PlacedObjectTypes, {PlacedObjectType} from './objectType';
               </label>
               <textarea
                 name="inputGeoJSON"
-                [(ngModel)]="geomText"
+                [(ngModel)]="coordinatesText"
                 class="form-control"
                 [placeholder]=""
                 rows="3"
@@ -75,8 +80,8 @@ import PlacedObjectTypes, {PlacedObjectType} from './objectType';
 })
 
 export class PlacedObjectDetailGeometryEditComponent implements OnInit {
-  geom: Geometry;
-  geomText : string;
+  feature: Feature;
+  coordinatesText : string;
   @Input() placedObjectId: number;
   @Input() placedObjectType: number;
   @Input() edit : boolean;
@@ -102,10 +107,10 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
-      .getGeom(this.placedObjectId)
+      .getFeature(this.placedObjectId)
       .then( data => {
-        this.geom = data;
-        this.geomText = JSON.stringify(data);
+        this.feature = data;
+        this.coordinatesText = JSON.stringify(data);
         this.status = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
@@ -118,10 +123,22 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
 
     this.onSubmitError = null;
 
-    let geometry : Geometry = JSON.parse(this.geomText) as Geometry;
+    let geom : Geometry;
+
+    switch(this.placedObjectType){
+      case 0:
+        geom = new MultiPolygon(JSON.parse(this.coordinatesText));
+        break;
+      case 1:
+        geom = new Point(JSON.parse(this.coordinatesText));
+        break;
+      case 2:
+        geom = new LineString(JSON.parse(this.coordinatesText));
+        break;
+    }
 
     this.placedObjectService
-      .saveGeom(this.placedObjectId, geometry)
+      .updateFeature(this.placedObjectId, geom)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError= error);
   };
