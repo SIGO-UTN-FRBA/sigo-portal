@@ -109,10 +109,11 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
     this.status = STATUS_INDICATOR.LOADING;
     this.feature = null;
     this.onInitError = null;
+    this.coordinatesText = "";
 
     this.loadGeometries()
       .then(() => {
-        if(this.feature != null)
+        if(this.feature.getGeometry())
           this.status = STATUS_INDICATOR.ACTIVE;
         else
           this.status = STATUS_INDICATOR.EMPTY;
@@ -129,8 +130,10 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
       .getFeature(this.airportId, this.runwayId, this.directionId)
       .then(data => {
 
-        if(data != null){
-          this.feature = data;
+        this.feature = data;
+
+        if(this.feature.getGeometry()){
+
           let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
           this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
         }
@@ -138,7 +141,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
       })
       .then(() => {
 
-        if(this.feature != null)
+        if(this.feature.getGeometry())
           return this.directionService
             .getDisplacedThresholdFeature(this.airportId, this.runwayId, this.directionId);
         else
@@ -148,7 +151,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
       .then(data => this.thresholdFeature = data)
       .then(()=> {
 
-        if(this.feature != null)
+        if(this.feature.getGeometry())
           return this.directionService
             .getStopwayFeature(this.airportId, this.runwayId, this.directionId);
         else
@@ -158,7 +161,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
       .then(data => this.stopwayFeature = data)
       .then(()=> {
 
-        if(this.feature != null)
+        if(this.feature.getGeometry())
           return this.directionService
             .getClearwayFeature(this.airportId, this.runwayId, this.directionId);
         else
@@ -172,7 +175,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {if(this.feature) this.locateGeometries()},1500);
+    setTimeout(()=> {if(this.feature.getGeometry()) this.locateGeometries()},1500);
   }
 
   allowEdition() {

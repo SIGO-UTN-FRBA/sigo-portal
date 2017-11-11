@@ -87,7 +87,7 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
   ngOnInit(): void {
 
     this.geometryType = PlacedObjectTypes[this.placedObjectType].geometry;
-
+    this.coordinatesText = '';
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
