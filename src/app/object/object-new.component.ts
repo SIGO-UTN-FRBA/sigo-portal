@@ -332,7 +332,7 @@ export class PlacedObjectNewComponent implements OnInit {
 
     this.objectService
       .save(this.placedObject)
-      .then(data => this.router.navigate([`/objects/${data.id}/detail`]))
+      .then(data => this.router.navigate([`/objects/${data.typeId}/${data.id}/detail`]))
       .catch(error => this.onSubmitError = error);
   };
 

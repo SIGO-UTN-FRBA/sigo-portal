@@ -94,7 +94,7 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
       .getFeature(this.placedObjectId)
       .then((data) => {
 
-        if(!data)
+        if(!data.getGeometry())
           this.status = STATUS_INDICATOR.EMPTY;
         else {
           this.feature = data;
@@ -110,26 +110,14 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {if (this.feature != null) this.locateGeom(); },1500);
+    setTimeout(()=> {if (this.feature != null) this.locateFeature(); },1500);
   }
 
   allowEdition() {
     this.editChange.emit(true);
   }
 
-  locateGeom(){
-
-    switch (this.placedObjectType){
-      case 1:
-        this.olmap.addIndividualObject(this.feature, {center: true, zoom: 16});
-        break;
-      case 2:
-        this.olmap.addWiringObject(this.feature, {center: true, zoom: 16});
-        break;
-      case 0:
-        this.olmap.addBuildingObject(this.feature, {center: true, zoom: 16});
-        break;
-    }
-
+  locateFeature(){
+    this.olmap.addObject(this.feature, {center: true, zoom: 16});
   }
 }

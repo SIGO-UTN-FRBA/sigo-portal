@@ -9,6 +9,7 @@ import Polygon = ol.geom.Polygon;
 import Point = ol.geom.Point;
 import LineString = ol.geom.LineString;
 import MultiPolygon = ol.geom.MultiPolygon;
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-object-geometry-edit',
@@ -101,7 +102,7 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
   ngOnInit(): void {
 
     this.geometryType = PlacedObjectTypes[this.placedObjectType].geometry;
-
+    this.coordinatesText = "";
     this.onInitError = null;
 
     this.status = STATUS_INDICATOR.LOADING;
@@ -110,7 +111,10 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
       .getFeature(this.placedObjectId)
       .then( data => {
         this.feature = data;
-        this.coordinatesText = JSON.stringify(data);
+        if(data.getGeometry()){
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
+        }
         this.status = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
