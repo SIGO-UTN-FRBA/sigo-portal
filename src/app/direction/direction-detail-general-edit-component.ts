@@ -85,6 +85,21 @@ import {DirectionDistancesService} from "./direction-distances.service";
               [(ngModel)]="direction.azimuth"
               required>
           </div>
+          <div class="col-md-6 col-sm-12 form-group">
+            <label
+              for="inputHeight"
+              class="control-label"
+              i18n="@@direction.detail.section.general.height">
+              Height
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              name="inputHeight"
+              min="0"
+              [(ngModel)]="direction.height"
+              required>
+          </div>
         </div>
         <hr>
         <div class="row">

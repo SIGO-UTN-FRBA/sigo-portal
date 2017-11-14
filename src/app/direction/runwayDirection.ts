@@ -8,4 +8,5 @@ export class RunwayDirection {
   position: number;
   name : string;
   azimuth : number;
+  height:number;
 }

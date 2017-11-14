@@ -75,6 +75,14 @@ import {Router} from "@angular/router";
               </label>
               <p class="form-control-static">{{direction.azimuth}}</p>
             </div>
+            <div class="col-md-6 col-sm-12 form-group">
+              <label for="height"
+                     class="control-label"
+                     i18n="@@direction.detail.section.general.height">
+                Height
+              </label>
+              <p class="form-control-static">{{direction.height}}</p>
+            </div>
           </div>
         </div>
       </div>
