@@ -46,7 +46,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
               </div>
             </div>
             <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
+              <div class="col-md-4 col-sm-12 form-group">
                 <label 
                   for="inputCodeFir" 
                   class="control-label" 
@@ -61,7 +61,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                   disabled
                   required>
               </div>
-              <div class="col-md-6 col-sm-12">
+              <div class="col-md-4 col-sm-12">
                 <label 
                   for="inputCodeIATA" 
                   class="control-label" 
@@ -73,6 +73,20 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                   class="form-control"
                   name="inputCodeIATA"
                   [(ngModel)]="airport.codeIATA"
+                  required>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <label
+                  for="inputCodeLocal"
+                  class="control-label"
+                  i18n="@@airport.detail.section.general.inputCodeLocal">
+                  Code Local
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="inputCodeLocal"
+                  [(ngModel)]="airport.codeLocal"
                   required>
               </div>
             </div>

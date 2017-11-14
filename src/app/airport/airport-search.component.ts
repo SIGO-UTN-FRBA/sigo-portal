@@ -41,21 +41,21 @@ import {AirportSearchFilter, default as AirportSearchFilters} from "./airportSea
                   maxlength="80"
                   required>
                 <span class="input-group-btn" role="group">
-                  <button
-                    type="submit"
-                    class="btn btn-lg btn-primary"
-                    [disabled]="searchForm.invalid"
-                    i18n-title="@@commons.button.search"
-                    title="Search">
+                  <button type="submit"
+                          class="btn btn-lg btn-primary"
+                          [disabled]="searchForm.invalid"
+                          i18n-title="@@commons.button.search"
+                          title="Search"
+                  >
                       <span class="glyphicon glyphicon-search"></span>
                   </button>
-                  <button
-                    type="button"
-                    (click)="onFilter()"
-                    class="btn btn-lg btn-primary"
-                    i18n-title="@@commons.button.filter"
-                    title="Filter">
-                      <span class="glyphicon glyphicon-filter"></span>
+                  <button type="button"
+                          (click)="onFilter()"
+                          class="btn btn-lg btn-primary"
+                          i18n-title="@@commons.button.filter"
+                          title="Filter"
+                  >
+                    <span class="glyphicon glyphicon-filter"></span>
                   </button>
                 </span>
               </div>
