@@ -30,6 +30,8 @@ import {OlLayers} from "./olLayers";
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
   layers : OlLayers;
+  scaleLineControl;
+  fullScreenControl;
 
   constructor() {
     this.layers = new OlLayers();
@@ -305,6 +307,13 @@ import {OlLayers} from "./olLayers";
   createMap = () => {
 
     /**
+     * Create map controls
+     */
+
+    this.fullScreenControl = new ol.control.FullScreen();
+    this.scaleLineControl = new ol.control.ScaleLine(); //TODO choose unit
+
+    /**
      * Create the map.
      */
 
@@ -312,8 +321,9 @@ import {OlLayers} from "./olLayers";
       target: 'map',
       layers: [this.getOMS()],
       controls: ol.control.defaults().extend([
-        new ol.control.FullScreen()
-      ]),
+            this.scaleLineControl,
+            this.fullScreenControl
+        ]),
       view: new ol.View({
         center: ol.proj.fromLonLat([0,0]),
         zoom: 7,
