@@ -296,7 +296,9 @@ import {OlLayers} from "./olLayers";
   getOMS(){
 
     let OSM = new Tile({
-      source: new ol.source.OSM()
+      source: new ol.source.Stamen({
+        layer: 'toner'
+      })
     });
 
     OSM.set('name', 'Openstreetmap');
