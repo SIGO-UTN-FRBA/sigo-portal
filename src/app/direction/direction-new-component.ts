@@ -82,7 +82,7 @@ import {ApiError} from "../main/apiError";
                   <label
                     for="inputAzimuth"
                     class="control-label"
-                    i18n="@@direction.detail.section.general.azimuth">
+                    i18n="@@direction.detail.section.general.inputAzimuth">
                     Azimuth
                   </label>
                   <input
@@ -93,6 +93,24 @@ import {ApiError} from "../main/apiError";
                     max="360"
                     [(ngModel)]="direction.azimuth"
                     required>
+                </div>
+                <div class="col-md-6 col-sm-12 form-group">
+                  <label
+                    for="inputHeight"
+                    class="control-label"
+                    i18n="@@direction.detail.section.general.inputHeight">
+                    Height
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="number"
+                      class="form-control"
+                      name="inputHeight"
+                      min="0"
+                      [(ngModel)]="direction.height"
+                      required>
+                    <div class="input-group-addon">[m]</div>
+                  </div>
                 </div>
               </div>
             </form>

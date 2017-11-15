@@ -81,7 +81,7 @@ import {Router} from "@angular/router";
                      i18n="@@direction.detail.section.general.height">
                 Height
               </label>
-              <p class="form-control-static">{{direction.height}}</p>
+              <p class="form-control-static">{{direction.height}} [m]</p>
             </div>
           </div>
         </div>

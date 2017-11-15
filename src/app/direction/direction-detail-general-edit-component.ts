@@ -92,13 +92,16 @@ import {DirectionDistancesService} from "./direction-distances.service";
               i18n="@@direction.detail.section.general.height">
               Height
             </label>
-            <input
-              type="number"
-              class="form-control"
-              name="inputHeight"
-              min="0"
-              [(ngModel)]="direction.height"
-              required>
+            <div class="input-group">
+              <input
+                type="number"
+                class="form-control"
+                name="inputHeight"
+                min="0"
+                [(ngModel)]="direction.height"
+                required>
+              <div class="input-group-addon">[m]</div>
+            </div>
           </div>
         </div>
         <hr>
