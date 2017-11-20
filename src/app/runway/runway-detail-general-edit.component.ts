@@ -22,7 +22,7 @@ import {EnumItem} from "../commons/enumItem";
             <app-loading-indicator></app-loading-indicator>
           </div>
           <div *ngSwitchCase="indicator.ERROR">
-            <app-error-indicator [error]="onInitError"></app-error-indicator>
+            <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
           </div>
           <form #generalForm 
                 *ngSwitchCase="indicator.ACTIVE" 
@@ -30,7 +30,7 @@ import {EnumItem} from "../commons/enumItem";
                 class="form container-fluid" 
                 (ngSubmit)="onSubmit()">
             
-            <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+            <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
             
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">

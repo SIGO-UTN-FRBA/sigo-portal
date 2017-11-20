@@ -16,6 +16,7 @@ import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component"
 import {AnalysisCaseService} from "./analysis-case.service";
 import {PlacedObjectService} from "../object/object.service";
 import {PlacedObjectCatalogService} from "../object/object-catalog.service";
+import {BlockUIModule} from "ng-block-ui";
 
 @NgModule({
   imports:[
@@ -23,7 +24,8 @@ import {PlacedObjectCatalogService} from "../object/object-catalog.service";
     FormsModule,
     AnalysisRoutingModule,
     CommonsModule,
-    OlmapModule
+    OlmapModule,
+    BlockUIModule
   ],
   declarations: [
     AnalysisComponent,

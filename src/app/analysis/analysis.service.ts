@@ -39,4 +39,12 @@ export class AnalysisService extends ApiService {
       .then(response => response.json() as Analysis)
       .catch(this.handleError);
   }
+
+  update(analysisId: number, stageId:number) : Promise<Analysis> {
+    return this.http
+      .patch(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}`, {stageId: stageId})
+      .toPromise()
+      .then(response => response.json() as Analysis)
+      .catch(this.handleError);
+  }
 }

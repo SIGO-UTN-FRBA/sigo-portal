@@ -39,7 +39,7 @@ import GeoJSON = ol.format.GeoJSON;
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <div *ngSwitchCase="indicator.ACTIVE">
           <div class="form container-fluid">

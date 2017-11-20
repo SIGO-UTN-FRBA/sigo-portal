@@ -18,7 +18,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
         <app-loading-indicator></app-loading-indicator>
       </div>
       <div *ngSwitchCase="indicator.ERROR">
-        <app-error-indicator [error]="onInitError"></app-error-indicator>
+        <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
       </div>
       <ul *ngSwitchCase="indicator.ACTIVE" class="media-list">
         <li *ngFor="let regulation of regulations" class="media media-border">

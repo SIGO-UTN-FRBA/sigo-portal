@@ -1,27 +1,22 @@
-import {Component, Input, OnInit} from "@angular/core";
-import {ApiError} from "../main/apiError";
+import {Component, Input} from "@angular/core";
+import {AppError} from "../main/ierror";
 
 @Component({
   selector: 'app-error-indicator',
   template:`
-    <div class="alert alert-danger center-block -align-center" role="alert"> 
+    <div role="alert"
+         *ngFor="let error of errors"
+         class="alert alert-danger center-block -align-center"> 
       <span class="glyphicon glyphicon-alert"></span>
       <strong i18n="@@commons.alert.error">Error!</strong>
-      {{message}}
+      {{error.displayString()}}
     </div>
   `
 })
 
 
-export class ErrorIndicatorComponent implements OnInit {
+export class ErrorIndicatorComponent {
 
-  @Input() error : ApiError;
-  message : string = '';
+  @Input() errors : AppError[];
 
-  ngOnInit(): void {
-    if(this.error.code != null)
-      this.message = this.error.message;
-    else
-      this.message = 'Unexpected error occurred.';
-  }
 }

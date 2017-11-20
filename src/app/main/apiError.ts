@@ -1,4 +1,6 @@
-export class ApiError {
+import {AppError} from "./ierror";
+
+export class ApiError implements AppError{
 
   private _code : string;
   private _message : string;
@@ -18,5 +20,9 @@ export class ApiError {
   }
   get code() {
     return this._code;
+  }
+
+  displayString() : string {
+    return this.message;
   }
 }

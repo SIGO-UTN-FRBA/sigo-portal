@@ -19,7 +19,7 @@ import {Analysis} from "./analysis";
         <app-empty-indicator type="result" entity="cases"></app-empty-indicator>
       </div>
       <div *ngSwitchCase="indicator.ERROR">
-        <app-error-indicator [error]="onInitError"></app-error-indicator>
+        <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
       </div>
 
       <ul *ngSwitchCase="indicator.ACTIVE" class="media-list">
@@ -39,7 +39,7 @@ import {Analysis} from "./analysis";
             <button type="button" 
                     (click)="cloneCase(analysis.id)"
                     *ngIf="analysis.statusId == 2"
-                    class="btn btn-default btn-sm" 
+                    class="btn btn-primary btn-sm" 
                     i18n="@@commons.button.new">
               New
             </button>

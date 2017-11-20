@@ -21,7 +21,7 @@ import {ApiError} from "../main/apiError";
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <form #takeoffSectionForm="ngForm" 
               *ngSwitchCase="indicator.ACTIVE" 
@@ -29,7 +29,7 @@ import {ApiError} from "../main/apiError";
               class="form container-fluid" 
               (ngSubmit)="onSubmit()">
 
-          <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
 
           <div class="row">
             <div class="col-md-6 col-sm-12 form-group">

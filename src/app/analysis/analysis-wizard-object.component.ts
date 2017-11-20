@@ -15,6 +15,8 @@ import {OlComponent} from "../olmap/ol.component";
 import Map = ol.Map;
 import Feature = ol.Feature;
 import {AnalysisCase} from "./analysisCase";
+import {UiError} from "../main/uiError";
+import {AppError} from "../main/ierror";
 
 @Component({
   providers: [ OlComponent ],
@@ -28,113 +30,109 @@ import {AnalysisCase} from "./analysisCase";
     </p>
     <hr/>
     
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title" i18n="@@analysis.wizard.object.section.objects.title">
-          Objects
-        </h3>
-      </div>
-      <div [ngSwitch]="initStatus" class="panel-body">
-        <div *ngSwitchCase="indicator.LOADING" >
-            <app-loading-indicator></app-loading-indicator>
-        </div>
-        <div *ngSwitchCase="indicator.ERROR">
-            <app-error-indicator [error]="onInitError"></app-error-indicator>
-        </div>
-        <ng-container *ngSwitchCase="indicator.ACTIVE">
-          <form #caseForm 
-                class="form-inline"
-                (ngSubmit)="onUpdateRadius()"
-          >
-            <div class="form-group">
-              <label for="inputSearchRadius" 
-                     i18n="@@analysis.wizard.object.section.objects.searchRadius"
-              >
-                Search Radius
-              </label>
-              <div class="input-group">
-                
-                <input type="number" 
-                       class="form-control" 
-                       name="inputSearchRadius" 
-                       [(ngModel)]="searchRadius"
-                       required>
-                <div class="input-group-addon">[km]</div>
-              </div>
-            </div>
-            <button type="submit"
-                    [disabled]="caseForm.invalid"
-                    class="btn btn-default"
-                    i18n="@commons.button.update"
-            >
-              Update
-            </button>
-          </form>
-          <br>
-          <ng-container [ngSwitch]="updateStatus">
 
-            <div *ngSwitchCase="indicator.LOADING" >
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title" i18n="@@analysis.wizard.object.section.objects.title">
+            Objects
+          </h3>
+        </div>
+        <div [ngSwitch]="initStatus" class="panel-body">
+          <div *ngSwitchCase="indicator.LOADING" >
               <app-loading-indicator></app-loading-indicator>
-            </div>
-            
-            <app-error-indicator *ngSwitchCase="indicator.ERROR" [error]="onUpdateError"></app-error-indicator>
-
-            <div *ngSwitchCase="indicator.EMPTY" >
-              <app-empty-indicator entity="placed objects" type="included"></app-empty-indicator>
-            </div>
-            
-            
-            <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
-              <table class="table table-hover">
-                <tr>
-                  <th>#</th>
-                  <th i18n="@@analysis.wizard.object.section.objects.name">Name</th>
-                  <th i18n="@@analysis.wizard.object.section.objects.type">Type</th>
-                  <th i18n="@@analysis.wizard.object.section.objects.included">Included</th>
-                </tr>
-                <tbody>
-                  <tr *ngFor="let analysisObject of analysisObjects; index as i;">
-                    <td><strong>{{i+1}}</strong></td>
-                    <td>
-                      <a [routerLink]="['/objects', analysisObject.object.typeId, analysisObject.object.id]">
-                        {{analysisObject.object.name}}
-                      </a>
-                    </td>
-                    <td>
-                      {{types[analysisObject.object.typeId].description}}
-                    </td>
-                    <td>
-                      <input type="checkbox" [ngModel]="analysisObject.included">
-                    </td>
+          </div>
+          <div *ngSwitchCase="indicator.ERROR">
+              <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
+          </div>
+          <ng-container *ngSwitchCase="indicator.ACTIVE">
+  
+            <form #caseForm 
+                  class="form-inline"
+                  (ngSubmit)="onUpdateRadius()"
+            >
+              <div class="form-group">
+                <label for="inputSearchRadius" 
+                       i18n="@@analysis.wizard.object.section.objects.searchRadius"
+                >
+                  Search Radius
+                </label>
+                <div class="input-group">
+                  
+                  <input type="number" 
+                         class="form-control" 
+                         name="inputSearchRadius" 
+                         [(ngModel)]="searchRadius"
+                         required>
+                  <div class="input-group-addon">[km]</div>
+                </div>
+              </div>
+              <button type="submit"
+                      [disabled]="caseForm.invalid"
+                      class="btn btn-default"
+                      i18n="@commons.button.update"
+              >
+                Update
+              </button>
+            </form>
+            <br>
+            <ng-container [ngSwitch]="updateStatus">
+  
+              <div *ngSwitchCase="indicator.LOADING" >
+                <app-loading-indicator></app-loading-indicator>
+              </div>
+              <div *ngSwitchCase="indicator.ERROR" >
+                <app-error-indicator></app-error-indicator>
+              </div>
+              <div *ngSwitchCase="indicator.EMPTY" >
+                <app-empty-indicator entity="placed objects" type="included"></app-empty-indicator>
+              </div>
+              
+              <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
+                <table class="table table-hover">
+                  <tr>
+                    <th>#</th>
+                    <th i18n="@@analysis.wizard.object.section.objects.name">Name</th>
+                    <th i18n="@@analysis.wizard.object.section.objects.type">Type</th>
+                    <th i18n="@@analysis.wizard.object.section.objects.included">Included</th>
                   </tr>
-                </tbody>
-              </table>
-              <br>
-            </div>
+                  <tbody>
+                    <tr *ngFor="let analysisObject of analysisObjects; index as i;">
+                      <td><strong>{{i+1}}</strong></td>
+                      <td>
+                        <a [routerLink]="['/objects', analysisObject.object.typeId, analysisObject.object.id]">
+                          {{analysisObject.object.name}}
+                        </a>
+                      </td>
+                      <td>
+                        {{types[analysisObject.object.typeId].description}}
+                      </td>
+                      <td>
+                        <input type="checkbox" [ngModel]="analysisObject.included">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br>
+              </div>
+            </ng-container>
+            <app-map #mapObjects (map)="map"></app-map>
           </ng-container>
-          <app-map #mapObjects (map)="map"></app-map>
-        </ng-container>
+        </div>
       </div>
-    </div>
-   
-    <br>
-    
-    <nav>
-      <ul class="pager">
-        <li class="previous disabled">
-          <a href="#">
-            <span aria-hidden="true">&larr;</span>
-            <ng-container i18n="@@commons.wizard.previus"> Previous</ng-container>
-          </a>
-        </li>
-        <li class="next">
-          <a href="#">
-            <ng-container i18n="@@commons.wizard.next">Next </ng-container>
-            <span aria-hidden="true">&rarr;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+     
+      <br>
+      
+      <nav>
+        <ul class="pager">
+          <li class="next">
+            <a (click)="onNext()" style="cursor: pointer">
+              <ng-container i18n="@@commons.wizard.next">Next </ng-container>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
   `
 })
 
@@ -150,7 +148,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   analysisObjects:AnalysisObject[];
   onInitError:ApiError;
   onUpdateError:ApiError;
-  onSubmitError:ApiError;
+  onSubmitError:AppError;
   types:PlacedObjectType[];
   airportFeature: Feature;
   private olmap: OlComponent;
@@ -303,5 +301,21 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
       .clearObjectLayers()
       .clearAirportLayer()
       .clearRunwayLayer();
+  }
+
+  onNext() {
+    //1. verificar que existan objetos includos
+    if(!this.analysisObjects.some(o => o.included)){
+      ApiError
+      this.onSubmitError=new UiError("There is not object included into analysis case","Error");
+      return;
+    }
+
+    //2. actualizar objectos del caso
+    //3. actualizar stage del caso
+  }
+
+  onPrevious() {
+    alert("previous");
   }
 }

@@ -24,7 +24,7 @@ import Feature = ol.Feature;
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <form  #geometryForm="ngForm"
                *ngSwitchCase="indicator.ACTIVE"
@@ -32,7 +32,7 @@ import Feature = ol.Feature;
                class="form container-fluid" 
                (ngSubmit)="onSubmit()">
 
-          <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
           
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
