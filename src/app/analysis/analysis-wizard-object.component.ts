@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from "@angular/core";
 import {AnalysisCaseService} from "./analysis-case.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AnalysisObject} from "./analysisObject";
 import {PlacedObjectService} from "../object/object.service";
 import {PlacedObject} from "../object/object";
@@ -17,6 +17,10 @@ import Feature = ol.Feature;
 import {AnalysisCase} from "./analysisCase";
 import {UiError} from "../main/uiError";
 import {AppError} from "../main/ierror";
+import {BlockTemplateComponent} from "../commons/block-template.component";
+import {BlockUI, NgBlockUI} from "ng-block-ui";
+import {AnalysisObjectService} from "./analysis-object.service";
+import AnalysisStages from "./analysisStages";
 
 @Component({
   providers: [ OlComponent ],
@@ -28,9 +32,14 @@ import {AppError} from "../main/ierror";
     <p i18n="@@wizard.object.main_description">
       This section allows users to define which objects are going to be analyzed.
     </p>
-    <hr/>
     
+    <hr/>
 
+    <div *ngIf="onSubmitError">
+      <app-error-indicator [errors]="[onSubmitError]"></app-error-indicator>
+    </div>
+    
+    <block-ui [template]="blockTemplate" [delayStop]="1500">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title" i18n="@@analysis.wizard.object.section.objects.title">
@@ -107,7 +116,7 @@ import {AppError} from "../main/ierror";
                         {{types[analysisObject.object.typeId].description}}
                       </td>
                       <td>
-                        <input type="checkbox" [ngModel]="analysisObject.included">
+                        <input type="checkbox" [(ngModel)]="analysisObject.included">
                       </td>
                     </tr>
                   </tbody>
@@ -132,15 +141,16 @@ import {AppError} from "../main/ierror";
           </li>
         </ul>
       </nav>
-
+    </block-ui>
   `
 })
 
 export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
+  @BlockUI() blockUI: NgBlockUI;
+  blockTemplate = BlockTemplateComponent;
   initStatus:number;
   updateStatus:number;
-  submitStatus:number;
   indicator;
   analysis:Analysis;
   analysisId:number;
@@ -160,11 +170,13 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
   constructor(
     private analysisService: AnalysisService,
-    private caseService : AnalysisCaseService,
-    private objectService:PlacedObjectService,
+    private caseService: AnalysisCaseService,
+    private objectService: PlacedObjectService,
     private objectCatalogService: PlacedObjectCatalogService,
-    private airportService:AirportService,
-    private route: ActivatedRoute
+    private airportService: AirportService,
+    private analysisObjectService: AnalysisObjectService,
+    private route: ActivatedRoute,
+    private router: Router
   ){
     this.analysisObjects = [];
     this.indicator = STATUS_INDICATOR;
@@ -173,6 +185,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
+    this.blockUI.stop();
     this.analysisId = this.route.snapshot.params['analysisId'];
     this.initStatus = STATUS_INDICATOR.LOADING;
     this.onInitError = null;
@@ -289,8 +302,8 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
   private resolveObjects() : Promise<any> {
 
-    return this.caseService
-      .getObjects(this.analysis.id, this.analysisCase.id)
+    return this.analysisObjectService
+      .list(this.analysis.id, this.analysisCase.id)
       .then(data => this.analysisObjects = data)
       .then(() => this.resolveDataObjects())
       .then(() => this.resolveFeatureObjects())
@@ -304,15 +317,32 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   }
 
   onNext() {
+
+    this.onSubmitError = null;
+
+    this.blockUI.start("Processing...");
+
     //1. verificar que existan objetos includos
     if(!this.analysisObjects.some(o => o.included)){
-      ApiError
-      this.onSubmitError=new UiError("There is not object included into analysis case","Error");
+      this.onSubmitError = new UiError("There is not object included into analysis case","Error");
+      this.blockUI.stop();
       return;
     }
 
     //2. actualizar objectos del caso
     //3. actualizar stage del caso
+    Promise.all(this.analysisObjects.map( o => this.analysisObjectService.update(this.analysisId, this.analysisCase.id, o.id, o.included)))
+      .then(() => {
+        return this.analysisService.update(this.analysisId, 1);
+      })
+      .then( () =>{
+        this.blockUI.stop();
+        this.router.navigate([`/analysis/${this.analysisId}/stages/exception`])
+      })
+      .catch((error) => {
+        this.onSubmitError = error;
+        this.blockUI.stop();
+      });
   }
 
   onPrevious() {

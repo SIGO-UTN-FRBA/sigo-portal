@@ -25,12 +25,4 @@ export class AnalysisCaseService extends ApiService {
       .then(response => response.json() as AnalysisCase)
       .catch(this.handleError)
   }
-
-  getObjects(analysisId:number, caseId:number) : Promise<AnalysisObject[]>{
-    return this.http
-      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/${caseId}/objects`)
-      .toPromise()
-      .then(response => response.json() as AnalysisObject[])
-      .catch(this.handleError)
-  }
 }

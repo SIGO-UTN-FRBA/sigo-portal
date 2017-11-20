@@ -29,7 +29,7 @@ import {Analysis} from "./analysis";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/analysis/{{analysis.id}}/stages/{{stages[analysis.statusId]}}">{{analysis.airport.codeFIR}}</a>
+              <a routerLink="/analysis/{{analysis.id}}/stages/{{stages[analysis.stageId]}}">{{analysis.airport.codeFIR}}</a>
             </h4>
             <p>{{analysis.airport.nameFIR}}</p>
             <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
@@ -79,7 +79,9 @@ export class AnalysisCaseListComponent implements OnInit {
       .search(this.route.snapshot.queryParamMap)
       .then(data => this.results = data)
       .then(()=> Promise.all(this.results.map(r => this.airportService.get(r.airportId).then((airport) => r.airport = airport))))
-      .then(()=> this.status = STATUS_INDICATOR.ACTIVE)
+      .then(()=> {
+        (this.results.length > 0) ? this.status = STATUS_INDICATOR.ACTIVE : this.status = STATUS_INDICATOR.EMPTY;
+      })
       .catch(error => this.status=STATUS_INDICATOR.ERROR);
 
   }
