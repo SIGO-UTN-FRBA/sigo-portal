@@ -5,7 +5,6 @@ import {AnalysisService} from "./analysis.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AirportService} from "../airport/airport.service";
-import AnalysisStages from "./analysisStages";
 import {Analysis} from "./analysis";
 
 @Component({
@@ -67,7 +66,7 @@ export class AnalysisCaseListComponent implements OnInit {
   ){
     this.results = [];
     this.indicator = STATUS_INDICATOR;
-    this.stages = AnalysisStages;
+    this.stages = this.analysisService.stages();
   }
 
   ngOnInit(): void {

@@ -47,4 +47,13 @@ export class AnalysisService extends ApiService {
       .then(response => response.json() as Analysis)
       .catch(this.handleError);
   }
+
+  stages(){
+    return [
+      "object",
+      "exception",
+      "analysis",
+      "inform"
+    ];
+  }
 }
