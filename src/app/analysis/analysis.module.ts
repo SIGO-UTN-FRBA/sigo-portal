@@ -19,6 +19,7 @@ import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 import {BlockUIModule} from "ng-block-ui";
 import {BlockTemplateComponent} from "../commons/block-template.component";
 import {AnalysisObjectService} from "./analysis-object.service";
+import {AnalysisExceptionService} from "./analysis-exception.service";
 
 @NgModule({
   imports:[
@@ -44,7 +45,8 @@ import {AnalysisObjectService} from "./analysis-object.service";
     AirportService,
     PlacedObjectService,
     PlacedObjectCatalogService,
-    AnalysisObjectService
+    AnalysisObjectService,
+    AnalysisExceptionService
   ],
   entryComponents: [
     BlockTemplateComponent

@@ -20,7 +20,6 @@ import {AppError} from "../main/ierror";
 import {BlockTemplateComponent} from "../commons/block-template.component";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {AnalysisObjectService} from "./analysis-object.service";
-import AnalysisStages from "./analysisStages";
 
 @Component({
   providers: [ OlComponent ],
@@ -39,7 +38,7 @@ import AnalysisStages from "./analysisStages";
       <app-error-indicator [errors]="[onSubmitError]"></app-error-indicator>
     </div>
     
-    <block-ui [template]="blockTemplate" [delayStop]="1500">
+    <block-ui [template]="blockTemplate" [delayStop]="500">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title" i18n="@@analysis.wizard.object.section.objects.title">
@@ -343,9 +342,5 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
         this.onSubmitError = error;
         this.blockUI.stop();
       });
-  }
-
-  onPrevious() {
-    alert("previous");
   }
 }
