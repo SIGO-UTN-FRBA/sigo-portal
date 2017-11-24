@@ -53,7 +53,14 @@ import GeoJSON = ol.format.GeoJSON;
             </div>
           </div>
           <br>
-          <app-map #mapDirection (map)="map"></app-map>
+          <app-map #mapDirection 
+                   (map)="map"
+                   [rotate]="true"
+                   [fullScreen]="true"
+                   [scale]="true"
+                   [layers]="['runway', 'direction', 'threshold', 'stopway', 'clearway']"
+          >
+          </app-map>
         </div>
         
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">

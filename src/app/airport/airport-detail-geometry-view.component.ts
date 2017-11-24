@@ -2,14 +2,10 @@ import {
   AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {AirportService} from "./airport.service";
-import Point = ol.geom.Point;
 import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {ApiError} from "../main/apiError";
 import Feature = ol.Feature;
-import GeoJSONFeature = ol.format.GeoJSONFeature;
-import JSONFeature = ol.format.JSONFeature;
-import Coordinate = ol.Coordinate;
 import GeoJSON = ol.format.GeoJSON;
 
 @Component({
@@ -57,7 +53,14 @@ import GeoJSON = ol.format.GeoJSON;
             </div>
           </div>
           <br>
-          <app-map #mapAirport (map)="map"></app-map>
+          <app-map #mapAirport 
+                   (map)="map" 
+                   [rotate]="true"
+                   [fullScreen]="true"
+                   [scale]="true"
+                   [layers]="['airport']"
+          >
+          </app-map>
         </div>
       </div>
 

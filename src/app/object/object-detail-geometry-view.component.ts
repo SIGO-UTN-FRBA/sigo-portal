@@ -54,7 +54,14 @@ import GeoJSON = ol.format.GeoJSON;
             </div>
           </div>
           <br>
-          <app-map #mapPlacedObject (map)="map"></app-map>
+          <app-map #mapPlacedObject
+                   (map)="map"
+                   [rotate]="true"
+                   [fullScreen]="true"
+                   [scale]="true"
+                   [layers]="['individual', 'building', 'wire']"
+          >
+          </app-map>
         </div>
       </div>
       

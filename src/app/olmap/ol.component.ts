@@ -8,11 +8,6 @@ import VectorLayer = ol.layer.Vector;
 import Feature = ol.Feature;
 import Style = ol.style.Style;
 import Circle = ol.style.Circle;
-import Polygon = ol.geom.Polygon;
-import Point = ol.geom.Point;
-import Geometry = ol.geom.Geometry;
-import {OlLayers} from "./olLayers";
-
 
 @Component({
   selector: 'app-map',
@@ -26,18 +21,26 @@ import {OlLayers} from "./olLayers";
   `
 
 }) export class OlComponent implements OnInit {
-
+  @Input() fullScreen:boolean;
+  @Input() scale:boolean;
+  @Input() layers: string[];
+  @Input() rotate: boolean;
+  @Input() layerSwitcher: boolean;
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-  layers : OlLayers;
+  olLayers : OlLayers;
   scaleLineControl;
   fullScreenControl;
 
   constructor() {
-    this.layers = new OlLayers();
+    this.olLayers = {} as OlLayers;
+    this.fullScreen=false;
+    this.scale=false;
+    this.layers=[];
+    this.rotate=false;
   }
 
-  private createVectorSource() {
+  private createDefaultVectorSource() {
     return new VectorSource({
       format: new GeoJSON({
         defaultDataProjection: 'EPSG:3857',
@@ -53,11 +56,11 @@ import {OlLayers} from "./olLayers";
   }
 
   getAirportLayer() : VectorLayer {
-    if(this.layers.airport != null)
-      return this.layers.airport;
+    if(this.olLayers.airport != null)
+      return this.olLayers.airport;
 
     let airportLayer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         image: new Circle({
           radius: 7,
@@ -67,9 +70,9 @@ import {OlLayers} from "./olLayers";
       })
     });
 
-    this.layers.airport = airportLayer;
+    airportLayer.setProperties({"title":"Airport"});
 
-    this.map.addLayer(airportLayer);
+    this.olLayers.airport = airportLayer;
 
     return airportLayer;
   }
@@ -82,20 +85,20 @@ import {OlLayers} from "./olLayers";
 
   getRunwayLayer() : VectorLayer {
 
-    if(this.layers.runway != null)
-      return this.layers.runway;
+    if(this.olLayers.runway != null)
+      return this.olLayers.runway;
 
     let runwayLayer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
         fill: new ol.style.Fill({color: 'black'})
       })
     });
 
-    this.layers.runway = runwayLayer;
+    runwayLayer.setProperties({"title":"Runway"});
 
-    this.map.addLayer(runwayLayer);
+    this.olLayers.runway = runwayLayer;
 
     return runwayLayer;
   }
@@ -108,11 +111,11 @@ import {OlLayers} from "./olLayers";
 
   getDirectionLayer() : VectorLayer {
 
-    if(this.layers.direction != null)
-      return this.layers.direction;
+    if(this.olLayers.direction != null)
+      return this.olLayers.direction;
 
     let directionLayer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         image: new Circle({
           radius: 3,
@@ -122,9 +125,9 @@ import {OlLayers} from "./olLayers";
       })
     });
 
-    this.layers.direction = directionLayer;
+    directionLayer.setProperties({"title":"Direction"});
 
-    this.map.addLayer(directionLayer);
+    this.olLayers.direction = directionLayer;
 
     return directionLayer;
   }
@@ -136,11 +139,11 @@ import {OlLayers} from "./olLayers";
   }
 
   getDisplacedThresholdLayer() : VectorLayer {
-    if(this.layers.threshold != null)
-      return this.layers.threshold;
+    if(this.olLayers.threshold != null)
+      return this.olLayers.threshold;
 
     let thresholdLayer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkred', width:1}),
         fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.6)' })
@@ -148,9 +151,9 @@ import {OlLayers} from "./olLayers";
       map: this.map
     });
 
-    this.layers.threshold = thresholdLayer;
+    thresholdLayer.setProperties({"title":"Displaced threshold"});
 
-    this.map.addLayer(thresholdLayer);
+    this.olLayers.threshold = thresholdLayer;
 
     return thresholdLayer;
   }
@@ -162,20 +165,20 @@ import {OlLayers} from "./olLayers";
   }
 
   getStopwayLayer() : VectorLayer {
-    if(this.layers.stopway != null)
-      return this.layers.stopway;
+    if(this.olLayers.stopway != null)
+      return this.olLayers.stopway;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkblue', width:1}),
         fill: new ol.style.Fill({color: 'rgba(0, 0, 255, 0.75)' })
       })
     });
 
-    this.layers.stopway = layer;
+    layer.setProperties({"title":"Stop-way"});
 
-    this.map.addLayer(layer);
+    this.olLayers.stopway = layer;
 
     return layer;
   }
@@ -187,20 +190,20 @@ import {OlLayers} from "./olLayers";
   }
 
   getClearwayLayer() : VectorLayer {
-    if(this.layers.clearway != null)
-      return this.layers.clearway;
+    if(this.olLayers.clearway != null)
+      return this.olLayers.clearway;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgreen', width:1}),
         fill: new ol.style.Fill({color: 'rgba(0, 255, 0, 0.6)' })
       })
     });
 
-    this.layers.clearway = layer;
+    layer.setProperties({"title":"Clear-way"});
 
-    this.map.addLayer(layer);
+    this.olLayers.clearway = layer;
 
     return layer;
   }
@@ -221,11 +224,11 @@ import {OlLayers} from "./olLayers";
   }
 
   getIndividualObjectLayer() : VectorLayer {
-    if(this.layers.individual != null)
-      return this.layers.individual;
+    if(this.olLayers.individual != null)
+      return this.olLayers.individual;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new ol.style.Style({
         image: new ol.style.RegularShape({
           stroke: new ol.style.Stroke({color: 'black', width: 2}),
@@ -237,9 +240,9 @@ import {OlLayers} from "./olLayers";
       })
     });
 
-    this.layers.individual = layer;
+    layer.setProperties({"title":"Individual object"});
 
-    this.map.addLayer(layer);
+    this.olLayers.individual = layer;
 
     return layer;
   }
@@ -251,20 +254,20 @@ import {OlLayers} from "./olLayers";
   }
 
   getBuildingObjectLayer() : VectorLayer {
-    if(this.layers.building != null)
-      return this.layers.building;
+    if(this.olLayers.building != null)
+      return this.olLayers.building;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
         fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.85)' })
       }),
     });
 
-    this.layers.building = layer;
+    layer.setProperties({"title":"Building"});
 
-    this.map.addLayer(layer);
+    this.olLayers.building = layer;
 
     return layer;
   }
@@ -276,24 +279,24 @@ import {OlLayers} from "./olLayers";
   }
 
   getWiringObjectLayer() : VectorLayer {
-    if(this.layers.wiring != null)
-      return this.layers.wiring;
+    if(this.olLayers.wiring != null)
+      return this.olLayers.wiring;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1})
       }),
     });
 
-    this.layers.wiring = layer;
+    layer.setProperties({"title":"Wire"});
 
-    this.map.addLayer(layer);
+    this.olLayers.wiring = layer;
 
     return layer;
   }
 
-  getOMS(){
+  getStamenTonerBaseLayer(){
 
     let OSM = new Tile({
       source: new ol.source.Stamen({
@@ -302,30 +305,18 @@ import {OlLayers} from "./olLayers";
     });
 
     OSM.set('name', 'Openstreetmap');
+    OSM.set('title', 'Stamen toner');
+    OSM.set('type', 'base');
 
     return OSM;
   }
 
   createMap = () => {
 
-    /**
-     * Create map controls
-     */
-
-    this.fullScreenControl = new ol.control.FullScreen();
-    this.scaleLineControl = new ol.control.ScaleLine(); //TODO choose unit
-
-    /**
-     * Create the map.
-     */
-
     this.map = new Map({
       target: 'map',
-      layers: [this.getOMS()],
-      controls: ol.control.defaults().extend([
-            this.scaleLineControl,
-            this.fullScreenControl
-        ]),
+      layers: this.initializeLayers(),
+      controls: this.initializeControls(),
       view: new ol.View({
         center: ol.proj.fromLonLat([0,0]),
         zoom: 7,
@@ -501,4 +492,115 @@ import {OlLayers} from "./olLayers";
     this.createMap();
   }
 
+  private initializeLayers() :(ol.layer.Base[] | ol.Collection<ol.layer.Base>){
+
+    let layerGroups : Array<ol.layer.Group>= [];
+
+    this.setupBaseLayerGroup(layerGroups);
+    this.setupAirportLayerGroup(layerGroups);
+    this.setupSurfaceLayerGroup(layerGroups);
+    this.setupObjectLayerGroup(layerGroups);
+
+    return layerGroups;
+  }
+
+  private setupBaseLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    let baseLayersGroup = new ol.layer.Group({
+      layers: [this.getStamenTonerBaseLayer()]
+    });
+    baseLayersGroup.set("title", "Base maps");
+
+    layerGroups.push(baseLayersGroup);
+  }
+
+  private setupAirportLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    let layers = new ol.Collection<ol.layer.Base>();
+
+    if(this.layers.includes("airport"))
+      layers.push(this.getAirportLayer());
+
+    if(this.layers.includes("runway"))
+      layers.push(this.getRunwayLayer());
+
+    if(this.layers.includes("direction"))
+      layers.push(this.getDirectionLayer());
+
+    if(this.layers.includes("threshold"))
+      layers.push(this.getDisplacedThresholdLayer());
+
+    if(this.layers.includes("clearway"))
+      layers.push(this.getClearwayLayer());
+
+    if(this.layers.includes("stopway"))
+      layers.push(this.getStopwayLayer());
+
+    if(layers.getArray().length > 0){
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set("title","Airport");
+      layerGroups.push(group);
+    }
+  }
+
+  private setupSurfaceLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    //TODO incluir superficies
+  }
+
+  private setupObjectLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    let layers = new ol.Collection<ol.layer.Base>();
+
+    if(this.layers.includes("individual"))
+      layers.push(this.getIndividualObjectLayer());
+
+    if(this.layers.includes("building"))
+      layers.push(this.getBuildingObjectLayer());
+
+    if(this.layers.includes("wire"))
+      layers.push(this.getWiringObjectLayer());
+
+    if(layers.getArray().length > 0){
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set("title","Object");
+      layerGroups.push(group);
+    }
+  }
+
+  private initializeControls() : (ol.Collection<ol.control.Control> | ol.control.Control[]){
+
+    let controls = [];
+
+    if(this.fullScreen){
+      this.fullScreenControl = new ol.control.FullScreen();
+      controls.push(this.fullScreenControl);
+    }
+
+    if(this.scale){
+      this.scaleLineControl = new ol.control.ScaleLine(); //TODO choose unit
+      controls.push(this.scaleLineControl);
+    }
+
+    if(this.rotate){
+      controls.push(new ol.control.Rotate());
+    }
+
+    /*
+    if(this.layerSwitcher){
+      controls.push(new ol.control['LayerSwitcher']());
+    }*/
+
+    return ol.control.defaults().extend(controls);
+  }
+}
+
+interface OlLayers {
+  airport: VectorLayer;
+  runway: VectorLayer;
+  direction: VectorLayer;
+  threshold: VectorLayer;
+  individual: VectorLayer;
+  building: VectorLayer;
+  wiring: VectorLayer;
+  stopway:VectorLayer;
+  clearway: VectorLayer;
 }

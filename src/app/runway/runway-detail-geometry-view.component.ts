@@ -52,7 +52,13 @@ import GeoJSON = ol.format.GeoJSON;
             </div>
           </div>
           <br>
-          <app-map #mapRunway (map)="map"></app-map>
+          <app-map #mapRunway 
+                   (map)="map"
+                   [rotate]="true"
+                   [fullScreen]="true"
+                   [scale]="true"
+                   [layers]="['runway']"
+          ></app-map>
         </div>
       </div>
 

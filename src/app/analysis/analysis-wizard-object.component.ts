@@ -123,7 +123,14 @@ import {AnalysisObjectService} from "./analysis-object.service";
                 <br>
               </div>
             </ng-container>
-            <app-map #mapObjects (map)="map"></app-map>
+            <app-map #mapObjects
+                     (map)="map"
+                     [rotate]="true"
+                     [fullScreen]="true"
+                     [scale]="true"
+                     [layers]="['airport', 'runway', 'individual', 'building', 'wire']"
+            >
+            </app-map>
           </ng-container>
         </div>
       </div>
