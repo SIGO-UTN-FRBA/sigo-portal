@@ -226,7 +226,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
   private resolveAnalysisCase() : Promise<any> {
     return this.caseService
-      .get(this.analysis.id, this.analysis.caseId)
+      .get(this.analysis.id)
       .then(data => {
         this.analysisCase = data;
         this.searchRadius = data.searchRadius * 100;
@@ -289,7 +289,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     this.analysisObjects = [];
 
     this.caseService
-      .update(this.analysis.id, this.analysisCase.id, this.searchRadius / 100)
+      .update(this.analysis.id, this.searchRadius / 100)
       .then(data => this.analysisCase = data)
       .then(() => this.clearMapLayers())
       .then(() => this.resolveObjects())
@@ -309,7 +309,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   private resolveObjects() : Promise<any> {
 
     return this.analysisObjectService
-      .list(this.analysis.id, this.analysisCase.id)
+      .list(this.analysis.id)
       .then(data => this.analysisObjects = data)
       .then(() => this.resolveDataObjects())
       .then(() => this.resolveFeatureObjects())
@@ -337,7 +337,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
     //2. actualizar objectos del caso
     //3. actualizar stage del caso
-    Promise.all(this.analysisObjects.map( o => this.analysisObjectService.update(this.analysisId, this.analysisCase.id, o.id, o.included)))
+    Promise.all(this.analysisObjects.map( o => this.analysisObjectService.update(this.analysisId, o.id, o.included)))
       .then(() => {
         return this.analysisService.update(this.analysisId, 1);
       })

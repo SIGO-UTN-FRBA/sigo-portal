@@ -9,17 +9,17 @@ export class AnalysisObjectService extends ApiService {
 
   constructor(http:Http){super(http)}
 
-  list(analysisId:number, caseId:number):Promise<AnalysisObject[]> {
+  list(analysisId: number):Promise<AnalysisObject[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/${caseId}/objects`)
+      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/objects`)
       .toPromise()
       .then(response => response.json() as AnalysisObject[])
       .catch(this.handleError)
   }
 
-  update(analysisId:number, caseId:number, objectId:number, included:boolean):Promise<AnalysisObject> {
+  update(analysisId: number, objectId: number, included: boolean):Promise<AnalysisObject> {
     return this.http
-      .patch(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/${caseId}/objects/${objectId}`, {included: included})
+      .patch(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/objects/${objectId}`, {included: included})
       .toPromise()
       .then(response => response.json() as AnalysisObject)
       .catch(this.handleError)

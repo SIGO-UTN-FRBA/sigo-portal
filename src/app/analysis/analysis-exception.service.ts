@@ -11,7 +11,7 @@ export class AnalysisExceptionService extends ApiService {
 
   list(analysisId:number):Promise<AnalysisException[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/${analysisId}/exceptions`)
+      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions`)
       .toPromise()
       .then(response => response.json() as AnalysisException[])
       .catch(this.handleError)
@@ -19,7 +19,7 @@ export class AnalysisExceptionService extends ApiService {
 
   create(analysisId:number, exception:AnalysisException):Promise<AnalysisException> {
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/${analysisId}/exceptions`, exception)
+      .post(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions`, exception)
       .toPromise()
       .then(response => response.json() as AnalysisException)
       .catch(this.handleError)
@@ -27,7 +27,7 @@ export class AnalysisExceptionService extends ApiService {
 
   update(analysisId:number, exception:AnalysisException):Promise<AnalysisException> {
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/${analysisId}/exceptions/${exception.id}`, exception)
+      .post(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions/${exception.id}`, exception)
       .toPromise()
       .then(response => response.json() as AnalysisException)
       .catch(this.handleError)
@@ -35,7 +35,7 @@ export class AnalysisExceptionService extends ApiService {
 
   delete(analysisId:number, exceptionId:number):Promise<any> {
     return this.http
-      .delete(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/${analysisId}/exceptions/${exceptionId}`)
+      .delete(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions/${exceptionId}`)
       .toPromise()
       .then(()=> null)
       .catch(this.handleError)
