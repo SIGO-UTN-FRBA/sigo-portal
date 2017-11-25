@@ -1,6 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {AnalysisExceptionService, ExceptionType} from "./analysis-exception.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import { Location } from '@angular/common';
 
 @Component({
   template:`
@@ -69,7 +70,8 @@ export class ExceptionNewComponent implements OnInit {
   constructor(
     private exceptionService : AnalysisExceptionService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ){}
 
   ngOnInit(): void {
@@ -84,6 +86,6 @@ export class ExceptionNewComponent implements OnInit {
   }
 
   onCancel(){
-
+    this.router.navigate([`/analysis/${this.analysisId}/stages/exception`])
   }
 }
