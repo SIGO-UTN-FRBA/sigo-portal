@@ -6,8 +6,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ApiError} from "../main/apiError";
 import {AppError} from "../main/ierror";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {AnalysisExceptionService} from "./analysis-exception.service";
-import {AnalysisException} from "./analysisException";
+import {AnalysisExceptionService, ExceptionType} from "../exception/analysis-exception.service";
+import {AnalysisException} from "../exception/analysisException";
 
 @Component({
   template:`
@@ -33,12 +33,12 @@ import {AnalysisException} from "./analysisException";
               Exceptions
             </h3>
             <div class="col-md-6 btn-group">
-              <a
-                routerLink="/exceptions/new"
+              <button
+                (click)="onCreate()"
                 class="btn btn-default pull-right"
                 i18n="@@commons.button.new">
                 New
-              </a>
+              </button>
             </div>
             <div class="clearfix"></div>
           </div>
@@ -70,7 +70,7 @@ import {AnalysisException} from "./analysisException";
                     {{exception.name}}
                   </a>
                 </td>
-                <td>{{exceptionTypes[exception.typeId]}}</td>
+                <td>{{exceptionTypes[exception.typeId].name}}</td>
                 <td>
                   <button type="button" class="btn btn-default btn-xs">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -116,7 +116,7 @@ export class AnalysisWizardExceptionComponent implements OnInit {
   onSubmitError:AppError;
   analysisId:number;
   exceptions:AnalysisException[];
-  exceptionTypes;
+  exceptionTypes:ExceptionType[];
 
   constructor(
     private analysisService: AnalysisService,
@@ -155,4 +155,7 @@ export class AnalysisWizardExceptionComponent implements OnInit {
       .catch((error) => this.onSubmitError = error);
   }
 
+  onCreate(){
+    this.router.navigate([`/analysis/${this.analysisId}/exceptions/new`])
+  }
 }

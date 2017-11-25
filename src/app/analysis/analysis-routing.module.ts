@@ -40,6 +40,10 @@ const analysisRoutes : Routes = [
         component: AnalysisWizardInformComponent
       },
       {
+        path:':analysisId/exceptions',
+        loadChildren: 'app/exception/exception.module#ExceptionModule'
+      },
+      {
         path: '',
         redirectTo: 'search'
       }

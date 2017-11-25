@@ -41,7 +41,16 @@ export class AnalysisExceptionService extends ApiService {
       .catch(this.handleError)
   }
 
-  types(){
-    return ["Surface", "Rule"];
+  types() : ExceptionType[]{
+    return [
+      {name: "Surface", code: "surface", ordinal:0},
+      {name:"Rule", code:"name", ordinal:1}
+    ] ;
   }
+}
+
+export interface ExceptionType {
+  name:string;
+  code:string;
+  ordinal:number
 }
