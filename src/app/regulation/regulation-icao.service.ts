@@ -14,7 +14,7 @@ export class RegulationIcaoService extends ApiService {
 
   getRules() : Promise<RuleICAOAnnex14[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/0/rules`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/rules`)
       .toPromise()
       .then((response) => response.json() as RuleICAOAnnex14[])
       .catch(this.handleError)
@@ -22,7 +22,7 @@ export class RegulationIcaoService extends ApiService {
 
   listICAOAnnex14RunwayCategories() : Promise<EnumItem[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/0/runwayCategories`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/runwayCategories`)
       .toPromise()
       .then((response) => response.json() as EnumItem[])
       .catch(this.handleError)
@@ -30,7 +30,7 @@ export class RegulationIcaoService extends ApiService {
 
   listICAOAnnex14RunwayClassifications() : Promise<EnumItem[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/0/runwayClassifications`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/runwayClassifications`)
       .toPromise()
       .then((response) => response.json() as EnumItem[])
       .catch(this.handleError)
@@ -38,7 +38,7 @@ export class RegulationIcaoService extends ApiService {
 
   listICAOAnnex14RunwayCodeLetters() : Promise<EnumItem[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/0/runwayCodeLetters`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/runwayCodeLetters`)
       .toPromise()
       .then((response) => response.json() as EnumItem[])
       .catch(this.handleError)
@@ -46,7 +46,7 @@ export class RegulationIcaoService extends ApiService {
 
   listICAOAnnex14RunwayCodeNumbers() : Promise<EnumItem[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/0/runwayCodeNumbers`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/runwayCodeNumbers`)
       .toPromise()
       .then((response) => response.json() as EnumItem[])
       .catch(this.handleError)
@@ -54,7 +54,7 @@ export class RegulationIcaoService extends ApiService {
 
   searchSurfaces(classification: number, category: number, code:number) : Promise<ListItem[]>{
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/0/surfaces?classification=${classification}&category=${category}&number=${code}&recommendations=false`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/surfaces?classification=${classification}&category=${category}&number=${code}&recommendations=false`)
       .toPromise()
       .then(response => response.json() as ListItem[])
       .catch(this.handleError)

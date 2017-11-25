@@ -6,7 +6,7 @@ import {Region} from "../region/region";
 import {RegionService} from "../region/region.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
-import {RegulationService} from "../regulation/regulation.service";
+import {RegulationService, RegulationType} from "../regulation/regulation.service";
 import {EnumItem} from "../commons/enumItem";
 
 @Component({
@@ -136,8 +136,8 @@ import {EnumItem} from "../commons/enumItem";
                           [(ngModel)]="airport.regulationId"
                           required
                   >
-                    <option *ngFor="let regulation of regulations" [value]="regulation.id">
-                      {{regulation.description}}
+                    <option *ngFor="let regulation of regulations" [value]="regulation.ordinal">
+                      {{regulation.name}}
                     </option>
                   </select>
                 </div>
@@ -175,7 +175,7 @@ import {EnumItem} from "../commons/enumItem";
 export class AirportNewComponent implements OnInit{
 
   airport : Airport;
-  regulations: EnumItem[];
+  regulations: RegulationType[];
   regions : Region[];
   status: number;
   onInitError: ApiError;
@@ -196,22 +196,18 @@ export class AirportNewComponent implements OnInit{
 
     this.status = STATUS_INDICATOR.LOADING;
 
-    let p1 = this.regulationService
-      .list()
-      .then(data => this.regulations = data)
-      .catch(error => Promise.reject(error));
+    this.regulations = this.regulationService.types();
 
-    let p2 = this.regionService
+    this.regionService
       .list()
-      .then(data => this.regions = data)
-      .catch(error => Promise.reject(error));
-
-    Promise.all([p1,p2])
-      .then(() => this.status = STATUS_INDICATOR.ACTIVE)
+      .then(data => {
+        this.regions = data;
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
       .catch(error => {
         this.onInitError = error;
         this.status = STATUS_INDICATOR.ERROR;
-      })
+      });
   }
 
   onSubmit(){
