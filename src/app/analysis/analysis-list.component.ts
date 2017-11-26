@@ -33,6 +33,7 @@ import {Analysis} from "./analysis";
             </h4>
             <p>{{analysis.airport.nameFIR}}</p>
             <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
+            <p>Edition: <i>{{analysis.editionDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
             <p>User: <i>Mark Otto</i></p>
           </div>
           <div class="media-right">

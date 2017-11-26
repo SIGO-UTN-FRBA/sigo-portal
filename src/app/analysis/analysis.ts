@@ -4,6 +4,7 @@ export class Analysis {
   id: number;
   caseId: number;
   creationDate: number;
+  editionDate:number;
   stageId: number;
   statusId: number;
   airportId: number;
