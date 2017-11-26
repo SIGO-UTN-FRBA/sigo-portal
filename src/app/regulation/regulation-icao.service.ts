@@ -5,6 +5,8 @@ import {EnumItem} from "../commons/enumItem";
 import {AppSettings} from "../main/app-settings";
 import {RuleICAOAnnex14} from "./ruleICAO";
 import {ListItem} from "../commons/listItem";
+import "rxjs/add/operator/toPromise";
+import {RegulationIcaoSurface} from "./regulationSurface";
 
 @Injectable()
 
@@ -12,9 +14,29 @@ export class RegulationIcaoService extends ApiService {
 
   constructor(http:Http){super(http)}
 
-  getRules() : Promise<RuleICAOAnnex14[]> {
+  allRules() : Promise<RuleICAOAnnex14[]> {
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/rules`)
+      .toPromise()
+      .then((response) => response.json() as RuleICAOAnnex14[])
+      .catch(this.handleError)
+  }
+
+  getRules(surfaceId:number, classification: number, category: number, code:number) : Promise<RuleICAOAnnex14[]> {
+
+    let queryString:string[]=[];
+
+    if(surfaceId != null)
+      queryString.push(`surface=${surfaceId}`);
+    if(classification != null)
+      queryString.push(`classification=${classification}`);
+    if(category!=null)
+      queryString.push(`category=${category}`);
+    if(code!=null)
+      queryString.push(`number=${code}`);
+
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/rules?${queryString.join('&')}`)
       .toPromise()
       .then((response) => response.json() as RuleICAOAnnex14[])
       .catch(this.handleError)
@@ -57,6 +79,14 @@ export class RegulationIcaoService extends ApiService {
       .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/surfaces?classification=${classification}&category=${category}&number=${code}&recommendations=false`)
       .toPromise()
       .then(response => response.json() as ListItem[])
+      .catch(this.handleError)
+  }
+
+  getSurface(surfaceId:number, classification: number, category: number, code:number) : Promise<RegulationIcaoSurface>{
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/surfaces/${surfaceId}?classification=${classification}&category=${category}&number=${code}&recommendations=false`)
+      .toPromise()
+      .then(response => response.json() as RegulationIcaoSurface)
       .catch(this.handleError)
   }
 }

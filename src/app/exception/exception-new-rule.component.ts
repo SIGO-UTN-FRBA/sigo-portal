@@ -24,7 +24,7 @@ import {RegulationService, RegulationType} from "../regulation/regulation.servic
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
             <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
           </div>
-          <ng-container *ngIf="indicator.ACTIVE">
+          <ng-container *ngSwitchCase="indicator.ACTIVE">
             <div class="row">
               <div class="col-md-6 col-sm-12 form-group">
                 <label
@@ -81,14 +81,6 @@ export class ExceptionNewRuleComponent implements OnInit {
         this.onInitStatus=STATUS_INDICATOR.ERROR;
       })
       .then(()=> this.router.navigate([`/analysis/${this.analysisId}/exceptions/new/rule/${this.regulation.code}`]))
-
-  }
-
-  onSubmit(){
-
-  }
-
-  onCancel(){
 
   }
 }

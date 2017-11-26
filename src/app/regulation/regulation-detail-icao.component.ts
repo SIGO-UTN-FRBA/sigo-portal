@@ -197,7 +197,7 @@ export class RegulationDetailICAOComponent implements OnInit {
       .catch(error => Promise.reject(error));
 
     let p4 = this.regulationService
-      .getRules()
+      .allRules()
       .then(data => this.rules=data)
       .catch(error => Promise.reject(error));
 
