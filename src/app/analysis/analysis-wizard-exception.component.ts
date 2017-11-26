@@ -72,7 +72,7 @@ import {AnalysisException} from "../exception/analysisException";
                 </td>
                 <td>{{exceptionTypes[exception.typeId].name}}</td>
                 <td>
-                  <button type="button" class="btn btn-default btn-xs">
+                  <button type="button" (click)="onDelete(exception.id)" class="btn btn-default btn-xs">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                   </button>
                 </td>
@@ -131,6 +131,12 @@ export class AnalysisWizardExceptionComponent implements OnInit {
   ngOnInit(): void {
     this.blockUI.stop();
     this.analysisId = this.route.snapshot.params['analysisId'];
+
+    this.initializeExceptions();
+  }
+
+  private initializeExceptions(){
+
     this.initStatus = STATUS_INDICATOR.LOADING;
     this.onInitError = null;
 
@@ -143,13 +149,29 @@ export class AnalysisWizardExceptionComponent implements OnInit {
         this.onInitError = error;
         this.initStatus = STATUS_INDICATOR.ERROR;
       })
-  }
+  };
 
   onNext(){
 
+    this.onSubmitError = null;
+
+    this.blockUI.start("Processing...");
+
+    this.analysisService
+      .update(this.analysisId, 2)
+      .then( () =>{
+        this.blockUI.stop();
+        return this.router.navigate([`/analysis/${this.analysisId}/stages/analysis`])
+      })
+      .catch((error) => {
+        this.onSubmitError = error;
+        this.blockUI.stop();
+      });
   }
 
   onPrevious(){
+    this.onSubmitError = null;
+
     this.analysisService.update(this.analysisId, 0)
       .then( () => this.router.navigate([`/analysis/${this.analysisId}/stages/object`]))
       .catch((error) => this.onSubmitError = error);
@@ -157,5 +179,15 @@ export class AnalysisWizardExceptionComponent implements OnInit {
 
   onCreate(){
     this.router.navigate([`/analysis/${this.analysisId}/exceptions/new`])
+  }
+
+  onDelete(exceptionId:number){
+    this.onSubmitError = null;
+
+    this.exceptionService
+      .delete(this.analysisId, exceptionId)
+      .then(()=> this.initializeExceptions())
+      .catch((error) => this.onSubmitError = error)
+
   }
 }

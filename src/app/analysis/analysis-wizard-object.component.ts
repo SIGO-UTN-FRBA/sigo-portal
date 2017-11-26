@@ -343,7 +343,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
       })
       .then( () =>{
         this.blockUI.stop();
-        this.router.navigate([`/analysis/${this.analysisId}/stages/exception`])
+        return this.router.navigate([`/analysis/${this.analysisId}/stages/exception`])
       })
       .catch((error) => {
         this.onSubmitError = error;
