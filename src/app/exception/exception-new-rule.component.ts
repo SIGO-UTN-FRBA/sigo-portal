@@ -1,9 +1,10 @@
 import {Component, OnInit} from "@angular/core";
-import {AnalysisExceptionService} from "./analysis-exception.service";
-import {RegulationIcaoService} from "../regulation/regulation-icao.service";
-import {RegulationFaaService} from "../regulation/regulation-faa.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {AppError} from "../main/ierror";
+import {ActivatedRoute, Router} from "@angular/router";
+import {AirportService} from "../airport/airport.service";
+import {AnalysisService} from "../analysis/analysis.service";
+import {RegulationService, RegulationType} from "../regulation/regulation.service";
 
 @Component({
   template:`
@@ -11,7 +12,7 @@ import {AppError} from "../main/ierror";
       New analysis exception for regulation rule
     </h1>
     <p i18n="@@exception.rule.new.main_description">
-      This section allows users to create an exception on regulation rule.
+      This section allows users to override a regulation rule.
     </p>
     <hr/>
     <div class="container-fluid">
@@ -23,13 +24,7 @@ import {AppError} from "../main/ierror";
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
             <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
           </div>
-          <form id="ngForm"
-                #exceptionForm="ngForm"
-                *ngSwitchCase="indicator.ACTIVE"
-                role="form"
-                class="form container-fluid"
-                (ngSubmit)="onSubmit()">
-
+          <ng-container *ngIf="indicator.ACTIVE">
             <div class="row">
               <div class="col-md-6 col-sm-12 form-group">
                 <label
@@ -38,132 +33,14 @@ import {AppError} from "../main/ierror";
                   i18n="@@exception.rule.detail.section.general.inputRegulation">
                   Regulation
                 </label>
-                <p class="form-control-static">{{filter.regulation}}</p>
+                <p class="form-control-static">{{regulation.name}}</p>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
-                <label
-                  for="inputClassification"
-                  class="control-label"
-                  i18n="@@exception.rule.detail.section.general.inputClassification">
-                  Classification
-                </label>
-                <select
-                  name="inputClassification"
-                  class="form-control"
-                  [(ngModel)]="filter.classification"
-                  required>
-                  <option *ngFor="let item of classifications" [value]="item.id">
-                    {{item.description}}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-6 col-sm-12 form-group">
-                <label
-                  for="inputCategory"
-                  class="control-label"
-                  i18n="@@exception.rule.detail.section.general.inputCategory">
-                  Category
-                </label>
-                <select
-                  name="inputCategory"
-                  class="form-control"
-                  [(ngModel)]="filter.category"
-                  required>
-                  <option *ngFor="let item of categories" [value]="item.id">
-                    {{item.description}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
-                <label
-                  for="inputNumberCode"
-                  class="control-label"
-                  i18n="@@exception.rule.detail.section.general.inputNumberCode">
-                  Number Code
-                </label>
-                <select
-                  name="inputNumberCode"
-                  class="form-control"
-                  [(ngModel)]="filter.code"
-                  required>
-                  <option *ngFor="let item of numberCodes" [value]="item.id">
-                    {{item.description}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
-                <label
-                  for="inputSurface"
-                  class="control-label"
-                  i18n="@@exception.rule.detail.section.general.inputSurface">
-                  Surface
-                </label>
-                <select
-                  name="inputSurface"
-                  class="form-control"
-                  [(ngModel)]="filter.surface"
-                  required>
-                  <option *ngFor="let item of surfaces" [value]="item.id">
-                    {{item.description}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-12 form-group">
-                <label
-                  for="inputProperty"
-                  class="control-label"
-                  i18n="@@exception.rule.detail.section.general.inputProperty">
-                  Property
-                </label>
-                <select
-                  name="inputProperty"
-                  class="form-control"
-                  [(ngModel)]="filter.property"
-                  required>
-                  <option *ngFor="let item of properties" [value]="item.id">
-                    {{item.description}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <ng-container *ngIf="filter.property">
-              <div class="row">
-                <div class="col-md-6 col-sm-12 form-group">
-                  <label
-                    for="inputClassification"
-                    class="control-label"
-                    i18n="@@exception.rule.detail.section.general.inputCurrentValue">
-                    Current Value
-                  </label>
-                  <p class="form-control-static">{{rule.currentValue}}</p>
-                </div>
-                <div class="col-md-6 col-sm-12 form-group">
-                  <label
-                    for="inputOverrideValue"
-                    class="control-label"
-                    i18n="@@exception.rule.detail.section.general.inputOverrideValue">
-                    Override Value
-                  </label>
-                  <input type="number"
-                         name="inputOverrideValue"
-                         class="form-control"
-                         [(ngModel)]="overrideValue"
-                         required
-                  >
-                </div>
-              </div>
-            </ng-container>
-          </form>
+          </ng-container>
         </div>
       </div>
+      <br>
+      <router-outlet></router-outlet>
     </div>
   `
 })
@@ -173,24 +50,37 @@ export class ExceptionNewRuleComponent implements OnInit {
   onInitStatus:number;
   indicator;
   onInitError:AppError;
-  onSubmitStatus:AppError;
-  filter;
+  private analysisId: number;
+  regulation:RegulationType;
 
   constructor(
-    private exceptionService:AnalysisExceptionService,
-    private icaoService:RegulationIcaoService,
-    private faaService:RegulationFaaService
+    private regulationService:RegulationService,
+    private airportService:AirportService,
+    private analysisService:AnalysisService,
+    private route:ActivatedRoute,
+    private router:Router
   ){
     this.indicator=STATUS_INDICATOR;
   }
 
   ngOnInit(): void {
-    this.initializeFilters();
 
     this.onInitStatus=STATUS_INDICATOR.LOADING;
     this.onInitError=null;
-    this.onSubmitStatus=null;
 
+    this.analysisId = this.route.parent.snapshot.params['analysisId'];
+
+    this.analysisService.get(this.analysisId)
+      .then(data => this.airportService.get(data.airportId))
+      .then(data => {
+        this.regulation = this.regulationService.types()[data.regulationId];
+        this.onInitStatus=STATUS_INDICATOR.ACTIVE;
+      })
+      .catch(error => {
+        this.onInitError=error;
+        this.onInitStatus=STATUS_INDICATOR.ERROR;
+      })
+      .then(()=> this.router.navigate([`/analysis/${this.analysisId}/exceptions/new/rule/${this.regulation.code}`]))
 
   }
 
@@ -199,10 +89,6 @@ export class ExceptionNewRuleComponent implements OnInit {
   }
 
   onCancel(){
-
-  }
-
-  private initializeFilters() {
 
   }
 }

@@ -26,11 +26,11 @@ import { Location } from '@angular/common';
                   <label for="options">
                     <input type="radio"
                            name="options"
-                           [value]="type.raw.code"
-                           [(ngModel)]="type.check"
+                           [value]="type.code"
+                           [(ngModel)]="selected"
                            required
                     />
-                    {{type.raw.name}}
+                    {{type.name}}
                   </label>
                 </div>
               </div>
@@ -51,7 +51,7 @@ import { Location } from '@angular/common';
           <button
             type="button"
             (click)="exceptionForm.ngSubmit.emit()"
-            [disabled]="exceptionForm.form.invalid"
+            [disabled]="!this.selected"
             class="btn btn-success"
             i18n="@@commons.button.create">
             Create
@@ -64,8 +64,9 @@ import { Location } from '@angular/common';
 
 export class ExceptionNewComponent implements OnInit {
 
-  types:Array<{raw: ExceptionType, check:boolean}> = [];
+  types:ExceptionType[] = [];
   analysisId:number;
+  selected:string;
 
   constructor(
     private exceptionService : AnalysisExceptionService,
@@ -75,14 +76,13 @@ export class ExceptionNewComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
+    this.selected=null;
     this.analysisId = this.route.parent.snapshot.params['analysisId'];
-    this.types = this.exceptionService.types().map((t)=> {return {raw: t, check:false} });
+    this.types = this.exceptionService.types();
   }
 
   onSubmit(){
-      //TODO disabled when there is no selection
-    let selected = this.types.filter(t=>t.check).map(t=>t.raw.code)[0];
-    this.router.navigate([`/analysis/${this.analysisId}/exceptions/new/${selected}`])
+    this.router.navigate([`/analysis/${this.analysisId}/exceptions/new/${this.selected}`])
   }
 
   onCancel(){

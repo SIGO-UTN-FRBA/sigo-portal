@@ -3,6 +3,7 @@ import {NgModule} from "@angular/core";
 import {ExceptionComponent} from "./exception.component";
 import {ExceptionNewRuleComponent} from "./exception-new-rule.component";
 import {ExceptionNewComponent} from "./exception-new.component";
+import {ExceptionNewRuleIcao14Component} from "./exception-new-rule-icao.component";
 
 const routes :Routes = [
   {
@@ -19,7 +20,13 @@ const routes :Routes = [
       },
       {
         path: 'new/rule',
-        component: ExceptionNewRuleComponent
+        component: ExceptionNewRuleComponent,
+        children: [
+          {
+            path:'icao14',
+            component:ExceptionNewRuleIcao14Component
+          }
+        ]
       },
       {
         path: 'surface/:exceptionId/detail',
