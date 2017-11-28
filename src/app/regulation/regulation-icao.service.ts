@@ -22,6 +22,14 @@ export class RegulationIcaoService extends ApiService {
       .catch(this.handleError)
   }
 
+  getRule(ruleId:number):Promise<RuleICAOAnnex14>{
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/rules/${ruleId}`)
+      .toPromise()
+      .then((response) => response.json() as RuleICAOAnnex14)
+      .catch(this.handleError)
+  }
+
   getRules(surfaceId:number, classification: number, category: number, code:number) : Promise<RuleICAOAnnex14[]> {
 
     let queryString:string[]=[];
@@ -74,19 +82,19 @@ export class RegulationIcaoService extends ApiService {
       .catch(this.handleError)
   }
 
-  searchSurfaces(classification: number, category: number, code:number) : Promise<ListItem[]>{
+  listICAOAnnex14Surfaces(): Promise<ListItem[]>{
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/surfaces?classification=${classification}&category=${category}&number=${code}&recommendations=false`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/surfaces`)
       .toPromise()
       .then(response => response.json() as ListItem[])
       .catch(this.handleError)
   }
 
-  getSurface(surfaceId:number, classification: number, category: number, code:number) : Promise<RegulationIcaoSurface>{
+  searchSurfaces(classification: number, category: number, code:number) : Promise<ListItem[]>{
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/surfaces/${surfaceId}?classification=${classification}&category=${category}&number=${code}&recommendations=false`)
+      .get(`${AppSettings.API_ENDPOINT}/regulations/icao14/surfaces?classification=${classification}&category=${category}&number=${code}&recommendations=false`)
       .toPromise()
-      .then(response => response.json() as RegulationIcaoSurface)
+      .then(response => response.json() as ListItem[])
       .catch(this.handleError)
   }
 }

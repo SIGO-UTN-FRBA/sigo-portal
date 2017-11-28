@@ -8,6 +8,8 @@ import {AppError} from "../main/ierror";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {AnalysisExceptionService, ExceptionType} from "../exception/analysis-exception.service";
 import {AnalysisException} from "../exception/analysisException";
+import {EnumItem} from "../commons/enumItem";
+import {RegulationService, RegulationType} from "../regulation/regulation.service";
 
 @Component({
   template:`
@@ -66,7 +68,10 @@ import {AnalysisException} from "../exception/analysisException";
               <tr *ngFor="let exception of exceptions; index as i;">
                 <td><strong>{{i+1}}</strong></td>
                 <td>
-                  <a [routerLink]="['/exceptions', exception.typeId, exception.id]">
+                  <a *ngIf="exception.typeId == 1" [routerLink]="['/analysis', analysisId, 'exceptions', 'rule', 'icao14', exception.id, 'detail']">
+                    {{exception.name}}
+                  </a>
+                  <a *ngIf="exception.typeId == 0" [routerLink]="['/analysis', analysisId, 'exceptions', 'surface', exception.id, 'detail']">
                     {{exception.name}}
                   </a>
                 </td>
@@ -117,10 +122,12 @@ export class AnalysisWizardExceptionComponent implements OnInit {
   analysisId:number;
   exceptions:AnalysisException[];
   exceptionTypes:ExceptionType[];
+  regulation:RegulationType;
 
   constructor(
     private analysisService: AnalysisService,
     private exceptionService: AnalysisExceptionService,
+    private regulationService: RegulationService,
     private route: ActivatedRoute,
     private router: Router
   ){
@@ -132,24 +139,20 @@ export class AnalysisWizardExceptionComponent implements OnInit {
     this.blockUI.stop();
     this.analysisId = this.route.snapshot.params['analysisId'];
 
-    this.initializeExceptions();
-  }
-
-  private initializeExceptions(){
-
-    this.initStatus = STATUS_INDICATOR.LOADING;
-    this.onInitError = null;
-
-    this.exceptionService.list(this.analysisId)
+    this.analysisService
+      .get(this.analysisId)
+      .then(data => this.regulation = this.regulationService.types()[data.regulationId])
+      .then(() => this.exceptionService.list(this.analysisId))
       .then(data => {
         this.exceptions=data;
+        debugger;
         (this.exceptions.length > 0) ? this.initStatus = STATUS_INDICATOR.ACTIVE : this.initStatus = STATUS_INDICATOR.EMPTY;
       })
       .catch(error =>{
         this.onInitError = error;
         this.initStatus = STATUS_INDICATOR.ERROR;
-      })
-  };
+      });
+  }
 
   onNext(){
 
@@ -178,7 +181,7 @@ export class AnalysisWizardExceptionComponent implements OnInit {
   }
 
   onCreate(){
-    this.router.navigate([`/analysis/${this.analysisId}/exceptions/new`])
+    return this.router.navigate([`/analysis/${this.analysisId}/exceptions/new`])
   }
 
   onDelete(exceptionId:number){
@@ -186,7 +189,12 @@ export class AnalysisWizardExceptionComponent implements OnInit {
 
     this.exceptionService
       .delete(this.analysisId, exceptionId)
-      .then(()=> this.initializeExceptions())
+      .then(() => this.exceptionService.list(this.analysisId))
+      .then(data => {
+        this.exceptions=data;
+        debugger;
+        (this.exceptions.length > 0) ? this.initStatus = STATUS_INDICATOR.ACTIVE : this.initStatus = STATUS_INDICATOR.EMPTY;
+      })
       .catch((error) => this.onSubmitError = error)
 
   }

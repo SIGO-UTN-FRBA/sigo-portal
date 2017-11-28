@@ -20,6 +20,7 @@ import {BlockUIModule} from "ng-block-ui";
 import {BlockTemplateComponent} from "../commons/block-template.component";
 import {AnalysisObjectService} from "./analysis-object.service";
 import {AnalysisExceptionService} from "../exception/analysis-exception.service";
+import {RegulationService} from "../regulation/regulation.service";
 
 @NgModule({
   imports:[
@@ -46,7 +47,8 @@ import {AnalysisExceptionService} from "../exception/analysis-exception.service"
     PlacedObjectService,
     PlacedObjectCatalogService,
     AnalysisObjectService,
-    AnalysisExceptionService
+    AnalysisExceptionService,
+    RegulationService
   ],
   entryComponents: [
     BlockTemplateComponent

@@ -4,6 +4,7 @@ import {ExceptionComponent} from "./exception.component";
 import {ExceptionNewRuleComponent} from "./exception-new-rule.component";
 import {ExceptionNewComponent} from "./exception-new.component";
 import {ExceptionNewRuleIcao14Component} from "./exception-new-rule-icao.component";
+import {ExceptionDetailRuleIcao14} from "./exception-detail-rule-icao";
 
 const routes :Routes = [
   {
@@ -33,8 +34,8 @@ const routes :Routes = [
         component: null
       },
       {
-        path: 'rule/:exceptionId/detail',
-        component: null
+        path: 'rule/icao14/:exceptionId/detail',
+        component: ExceptionDetailRuleIcao14
       }
     ]
   }

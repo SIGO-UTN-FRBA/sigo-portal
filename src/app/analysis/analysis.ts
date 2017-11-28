@@ -9,4 +9,5 @@ export class Analysis {
   statusId: number;
   airportId: number;
   airport: Airport;
+  regulationId:number;
 }

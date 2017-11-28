@@ -14,7 +14,7 @@ import {AnalysisExceptionRule} from "./analysisExceptionRule";
     <div *ngIf="onSubmitError" class="container-fluid">
       <app-error-indicator [errors]="[onSubmitError]"></app-error-indicator>
     </div>
-    
+
     <div class="panel panel-default">
       <div class="panel-body" [ngSwitch]="onInitStatus">
         <div *ngSwitchCase="indicator.LOADING">
@@ -130,20 +130,20 @@ import {AnalysisExceptionRule} from "./analysisExceptionRule";
               </select>
             </div>
           </div>
-         
+
           <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
               <label
-                for="inputCurrentValue"
+                for="inputDefaultValue"
                 class="control-label"
-                i18n="@@exception.rule.detail.section.general.inputCurrentValue">
+                i18n="@@exception.rule.detail.section.general.inputDefaultValue">
                 Value
               </label>
               <input type="number"
-                     name="inputCurrentValue"
+                     name="inputDefaultValue"
                      class="form-control"
                      disabled="true"
-                     [(ngModel)]="currentValue"
+                     [(ngModel)]="defaultValue"
               >
             </div>
             <div class="col-md-6 col-sm-12 form-group">
@@ -157,7 +157,7 @@ import {AnalysisExceptionRule} from "./analysisExceptionRule";
                      name="inputOverrideValue"
                      class="form-control"
                      [(ngModel)]="overrideValue"
-                     [disabled]="!currentValue"
+                     [disabled]="!defaultValue"
                      required
               >
             </div>
@@ -201,7 +201,7 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
   surfaces:ListItem[];
   rules:RuleICAOAnnex14[];
   properties:string[];
-  currentValue: any;
+  defaultValue: any;
   overrideValue: any;
 
   constructor(
@@ -219,7 +219,7 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
 
     this.onInitStatus=STATUS_INDICATOR.LOADING;
     this.onInitError=null;
-    this.currentValue=null;
+    this.defaultValue=null;
 
     this.analysisId = this.route.parent.parent.snapshot.params['analysisId'];
 
@@ -275,11 +275,11 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
   }
 
   updateRule(){
-      this.currentValue = null;
+      this.defaultValue = null;
       this.overrideValue = null;
 
       if(this.filter.rule != null){
-        this.currentValue = this.selectedRule().value;
+        this.defaultValue = this.selectedRule().value;
       }
   }
 
@@ -297,10 +297,11 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
     let exception = new AnalysisExceptionRule(
       null,
       this.analysisId,
-      `Override "${rule.property}" property in "${surface.value}" surface (old: ${this.currentValue}, new: ${this.overrideValue})`,
+      `Override "${rule.property}" property in "${surface.value}" surface (old: ${this.defaultValue}, new: ${this.overrideValue})`,
       rule.id,
       rule.property,
-      this.overrideValue
+      this.overrideValue,
+      0
     );
 
     this.exceptionService

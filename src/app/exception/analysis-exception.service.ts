@@ -3,6 +3,7 @@ import {ApiService} from "../main/api.service";
 import {Http} from "@angular/http";
 import {AppSettings} from "../main/app-settings";
 import {AnalysisException} from "./analysisException";
+import {AnalysisExceptionRule} from "./analysisExceptionRule";
 
 @Injectable()
 export class AnalysisExceptionService extends ApiService {
@@ -14,6 +15,14 @@ export class AnalysisExceptionService extends ApiService {
       .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions`)
       .toPromise()
       .then(response => response.json() as AnalysisException[])
+      .catch(this.handleError)
+  }
+
+  get(analysisId:number, exceptionId:number):Promise<AnalysisException>{
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions/${exceptionId}`)
+      .toPromise()
+      .then(response => response.json() as AnalysisException)
       .catch(this.handleError)
   }
 

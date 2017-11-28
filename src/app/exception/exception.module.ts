@@ -15,6 +15,9 @@ import {AnalysisExceptionService} from "./analysis-exception.service";
 import {AirportService} from "../airport/airport.service";
 import {RegulationIcaoService} from "../regulation/regulation-icao.service";
 import {RegulationFaaService} from "../regulation/regulation-faa.service";
+import {ExceptionDetailRuleIcao14} from "./exception-detail-rule-icao";
+import {ExceptionDetailRuleIcaoEdit} from "./exception-detail-rule-icao-edit";
+import {ExceptionDetailRuleIcaoView} from "./exception-detail-rule-icao-view";
 
 @NgModule({
   imports:[
@@ -29,7 +32,10 @@ import {RegulationFaaService} from "../regulation/regulation-faa.service";
     ExceptionNewComponent,
     ExceptionNewRuleComponent,
     ExceptionNewRuleIcao14Component,
-    ExceptionNewSurfaceComponent
+    ExceptionNewSurfaceComponent,
+    ExceptionDetailRuleIcao14,
+    ExceptionDetailRuleIcaoView,
+    ExceptionDetailRuleIcaoEdit
   ],
   providers: [
     RegulationService,
