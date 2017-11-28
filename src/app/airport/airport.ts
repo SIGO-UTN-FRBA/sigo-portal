@@ -7,8 +7,6 @@ export class Airport {
   nameFIR: string;
   codeFIR: string;
   codeIATA: string;
-  latitude: number;
-  longitude: number;
-  elevation: number;
+  codeLocal: string;
   runways: Runway[]
 }

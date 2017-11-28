@@ -5,6 +5,7 @@ import {BreadcrumbComponent} from "./breadcrumb.component";
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
 import {ErrorIndicatorComponent} from "./error-indicator.component";
+import {BlockTemplateComponent} from "./block-template.component";
 
 @NgModule({
   imports:[
@@ -15,7 +16,8 @@ import {ErrorIndicatorComponent} from "./error-indicator.component";
     LoadingIndicatorComponent,
     EmptyIndicatorComponent,
     BreadcrumbComponent,
-    ErrorIndicatorComponent
+    ErrorIndicatorComponent,
+    BlockTemplateComponent
   ],
   exports: [
     LoadingIndicatorComponent,
@@ -25,4 +27,6 @@ import {ErrorIndicatorComponent} from "./error-indicator.component";
   ]
 })
 
-export class CommonsModule{}
+export class CommonsModule {
+
+}

@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {AnalysisCaseService} from "./analysisCase.service";
+import {AnalysisService} from "./analysis.service";
 import {AnalysisComponent} from "./analysis.component";
 import {CommonModule} from "@angular/common";
 import { FormsModule }   from '@angular/forms';
@@ -13,6 +13,14 @@ import {AnalysisWizardAnalysisComponent} from "./analysis-wizard-analysis.compon
 import {AnalysisWizardExceptionComponent} from "./analysis-wizard-exception.component";
 import {AnalysisWizardInformComponent} from "./analysis-wizard-inform.component";
 import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component";
+import {AnalysisCaseService} from "./analysis-case.service";
+import {PlacedObjectService} from "../object/object.service";
+import {PlacedObjectCatalogService} from "../object/object-catalog.service";
+import {BlockUIModule} from "ng-block-ui";
+import {BlockTemplateComponent} from "../commons/block-template.component";
+import {AnalysisObjectService} from "./analysis-object.service";
+import {AnalysisExceptionService} from "../exception/analysis-exception.service";
+import {RegulationService} from "../regulation/regulation.service";
 
 @NgModule({
   imports:[
@@ -20,7 +28,8 @@ import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component"
     FormsModule,
     AnalysisRoutingModule,
     CommonsModule,
-    OlmapModule
+    OlmapModule,
+    BlockUIModule
   ],
   declarations: [
     AnalysisComponent,
@@ -33,7 +42,16 @@ import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component"
   ],
   providers: [
     AnalysisCaseService,
-    AirportService
+    AnalysisService,
+    AirportService,
+    PlacedObjectService,
+    PlacedObjectCatalogService,
+    AnalysisObjectService,
+    AnalysisExceptionService,
+    RegulationService
+  ],
+  entryComponents: [
+    BlockTemplateComponent
   ]
 })
 

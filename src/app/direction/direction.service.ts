@@ -9,6 +9,8 @@ import {RunwayDistance} from "./runwayDistance";
 import {ApiService} from "../main/api.service";
 import Polygon = ol.geom.Polygon;
 import "rxjs/add/operator/toPromise";
+import Feature = ol.Feature;
+import GeoJSON = ol.format.GeoJSON;
 
 @Injectable()
 
@@ -56,17 +58,20 @@ export class DirectionService extends ApiService {
       .catch(this.handleError)
   }
 
-  getGeom(airportId : number, runwayId: number, directionId : number) : Promise<Point> {
+  getFeature(airportId : number, runwayId: number, directionId : number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/geometry`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/feature`)
       .toPromise()
-      .then(response => response.json() as Point)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  saveGeom(airportId : number, runwayId: number, directionId : number, geom : Point) : Promise<Point> {
+  updateFeature(airportId : number, runwayId: number, directionId : number, point : Point) : Promise<Point> {
+
+    let jsonGeom = JSON.parse(new GeoJSON().writeGeometry(point));
+
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/geometry`, geom)
+      .patch(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/feature`, {geometry: jsonGeom})
       .toPromise()
       .then(response => response.json() as Point)
       .catch(this.handleError)
@@ -112,27 +117,27 @@ export class DirectionService extends ApiService {
       .catch(this.handleError)
   }
 
-  getDisplacedThresholdGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+  getDisplacedThresholdFeature(airportId: number, runwayId: number, directionId: number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/approach/geometries/threshold`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/approach/threshold/feature`)
       .toPromise()
-      .then(response => response.json() as Polygon)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  getStopwayGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+  getStopwayFeature(airportId: number, runwayId: number, directionId: number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/geometries/stopway`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/stopway/feature`)
       .toPromise()
-      .then(response => response.json() as Polygon)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  getClearwayGeom(airportId: number, runwayId: number, directionId: number) : Promise<Polygon> {
+  getClearwayFeature(airportId: number, runwayId: number, directionId: number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/geometries/clearway`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/clearway/feature`)
       .toPromise()
-      .then(response => response.json() as Polygon)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 }

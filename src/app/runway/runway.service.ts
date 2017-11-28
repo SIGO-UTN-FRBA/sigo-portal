@@ -5,6 +5,8 @@ import Polygon = ol.geom.Polygon;
 import {ApiService} from "../main/api.service";
 import {Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
+import Feature = ol.Feature;
+import GeoJSON = ol.format.GeoJSON;
 
 @Injectable()
 
@@ -46,17 +48,20 @@ export class RunwayService extends ApiService {
       .catch(this.handleError)
   }
 
-  getGeom(airportId: number, runwayId: number) : Promise<Polygon>{
+  getFeature(airportId: number, runwayId: number) : Promise<Feature>{
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/geometry`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/feature`)
       .toPromise()
-      .then(response => response.json() as Polygon)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  saveGeom(airportId: number, runwayId: number, geom : Polygon) : Promise<Polygon>{
+  updateFeature(airportId: number, runwayId: number, polygon : Polygon) : Promise<Polygon>{
+
+    let jsonGeom = JSON.parse(new GeoJSON().writeGeometry(polygon));
+
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/geometry`, geom)
+      .patch(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/feature`, {geometry: jsonGeom})
       .toPromise()
       .then(response => response.json() as Polygon)
       .catch(this.handleError)

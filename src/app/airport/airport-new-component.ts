@@ -6,7 +6,7 @@ import {Region} from "../region/region";
 import {RegionService} from "../region/region.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
-import {RegulationService} from "../regulation/regulation.service";
+import {RegulationService, RegulationType} from "../regulation/regulation.service";
 import {EnumItem} from "../commons/enumItem";
 
 @Component({
@@ -30,14 +30,14 @@ import {EnumItem} from "../commons/enumItem";
             <app-loading-indicator></app-loading-indicator>
           </div>
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-            <app-error-indicator [error]="onInitError"></app-error-indicator>
+            <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
           </div>
           <div *ngSwitchCase="indicator.ACTIVE" class="container-fluid">
             <form #airportForm="ngForm"
                   role="form" class="form"
                   (ngSubmit)="onSubmit()">
 
-              <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+              <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
 
               <div class="row">
                 <div class="col-md-12 col-sm-12 form-group">
@@ -74,7 +74,7 @@ import {EnumItem} from "../commons/enumItem";
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6 col-sm-12 form-group">
+                <div class="col-md-4 col-sm-12 form-group">
                   <label
                     for="inputCodeFir"
                     class="control-label"
@@ -90,7 +90,7 @@ import {EnumItem} from "../commons/enumItem";
                     [(ngModel)]="airport.codeFIR"
                     required>
                 </div>
-                <div class="col-md-6 col-sm-12">
+                <div class="col-md-4 col-sm-12">
                   <label
                     for="inputCodeIATA"
                     class="control-label"
@@ -104,6 +104,22 @@ import {EnumItem} from "../commons/enumItem";
                     class="form-control"
                     name="inputCodeIATA"
                     [(ngModel)]="airport.codeIATA"
+                    required>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                  <label
+                    for="inputCodeLocal"
+                    class="control-label"
+                    i18n="@@airport.detail.section.general.inputCodeLocal">
+                    Code Local
+                  </label>
+                  <input
+                    type="text"
+                    maxlength="3"
+                    minlength="3"
+                    class="form-control"
+                    name="inputCodeLocal"
+                    [(ngModel)]="airport.codeLocal"
                     required>
                 </div>
               </div>
@@ -120,8 +136,8 @@ import {EnumItem} from "../commons/enumItem";
                           [(ngModel)]="airport.regulationId"
                           required
                   >
-                    <option *ngFor="let regulation of regulations" [value]="regulation.id">
-                      {{regulation.description}}
+                    <option *ngFor="let regulation of regulations" [value]="regulation.ordinal">
+                      {{regulation.name}}
                     </option>
                   </select>
                 </div>
@@ -159,7 +175,7 @@ import {EnumItem} from "../commons/enumItem";
 export class AirportNewComponent implements OnInit{
 
   airport : Airport;
-  regulations: EnumItem[];
+  regulations: RegulationType[];
   regions : Region[];
   status: number;
   onInitError: ApiError;
@@ -180,22 +196,18 @@ export class AirportNewComponent implements OnInit{
 
     this.status = STATUS_INDICATOR.LOADING;
 
-    let p1 = this.regulationService
-      .list()
-      .then(data => this.regulations = data)
-      .catch(error => Promise.reject(error));
+    this.regulations = this.regulationService.types();
 
-    let p2 = this.regionService
+    this.regionService
       .list()
-      .then(data => this.regions = data)
-      .catch(error => Promise.reject(error));
-
-    Promise.all([p1,p2])
-      .then(() => this.status = STATUS_INDICATOR.ACTIVE)
+      .then(data => {
+        this.regions = data;
+        this.status = STATUS_INDICATOR.ACTIVE;
+      })
       .catch(error => {
         this.onInitError = error;
         this.status = STATUS_INDICATOR.ERROR;
-      })
+      });
   }
 
   onSubmit(){

@@ -45,7 +45,7 @@ import {Router} from "@angular/router";
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
@@ -74,6 +74,14 @@ import {Router} from "@angular/router";
                 Azimuth
               </label>
               <p class="form-control-static">{{direction.azimuth}}</p>
+            </div>
+            <div class="col-md-6 col-sm-12 form-group">
+              <label for="height"
+                     class="control-label"
+                     i18n="@@direction.detail.section.general.height">
+                Height
+              </label>
+              <p class="form-control-static">{{direction.height}} [m]</p>
             </div>
           </div>
         </div>

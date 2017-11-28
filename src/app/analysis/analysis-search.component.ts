@@ -92,7 +92,7 @@ export class AnalysisCaseSearchComponent {
 
   onSubmit = () => {
 
-    let params = {};
+    let params = { current: true };
 
     params[this.searchType.property] = this.searchValue;
 

@@ -18,7 +18,7 @@ import {ApiError} from "../main/apiError";
         <app-empty-indicator type="result" entity="airports"></app-empty-indicator>
       </div>
       <div *ngSwitchCase="indicator.ERROR">
-        <app-error-indicator [error]="onInitError"></app-error-indicator>
+        <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
       </div>
       
       <ul *ngSwitchCase="indicator.ACTIVE" class="media-list">

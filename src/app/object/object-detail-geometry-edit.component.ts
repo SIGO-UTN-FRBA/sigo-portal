@@ -4,6 +4,12 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {PlacedObjectService} from "./object.service";
 import Geometry = ol.geom.Geometry;
 import PlacedObjectTypes, {PlacedObjectType} from './objectType';
+import {Feature} from "openlayers";
+import Polygon = ol.geom.Polygon;
+import Point = ol.geom.Point;
+import LineString = ol.geom.LineString;
+import MultiPolygon = ol.geom.MultiPolygon;
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-object-geometry-edit',
@@ -23,7 +29,7 @@ import PlacedObjectTypes, {PlacedObjectType} from './objectType';
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         
         <form  #geometryForm="ngForm"
@@ -32,7 +38,7 @@ import PlacedObjectTypes, {PlacedObjectType} from './objectType';
                class="form container-fluid" 
                (ngSubmit)="onSubmit()">
 
-          <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
           
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
@@ -41,7 +47,7 @@ import PlacedObjectTypes, {PlacedObjectType} from './objectType';
               </label>
               <textarea
                 name="inputGeoJSON"
-                [(ngModel)]="geomText"
+                [(ngModel)]="coordinatesText"
                 class="form-control"
                 [placeholder]=""
                 rows="3"
@@ -75,8 +81,8 @@ import PlacedObjectTypes, {PlacedObjectType} from './objectType';
 })
 
 export class PlacedObjectDetailGeometryEditComponent implements OnInit {
-  geom: Geometry;
-  geomText : string;
+  feature: Feature;
+  coordinatesText : string;
   @Input() placedObjectId: number;
   @Input() placedObjectType: number;
   @Input() edit : boolean;
@@ -96,16 +102,19 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
   ngOnInit(): void {
 
     this.geometryType = PlacedObjectTypes[this.placedObjectType].geometry;
-
+    this.coordinatesText = "";
     this.onInitError = null;
 
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
-      .getGeom(this.placedObjectId)
+      .getFeature(this.placedObjectId)
       .then( data => {
-        this.geom = data;
-        this.geomText = JSON.stringify(data);
+        this.feature = data;
+        if(data.getGeometry()){
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
+        }
         this.status = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
@@ -118,10 +127,22 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
 
     this.onSubmitError = null;
 
-    let geometry : Geometry = JSON.parse(this.geomText) as Geometry;
+    let geom : Geometry;
+
+    switch(this.placedObjectType){
+      case 0:
+        geom = new MultiPolygon(JSON.parse(this.coordinatesText));
+        break;
+      case 1:
+        geom = new Point(JSON.parse(this.coordinatesText));
+        break;
+      case 2:
+        geom = new LineString(JSON.parse(this.coordinatesText));
+        break;
+    }
 
     this.placedObjectService
-      .saveGeom(this.placedObjectId, geometry)
+      .updateFeature(this.placedObjectId, geom)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError= error);
   };

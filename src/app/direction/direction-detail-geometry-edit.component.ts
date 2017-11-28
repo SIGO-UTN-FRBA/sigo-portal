@@ -3,6 +3,8 @@ import Point = ol.geom.Point;
 import {DirectionService} from "./direction.service";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import GeoJSON = ol.format.GeoJSON;
+import Feature = ol.Feature;
 
 @Component({
   selector: 'app-direction-geometry-edit',
@@ -22,7 +24,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <form  #geometryForm="ngForm"
                *ngSwitchCase="indicator.ACTIVE"
@@ -30,7 +32,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                class="form container-fluid" 
                (ngSubmit)="onSubmit()">
 
-          <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
           
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
@@ -39,9 +41,9 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
               </label>
               <textarea
                 name="inputGeoJSON"
-                [(ngModel)]="geomText"
+                [(ngModel)]="coordinatesText"
                 class="form-control"
-                placeholder='{ "type": "Point", "coordinates": [0.0, 0.0] }'
+                placeholder='[0.0, 0.0]'
                 rows="3"
                 required>
               </textarea>
@@ -73,7 +75,8 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 })
 
 export class DirectionDetailGeometryEditComponent implements OnInit{
-  geomText : string;
+  coordinatesText : string;
+  feature:Feature;
   @Input() airportId: number;
   @Input() runwayId: number;
   @Input() directionId: number;
@@ -93,13 +96,17 @@ export class DirectionDetailGeometryEditComponent implements OnInit{
   ngOnInit(): void {
 
     this.onInitError = null;
-
+    this.coordinatesText = '';
     this.status = STATUS_INDICATOR.LOADING;
 
     this.directionService
-      .getGeom(this.airportId, this.runwayId, this.directionId)
+      .getFeature(this.airportId, this.runwayId, this.directionId)
       .then( data => {
-        this.geomText = JSON.stringify(data);
+        this.feature = data;
+        if(data.getGeometry()){
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
+        }
         this.status = STATUS_INDICATOR.ACTIVE;
       })
       .catch( error => {
@@ -112,10 +119,10 @@ export class DirectionDetailGeometryEditComponent implements OnInit{
 
     this.onSubmitError = null;
 
-    let point : Point = JSON.parse(this.geomText) as Point;
+    let point : Point = new Point(JSON.parse(this.coordinatesText));
 
     this.directionService
-      .saveGeom(this.airportId, this.runwayId, this.directionId, point)
+      .updateFeature(this.airportId, this.runwayId, this.directionId, point)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError = error);
   };

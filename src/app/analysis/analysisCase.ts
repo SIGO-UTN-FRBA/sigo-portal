@@ -6,5 +6,5 @@ export class AnalysisCase {
   airport:Airport;
   regulationId:number;
   areaId:number;
-  status:number;
+  searchRadius:number;
 }

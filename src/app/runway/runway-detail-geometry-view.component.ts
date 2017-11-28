@@ -5,6 +5,8 @@ import {RunwayService} from "./runway.service";
 import Map = ol.Map;
 import Polygon = ol.geom.Polygon;
 import {ApiError} from "../main/apiError";
+import Feature = ol.Feature;
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-runway-geometry-view',
@@ -36,7 +38,7 @@ import {ApiError} from "../main/apiError";
           <app-empty-indicator type="definition" entity="geometry"></app-empty-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <div *ngSwitchCase="indicator.ACTIVE">
           <div class="form container-fluid">
@@ -45,12 +47,18 @@ import {ApiError} from "../main/apiError";
                 <label for="inputGeoJSON" class="control-label" i18n="@@runway.detail.section.spatial.inputGeoJSON">
                   Polygon
                 </label>
-                <p class="form-control-static">{{geomText}}</p>
+                <p class="form-control-static">{{coordinatesText}}</p>
               </div>
             </div>
           </div>
           <br>
-          <app-map #mapRunway (map)="map"></app-map>
+          <app-map #mapRunway 
+                   (map)="map"
+                   [rotate]="true"
+                   [fullScreen]="true"
+                   [scale]="true"
+                   [layers]="['runway']"
+          ></app-map>
         </div>
       </div>
 
@@ -71,8 +79,8 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
-  geom  : Polygon;
-  geomText : string;
+  feature  : Feature;
+  coordinatesText : string;
 
   constructor(
     private runwayService : RunwayService
@@ -83,21 +91,19 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
   ngOnInit(): void {
 
     this.onInitError = null;
-
+    this.coordinatesText = '';
     this.status = STATUS_INDICATOR.LOADING;
 
     this.runwayService
-      .getGeom(this.airportId, this.runwayId)
-      .then(line => {
-
-        if(!line){
+      .getFeature(this.airportId, this.runwayId)
+      .then(data => {
+        this.feature=data;
+        if(!this.feature.getGeometry())
           this.status = STATUS_INDICATOR.EMPTY;
-
-        } else {
-
+        else {
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
           this.status = STATUS_INDICATOR.ACTIVE;
-          this.geom = line;
-          this.geomText = JSON.stringify(line);
         }
       })
       .catch(error =>{
@@ -108,15 +114,14 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
 
   ngAfterViewInit(): void {
 
-    setTimeout(()=> {if (this.geom != null) this.locateGeom()},500);
+    setTimeout(()=> {if (this.feature.getGeometry()) this.locateFeature()},500);
   }
 
   allowEdition() {
     this.editChange.emit(true);
   }
 
-  locateGeom(){
-
-    this.olmap.addRunway(this.geom as Polygon,{center: true, zoom: 15});
+  locateFeature(){
+    this.olmap.addRunway(this.feature,{center: true, zoom: 15});
   }
 }

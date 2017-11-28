@@ -16,7 +16,7 @@ import {PlacedObjectService} from "./object.service";
         <app-empty-indicator type="result" entity="objects"></app-empty-indicator>
       </div>
       <div *ngSwitchCase="indicator.ERROR">
-        <app-error-indicator [error]="onInitError"></app-error-indicator>
+        <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
       </div>
 
       <ul *ngSwitchCase="indicator.ACTIVE" class="media-list">

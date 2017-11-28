@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {ApiError} from "../main/apiError";
-import {RegulationService} from "./regulation.service";
+import {RegulationService, RegulationType} from "./regulation.service";
 import {Regulation} from "./regulation";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 
@@ -18,7 +18,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
         <app-loading-indicator></app-loading-indicator>
       </div>
       <div *ngSwitchCase="indicator.ERROR">
-        <app-error-indicator [error]="onInitError"></app-error-indicator>
+        <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
       </div>
       <ul *ngSwitchCase="indicator.ACTIVE" class="media-list">
         <li *ngFor="let regulation of regulations" class="media media-border">
@@ -27,7 +27,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/regulations/{{regulation.id}}/detail">{{regulation.name}}</a>
+              <a routerLink="/regulations/{{types[regulation.id].code}}/detail">{{regulation.name}}</a>
             </h4>
             <p>{{regulation.authority}}</p>
             <p>{{regulation.description}}</p>
@@ -44,6 +44,7 @@ export class RegulationListComponent implements OnInit {
   indicator;
   onInitError:ApiError;
   regulations:Regulation[];
+  types:RegulationType[];
 
   constructor(
     private regulationService:RegulationService
@@ -55,11 +56,11 @@ export class RegulationListComponent implements OnInit {
   ngOnInit(): void {
 
     this.status = STATUS_INDICATOR.LOADING;
-    this.onInitError=null;
+    this.onInitError = null;
 
-    this.regulationService
-      .list()
-      .then(data => Promise.all(data.map(r => this.regulationService.get(r.id).then(r => this.regulations.push(r)))))
+    this.types = this.regulationService.types();
+
+    Promise.all(this.types.map(r => this.regulationService.get(r.ordinal).then(r => this.regulations.push(r))))
       .then(()=> this.status=STATUS_INDICATOR.ACTIVE)
       .catch(error=>{
         this.onInitError=error;

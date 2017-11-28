@@ -17,6 +17,11 @@ let AirportSearchFilters : AirportSearchFilter[] = [
     placeHolder : "IATA 3-letter code of the location"
   },
   {
+    name : 'Local Code',
+    property : "codeLocal",
+    placeHolder : "Local 3-letter code of the location"
+  },
+  {
     name : 'Name',
     property : "nameFIR",
     placeHolder : "Name of the airport"

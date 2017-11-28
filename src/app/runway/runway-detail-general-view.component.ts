@@ -46,7 +46,7 @@ import {EnumItem} from "../commons/enumItem";
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">

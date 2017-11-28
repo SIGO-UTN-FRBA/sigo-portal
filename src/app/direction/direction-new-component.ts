@@ -30,7 +30,7 @@ import {ApiError} from "../main/apiError";
             <app-loading-indicator></app-loading-indicator>
           </div>
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-            <app-error-indicator [error]="onInitError"></app-error-indicator>
+            <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
           </div>
           <div *ngSwitchCase="indicator.ACTIVE" class="container-fluid">
             <form id="ngForm"
@@ -39,7 +39,7 @@ import {ApiError} from "../main/apiError";
                   class="form container-fluid"
                   (ngSubmit)="onSubmit()">
 
-              <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+              <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
 
               <div class="row">
                 <div class="col-md-6 col-sm-12 form-group">
@@ -82,7 +82,7 @@ import {ApiError} from "../main/apiError";
                   <label
                     for="inputAzimuth"
                     class="control-label"
-                    i18n="@@direction.detail.section.general.azimuth">
+                    i18n="@@direction.detail.section.general.inputAzimuth">
                     Azimuth
                   </label>
                   <input
@@ -93,6 +93,24 @@ import {ApiError} from "../main/apiError";
                     max="360"
                     [(ngModel)]="direction.azimuth"
                     required>
+                </div>
+                <div class="col-md-6 col-sm-12 form-group">
+                  <label
+                    for="inputHeight"
+                    class="control-label"
+                    i18n="@@direction.detail.section.general.inputHeight">
+                    Height
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="number"
+                      class="form-control"
+                      name="inputHeight"
+                      min="0"
+                      [(ngModel)]="direction.height"
+                      required>
+                    <div class="input-group-addon">[m]</div>
+                  </div>
                 </div>
               </div>
             </form>

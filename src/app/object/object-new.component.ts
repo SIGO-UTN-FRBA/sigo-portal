@@ -34,7 +34,7 @@ import {LocationService} from "../location/location.service";
             <app-loading-indicator></app-loading-indicator>
           </div>
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-            <app-error-indicator [error]="onInitError"></app-error-indicator>
+            <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
           </div>
           <div *ngSwitchCase="indicator.ACTIVE" class="container-fluid">
             <form id="ngForm"
@@ -43,7 +43,7 @@ import {LocationService} from "../location/location.service";
                   class="form container-fluid"
                   (ngSubmit)="onSubmit()">
 
-              <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+              <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
 
               <div class="row">
                 <div class="col-md-6 col-sm-12 form-group">
@@ -332,7 +332,7 @@ export class PlacedObjectNewComponent implements OnInit {
 
     this.objectService
       .save(this.placedObject)
-      .then(data => this.router.navigate([`/objects/${data.id}/detail`]))
+      .then(data => this.router.navigate([`/objects/${data.typeId}/${data.id}/detail`]))
       .catch(error => this.onSubmitError = error);
   };
 

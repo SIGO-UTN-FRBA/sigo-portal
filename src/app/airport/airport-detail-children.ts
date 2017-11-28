@@ -40,7 +40,7 @@ import {ApiError} from "../main/apiError";
         </div>
 
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         
       </div>

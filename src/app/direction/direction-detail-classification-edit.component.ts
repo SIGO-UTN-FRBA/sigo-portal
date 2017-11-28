@@ -22,7 +22,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <ng-container *ngSwitchCase="indicator.ACTIVE">
           <ng-container [ngSwitch]="classification.type">
@@ -34,7 +34,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
                   class="form container-fluid"
                   (ngSubmit)="onSubmit(classificationICAO)">
 
-                <app-error-indicator [error]="onSubmitError" *ngIf="onSubmitError"></app-error-indicator>
+                <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
             
                 <div class="row">
                   <div class="col-md-6 col-sm-12 form-group">

@@ -10,6 +10,8 @@ import Point = ol.geom.Point;
 import Polygon = ol.geom.Polygon;
 import LineString = ol.geom.LineString;
 import Object = ol.Object;
+import Feature = ol.Feature;
+import GeoJSON = ol.format.GeoJSON;
 
 @Injectable()
 export class PlacedObjectService extends ApiService {
@@ -59,17 +61,20 @@ export class PlacedObjectService extends ApiService {
       .catch(this.handleError)
   }
 
-  getGeom(placedObjectId : number) : Promise<Geometry> {
+  getFeature(placedObjectId : number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/geometry`)
+      .get(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/feature`)
       .toPromise()
-      .then(response => response.json() as Geometry)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  saveGeom(placedObjectId : number, geom : Geometry) : Promise<Geometry>{
+  updateFeature(placedObjectId : number, geom : Geometry) : Promise<Geometry>{
+
+    let jsonGeom = JSON.parse(new GeoJSON().writeGeometry(geom));
+
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/geometry`, geom)
+      .patch(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/feature`, {geometry: jsonGeom})
       .toPromise()
       .then(response => response.json() as Geometry)
       .catch(this.handleError)

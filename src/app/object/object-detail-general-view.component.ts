@@ -52,7 +52,7 @@ import {PoliticalLocation} from "../location/location";
               <app-loading-indicator></app-loading-indicator>
             </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-              <app-error-indicator [error]="onInitError"></app-error-indicator>
+              <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
             </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
               

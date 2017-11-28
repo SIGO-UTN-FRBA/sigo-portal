@@ -33,7 +33,7 @@ import {ApiError} from "../main/apiError";
           <app-empty-indicator type="relation" entity="directions"></app-empty-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <ul *ngSwitchCase="indicator.ACTIVE">
           <li *ngFor="let direction of directions">

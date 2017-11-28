@@ -8,33 +8,39 @@ import VectorLayer = ol.layer.Vector;
 import Feature = ol.Feature;
 import Style = ol.style.Style;
 import Circle = ol.style.Circle;
-import Polygon = ol.geom.Polygon;
-import Point = ol.geom.Point;
-import Geometry = ol.geom.Geometry;
-import {OlLayers} from "./olLayers";
-
 
 @Component({
   selector: 'app-map',
   providers: [OlService],
   template: `
     <div id="map" class="map"></div>
-    <div id="ol-popup">
-      <div id="ol-popup-content"></div>
+    <div id="ol-popup" class="ol-popup">
+      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+      <div id="popup-content"></div>
     </div>
   `
 
 }) export class OlComponent implements OnInit {
-
+  @Input() fullScreen:boolean;
+  @Input() scale:boolean;
+  @Input() layers: string[];
+  @Input() rotate: boolean;
+  @Input() layerSwitcher: boolean;
   @Input() map : Map;
   @Output() mapChange:EventEmitter<Map> = new EventEmitter<Map>();
-  layers : OlLayers;
+  olLayers : OlLayers;
+  scaleLineControl;
+  fullScreenControl;
 
   constructor() {
-    this.layers = new OlLayers();
+    this.olLayers = {} as OlLayers;
+    this.fullScreen=false;
+    this.scale=false;
+    this.layers=[];
+    this.rotate=false;
   }
 
-  private createVectorSource() {
+  private createDefaultVectorSource() {
     return new VectorSource({
       format: new GeoJSON({
         defaultDataProjection: 'EPSG:3857',
@@ -43,18 +49,18 @@ import {OlLayers} from "./olLayers";
     });
   }
 
-  clearAiportLayer() : OlComponent {
+  clearAirportLayer() : OlComponent {
     this.getAirportLayer().getSource().clear();
 
     return this;
   }
 
   getAirportLayer() : VectorLayer {
-    if(this.layers.airport != null)
-      return this.layers.airport;
+    if(this.olLayers.airport != null)
+      return this.olLayers.airport;
 
     let airportLayer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         image: new Circle({
           radius: 7,
@@ -64,9 +70,9 @@ import {OlLayers} from "./olLayers";
       })
     });
 
-    this.layers.airport = airportLayer;
+    airportLayer.setProperties({"title":"Airport"});
 
-    this.map.addLayer(airportLayer);
+    this.olLayers.airport = airportLayer;
 
     return airportLayer;
   }
@@ -79,20 +85,20 @@ import {OlLayers} from "./olLayers";
 
   getRunwayLayer() : VectorLayer {
 
-    if(this.layers.runway != null)
-      return this.layers.runway;
+    if(this.olLayers.runway != null)
+      return this.olLayers.runway;
 
     let runwayLayer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
         fill: new ol.style.Fill({color: 'black'})
       })
     });
 
-    this.layers.runway = runwayLayer;
+    runwayLayer.setProperties({"title":"Runway"});
 
-    this.map.addLayer(runwayLayer);
+    this.olLayers.runway = runwayLayer;
 
     return runwayLayer;
   }
@@ -105,11 +111,11 @@ import {OlLayers} from "./olLayers";
 
   getDirectionLayer() : VectorLayer {
 
-    if(this.layers.direction != null)
-      return this.layers.direction;
+    if(this.olLayers.direction != null)
+      return this.olLayers.direction;
 
     let directionLayer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         image: new Circle({
           radius: 3,
@@ -119,9 +125,9 @@ import {OlLayers} from "./olLayers";
       })
     });
 
-    this.layers.direction = directionLayer;
+    directionLayer.setProperties({"title":"Direction"});
 
-    this.map.addLayer(directionLayer);
+    this.olLayers.direction = directionLayer;
 
     return directionLayer;
   }
@@ -133,11 +139,11 @@ import {OlLayers} from "./olLayers";
   }
 
   getDisplacedThresholdLayer() : VectorLayer {
-    if(this.layers.threshold != null)
-      return this.layers.threshold;
+    if(this.olLayers.threshold != null)
+      return this.olLayers.threshold;
 
     let thresholdLayer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkred', width:1}),
         fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.6)' })
@@ -145,9 +151,9 @@ import {OlLayers} from "./olLayers";
       map: this.map
     });
 
-    this.layers.threshold = thresholdLayer;
+    thresholdLayer.setProperties({"title":"Displaced threshold"});
 
-    this.map.addLayer(thresholdLayer);
+    this.olLayers.threshold = thresholdLayer;
 
     return thresholdLayer;
   }
@@ -159,20 +165,20 @@ import {OlLayers} from "./olLayers";
   }
 
   getStopwayLayer() : VectorLayer {
-    if(this.layers.stopway != null)
-      return this.layers.stopway;
+    if(this.olLayers.stopway != null)
+      return this.olLayers.stopway;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkblue', width:1}),
         fill: new ol.style.Fill({color: 'rgba(0, 0, 255, 0.75)' })
       })
     });
 
-    this.layers.stopway = layer;
+    layer.setProperties({"title":"Stop-way"});
 
-    this.map.addLayer(layer);
+    this.olLayers.stopway = layer;
 
     return layer;
   }
@@ -184,22 +190,31 @@ import {OlLayers} from "./olLayers";
   }
 
   getClearwayLayer() : VectorLayer {
-    if(this.layers.clearway != null)
-      return this.layers.clearway;
+    if(this.olLayers.clearway != null)
+      return this.olLayers.clearway;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgreen', width:1}),
         fill: new ol.style.Fill({color: 'rgba(0, 255, 0, 0.6)' })
       })
     });
 
-    this.layers.clearway = layer;
+    layer.setProperties({"title":"Clear-way"});
 
-    this.map.addLayer(layer);
+    this.olLayers.clearway = layer;
 
     return layer;
+  }
+
+  clearObjectLayers() : OlComponent {
+
+    this.getIndividualObjectLayer().getSource().clear();
+    this.getBuildingObjectLayer().getSource().clear();
+    this.getWiringObjectLayer().getSource().clear();
+
+    return this;
   }
 
   clearIndividualObjectLayer() : OlComponent {
@@ -209,11 +224,11 @@ import {OlLayers} from "./olLayers";
   }
 
   getIndividualObjectLayer() : VectorLayer {
-    if(this.layers.individual != null)
-      return this.layers.individual;
+    if(this.olLayers.individual != null)
+      return this.olLayers.individual;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new ol.style.Style({
         image: new ol.style.RegularShape({
           stroke: new ol.style.Stroke({color: 'black', width: 2}),
@@ -225,9 +240,9 @@ import {OlLayers} from "./olLayers";
       })
     });
 
-    this.layers.individual = layer;
+    layer.setProperties({"title":"Individual object"});
 
-    this.map.addLayer(layer);
+    this.olLayers.individual = layer;
 
     return layer;
   }
@@ -239,20 +254,20 @@ import {OlLayers} from "./olLayers";
   }
 
   getBuildingObjectLayer() : VectorLayer {
-    if(this.layers.building != null)
-      return this.layers.building;
+    if(this.olLayers.building != null)
+      return this.olLayers.building;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
         fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.85)' })
       }),
     });
 
-    this.layers.building = layer;
+    layer.setProperties({"title":"Building"});
 
-    this.map.addLayer(layer);
+    this.olLayers.building = layer;
 
     return layer;
   }
@@ -264,31 +279,34 @@ import {OlLayers} from "./olLayers";
   }
 
   getWiringObjectLayer() : VectorLayer {
-    if(this.layers.wiring != null)
-      return this.layers.wiring;
+    if(this.olLayers.wiring != null)
+      return this.olLayers.wiring;
 
     let layer = new VectorLayer({
-      source: this.createVectorSource(),
+      source: this.createDefaultVectorSource(),
       style: new Style({
         stroke: new ol.style.Stroke({color: 'darkgray', width:1})
       }),
     });
 
-    this.layers.wiring = layer;
+    layer.setProperties({"title":"Wire"});
 
-    this.map.addLayer(layer);
+    this.olLayers.wiring = layer;
 
     return layer;
   }
 
-
-  getOMS(){
+  getStamenTonerBaseLayer(){
 
     let OSM = new Tile({
-      source: new ol.source.OSM()
+      source: new ol.source.Stamen({
+        layer: 'toner'
+      })
     });
 
     OSM.set('name', 'Openstreetmap');
+    OSM.set('title', 'Stamen toner');
+    OSM.set('type', 'base');
 
     return OSM;
   }
@@ -297,7 +315,8 @@ import {OlLayers} from "./olLayers";
 
     this.map = new Map({
       target: 'map',
-      layers: [this.getOMS()],
+      layers: this.initializeLayers(),
+      controls: this.initializeControls(),
       view: new ol.View({
         center: ol.proj.fromLonLat([0,0]),
         zoom: 7,
@@ -309,11 +328,18 @@ import {OlLayers} from "./olLayers";
 
     this.map.addInteraction(select_interaction);
 
-    // add popup for all features
+    /**
+     * Elements that make up the popup.
+     */
     let container = document.getElementById('ol-popup');
-    let content = document.getElementById('ol-popup-content');
+    let content = document.getElementById('popup-content');
+    let closer = document.getElementById('popup-closer');
 
-    let popup = new ol.Overlay({
+
+    /**
+     * Create an overlay to anchor the popup to the map.
+     */
+    let overlay = new ol.Overlay({
       element: container,
       autoPan: true,
       positioning: 'bottom-center',
@@ -321,174 +347,126 @@ import {OlLayers} from "./olLayers";
       offset: [0, -5]
     });
 
-    this.map.addOverlay(popup);
+    this.map.addOverlay(overlay);
 
-    this.map.on('click', (evt) => {
+    /**
+     * Add a click handler to hide the popup.
+     * @return {boolean} Don't follow the href.
+     */
+    closer.onclick = function() {
+      overlay.setPosition(undefined);
+      closer.blur();
+      return false;
+    };
+
+    /**
+     * Add a click handler to the map to render the popup.
+     */
+
+    this.map.on('singleclick', (evt) => {
+
       let feature = this.map.forEachFeatureAtPixel(evt.pixel, (feat) => {
         return feat;
       });
+
       if (feature) {
-        let coordinate = evt.coordinate;
-        content.innerHTML = feature.get('name');
-        popup.setPosition(coordinate);
+
+        let properties = '';
+
+        Object.keys(feature.getProperties()).filter(k => { return !(k == 'geometry' || k == 'class') }).forEach( p => {
+          properties += `<p>${p}: <i>${feature.get(p)}</i></p>`
+        });
+
+        content.innerHTML = `<p><strong>${feature.get('class')}</strong></p> ${properties}`;
+
+        overlay.setPosition(evt.coordinate);
       }
     });
   };
 
-  public addRunway (geom : Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.Polygon(geom['coordinates']);
-
-    let feature = new Feature({
-      id: 'y',
-      name: 'y',
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857')
-    });
+  public addRunway (feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getRunwayLayer(), options);
 
     return this;
   }
 
-  public addAirport (geom: Point, options? :{center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.Point(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'x',
-      id: 'x',
-    });
+  public addAirport (feature: Feature, options? :{center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getAirportLayer(), options);
 
     return this;
   };
 
-  public addDirection(geom: Point, options? :{center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.Point(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'w',
-      id: 'w',
-    });
+  public addDirection(feature: Feature, options? :{center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getDirectionLayer(), options);
 
     return this;
   }
 
-  public addThreshold(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.Polygon(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Displaced Threshold',
-      id: 'z',
-    });
+  public addThreshold(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getDisplacedThresholdLayer(), options);
 
     return this;
   }
 
-  public addStopway(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.Polygon(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Stopway',
-      id: 's',
-    });
+  public addStopway(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getStopwayLayer(), options);
 
     return this;
   }
 
-  public addClearway(geom: Polygon, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.Polygon(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Clearway',
-      id: 's',
-    });
+  public addClearway(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getClearwayLayer(), options);
 
     return this;
   }
 
-  public addIndividualObject(geom: Geometry, options?: { center?: boolean; zoom?: number }) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.Point(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Individual Objects',
-      id: 'i',
-    });
+  public addIndividualObject(feature: Feature, options?: { center?: boolean; zoom?: number }) : OlComponent {
 
     this.addFeature(feature, this.getIndividualObjectLayer(), options);
 
     return this;
   }
 
-  public addBuildingObject(geom: Geometry, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.MultiPolygon(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Building Objects',
-      id: 'b',
-    });
+  public addBuildingObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getBuildingObjectLayer(), options);
 
     return this;
   }
 
-  public addWiringObject(geom: Geometry, options? : {center?: boolean, zoom?: number}) : OlComponent {
-
-    //TODO para una feature y no solo una geom
-
-    let tmp = new ol.geom.LineString(geom['coordinates']);
-
-    let feature = new ol.Feature({
-      geometry: tmp.transform('EPSG:4326', 'EPSG:3857'),
-      name: 'Wiring Objects',
-      id: 'w',
-    });
+  public addWiringObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     this.addFeature(feature, this.getWiringObjectLayer(), options);
 
     return this;
   }
 
+  public addObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+
+    switch (feature.get("class")){
+      case "Building":
+        this.addBuildingObject(feature, options);
+        break;
+      case "Individual Object":
+        this.addIndividualObject(feature, options);
+        break;
+      case "Overhead Wire":
+        this.addWiringObject(feature, options);
+        break;
+    }
+
+    return this;
+  }
+
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
+
+    feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
 
     layer.getSource().addFeature(feature);
 
@@ -514,4 +492,115 @@ import {OlLayers} from "./olLayers";
     this.createMap();
   }
 
+  private initializeLayers() :(ol.layer.Base[] | ol.Collection<ol.layer.Base>){
+
+    let layerGroups : Array<ol.layer.Group>= [];
+
+    this.setupBaseLayerGroup(layerGroups);
+    this.setupAirportLayerGroup(layerGroups);
+    this.setupSurfaceLayerGroup(layerGroups);
+    this.setupObjectLayerGroup(layerGroups);
+
+    return layerGroups;
+  }
+
+  private setupBaseLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    let baseLayersGroup = new ol.layer.Group({
+      layers: [this.getStamenTonerBaseLayer()]
+    });
+    baseLayersGroup.set("title", "Base maps");
+
+    layerGroups.push(baseLayersGroup);
+  }
+
+  private setupAirportLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    let layers = new ol.Collection<ol.layer.Base>();
+
+    if(this.layers.includes("airport"))
+      layers.push(this.getAirportLayer());
+
+    if(this.layers.includes("runway"))
+      layers.push(this.getRunwayLayer());
+
+    if(this.layers.includes("direction"))
+      layers.push(this.getDirectionLayer());
+
+    if(this.layers.includes("threshold"))
+      layers.push(this.getDisplacedThresholdLayer());
+
+    if(this.layers.includes("clearway"))
+      layers.push(this.getClearwayLayer());
+
+    if(this.layers.includes("stopway"))
+      layers.push(this.getStopwayLayer());
+
+    if(layers.getArray().length > 0){
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set("title","Airport");
+      layerGroups.push(group);
+    }
+  }
+
+  private setupSurfaceLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    //TODO incluir superficies
+  }
+
+  private setupObjectLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    let layers = new ol.Collection<ol.layer.Base>();
+
+    if(this.layers.includes("individual"))
+      layers.push(this.getIndividualObjectLayer());
+
+    if(this.layers.includes("building"))
+      layers.push(this.getBuildingObjectLayer());
+
+    if(this.layers.includes("wire"))
+      layers.push(this.getWiringObjectLayer());
+
+    if(layers.getArray().length > 0){
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set("title","Object");
+      layerGroups.push(group);
+    }
+  }
+
+  private initializeControls() : (ol.Collection<ol.control.Control> | ol.control.Control[]){
+
+    let controls = [];
+
+    if(this.fullScreen){
+      this.fullScreenControl = new ol.control.FullScreen();
+      controls.push(this.fullScreenControl);
+    }
+
+    if(this.scale){
+      this.scaleLineControl = new ol.control.ScaleLine(); //TODO choose unit
+      controls.push(this.scaleLineControl);
+    }
+
+    if(this.rotate){
+      controls.push(new ol.control.Rotate());
+    }
+
+    /*
+    if(this.layerSwitcher){
+      controls.push(new ol.control['LayerSwitcher']());
+    }*/
+
+    return ol.control.defaults().extend(controls);
+  }
+}
+
+interface OlLayers {
+  airport: VectorLayer;
+  runway: VectorLayer;
+  direction: VectorLayer;
+  threshold: VectorLayer;
+  individual: VectorLayer;
+  building: VectorLayer;
+  wiring: VectorLayer;
+  stopway:VectorLayer;
+  clearway: VectorLayer;
 }

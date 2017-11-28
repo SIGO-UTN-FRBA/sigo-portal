@@ -2,15 +2,15 @@ import {
   AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
 } from "@angular/core";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import Point = ol.geom.Point;
 import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {DirectionService} from "./direction.service";
 import {ApiError} from "../main/apiError";
-import Polygon = ol.geom.Polygon;
 import {DirectionDistancesService} from "./direction-distances.service";
 import {Subscription} from "rxjs/Subscription";
 import {RunwayService} from "../runway/runway.service";
+import {Feature} from "openlayers";
+import GeoJSON = ol.format.GeoJSON;
 
 @Component({
   selector: 'app-direction-geometry-view',
@@ -39,7 +39,7 @@ import {RunwayService} from "../runway/runway.service";
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <div *ngSwitchCase="indicator.ACTIVE">
           <div class="form container-fluid">
@@ -48,12 +48,19 @@ import {RunwayService} from "../runway/runway.service";
                 <label for="inputGeoJSON" class="control-label" i18n="@@direction.detail.section.spatial.inputGeoJSON">
                   Point
                 </label>
-                <p class="form-control-static">{{geomText}}</p>
+                <p class="form-control-static">{{coordinatesText}}</p>
               </div>
             </div>
           </div>
           <br>
-          <app-map #mapDirection (map)="map"></app-map>
+          <app-map #mapDirection 
+                   (map)="map"
+                   [rotate]="true"
+                   [fullScreen]="true"
+                   [scale]="true"
+                   [layers]="['runway', 'direction', 'threshold', 'stopway', 'clearway']"
+          >
+          </app-map>
         </div>
         
         <div *ngSwitchCase="indicator.EMPTY" class="container-fluid">
@@ -80,12 +87,12 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   status : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
-  geom  : Point;
-  geomText : string;
-  thresholdGeom : Polygon;
-  stopwayGeom : Polygon;
-  clearwayGeom : Polygon;
-  runwayGeom : Polygon;
+  feature  : Feature;
+  coordinatesText : string;
+  thresholdFeature : Feature;
+  stopwayFeature : Feature;
+  clearwayFeature : Feature;
+  runwayFeature : Feature;
   subscription: Subscription;
 
   constructor(
@@ -93,27 +100,27 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
     private distancesService : DirectionDistancesService,
     private runwayService : RunwayService
   ){
-    this.geom = null;
     this.indicator = STATUS_INDICATOR;
 
     this.subscription = this.distancesService.lengthUpdated$.subscribe(
       () => this.loadGeometries()
         .then(()=> this.olmap.clearDirectionLayer())
         .then(()=> this.olmap.clearDisplacedThresholdLayer())
-        .then(()=> this.olmap.getStopwayLayer())
-        .then(()=> this.olmap.getClearwayLayer())
+        .then(()=> this.olmap.clearStopwayLayer())
+        .then(()=> this.olmap.clearClearwayLayer())
         .then(()=> this.locateGeometries())
     );
   }
 
   ngOnInit(): void {
     this.status = STATUS_INDICATOR.LOADING;
-    this.geom = null;
+    this.feature = null;
     this.onInitError = null;
+    this.coordinatesText = "";
 
     this.loadGeometries()
       .then(() => {
-        if(this.geom != null)
+        if(this.feature.getGeometry())
           this.status = STATUS_INDICATOR.ACTIVE;
         else
           this.status = STATUS_INDICATOR.EMPTY;
@@ -127,49 +134,55 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   private loadGeometries() : Promise<any> {
 
     return this.directionService
-      .getGeom(this.airportId, this.runwayId, this.directionId)
-      .then(point => {
+      .getFeature(this.airportId, this.runwayId, this.directionId)
+      .then(data => {
 
-        if(point != null){
-          this.geom = point;
-          this.geomText = JSON.stringify(point);
+        this.feature = data;
+
+        if(this.feature.getGeometry()){
+
+          let jsonFeature = JSON.parse(new GeoJSON().writeFeature(data));
+          this.coordinatesText = JSON.stringify(jsonFeature.geometry.coordinates);
         }
 
-        return point;
       })
       .then(() => {
 
-        if(this.geom != null)
+        if(this.feature.getGeometry())
           return this.directionService
-            .getDisplacedThresholdGeom(this.airportId, this.runwayId, this.directionId);
+            .getDisplacedThresholdFeature(this.airportId, this.runwayId, this.directionId);
         else
           return null;
 
       })
-      .then(polygon => this.thresholdGeom = polygon)
+      .then(data => this.thresholdFeature = data)
       .then(()=> {
-        if(this.geom != null)
+
+        if(this.feature.getGeometry())
           return this.directionService
-            .getStopwayGeom(this.airportId, this.runwayId, this.directionId);
+            .getStopwayFeature(this.airportId, this.runwayId, this.directionId);
         else
           return null;
+
       })
-      .then(polygon => this.stopwayGeom = polygon)
+      .then(data => this.stopwayFeature = data)
       .then(()=> {
-        if(this.geom != null)
+
+        if(this.feature.getGeometry())
           return this.directionService
-            .getClearwayGeom(this.airportId, this.runwayId, this.directionId);
+            .getClearwayFeature(this.airportId, this.runwayId, this.directionId);
         else
           return null;
+
       })
-      .then(polygon => this.clearwayGeom = polygon)
-      .then(()=> this.runwayService.getGeom(this.airportId, this.runwayId))
-      .then(polygon => this.runwayGeom = polygon)
+      .then(polygon => this.clearwayFeature = polygon)
+      .then(()=> this.runwayService.getFeature(this.airportId, this.runwayId))
+      .then(data => this.runwayFeature = data)
       .catch(error => Promise.reject(error));
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {if(this.geom) this.locateGeometries()},1500);
+    setTimeout(()=> {if(this.feature.getGeometry()) this.locateGeometries()},1500);
   }
 
   allowEdition() {
@@ -178,11 +191,11 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
 
   private locateGeometries(){
       this.olmap
-        .addRunway(this.runwayGeom, {center: true, zoom: 14})
-        .addThreshold(this.thresholdGeom)
-        .addDirection(this.geom)
-        .addClearway(this.clearwayGeom)
-        .addStopway(this.stopwayGeom);
+        .addRunway(this.runwayFeature, {center: true, zoom: 14})
+        .addThreshold(this.thresholdFeature)
+        .addDirection(this.feature)
+        .addClearway(this.clearwayFeature)
+        .addStopway(this.stopwayFeature);
   }
 
   ngOnDestroy() {

@@ -43,7 +43,7 @@ import {Router} from "@angular/router";
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
         </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
@@ -55,17 +55,23 @@ import {Router} from "@angular/router";
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6 col-sm-12 form-group">
+            <div class="col-md-4 col-sm-12 form-group">
               <label for="inputCodeFir" class="control-label" i18n="@@airport.detail.section.general.inputCodeFir">
                 Code ICAO
               </label>
               <p class="form-control-static">{{airport.codeFIR}}</p>
             </div>
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-4 col-sm-12">
               <label for="inputCodeIATA" class="control-label" i18n="@@airport.detail.section.general.inputCodeIATA">
                 Code IATA
               </label>
               <p class="form-control-static">{{airport.codeIATA}}</p>
+            </div>
+            <div class="col-md-4 col-sm-12">
+              <label for="inputCodeLocal" class="control-label" i18n="@@airport.detail.section.general.inputCodeLocal">
+                Code Local
+              </label>
+              <p class="form-control-static">{{airport.codeLocal}}</p>
             </div>
           </div>
         </div>

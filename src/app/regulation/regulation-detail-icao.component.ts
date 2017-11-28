@@ -42,7 +42,7 @@ export class FilterRulesBySurface implements PipeTransform {
             <app-loading-indicator></app-loading-indicator>
           </div>
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-            <app-error-indicator [error]="onInitError"></app-error-indicator>
+            <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
           </div>
           <form #regulationForm="ngForm"
                 *ngSwitchCase="indicator.ACTIVE"
@@ -134,7 +134,7 @@ export class FilterRulesBySurface implements PipeTransform {
             <app-loading-indicator></app-loading-indicator>
           </div>
           <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-            <app-error-indicator [error]="onInitError"></app-error-indicator>
+            <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
           </div>
           <ul *ngSwitchCase="indicator.ACTIVE" class="list-group">
             <div *ngFor="let surface of surfaces" class="form-horizontal">
@@ -197,7 +197,7 @@ export class RegulationDetailICAOComponent implements OnInit {
       .catch(error => Promise.reject(error));
 
     let p4 = this.regulationService
-      .getRules()
+      .allRules()
       .then(data => this.rules=data)
       .catch(error => Promise.reject(error));
 

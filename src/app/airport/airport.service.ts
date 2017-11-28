@@ -6,6 +6,9 @@ import {AppSettings} from "../main/app-settings";
 import Point = ol.geom.Point;
 import {ApiService} from "../main/api.service";
 import {ParamMap} from "@angular/router";
+import {Feature} from "openlayers";
+import JSONFeature = ol.format.JSONFeature;
+import GeoJSON = ol.format.GeoJSON;
 
 
 @Injectable()
@@ -56,17 +59,21 @@ export class AirportService extends ApiService {
       .catch(this.handleError);
   }
 
-  getGeom(airportId : number) : Promise<Point> {
+  getFeature(airportId : number) : Promise<Feature> {
+
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/geometry`)
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/feature`)
       .toPromise()
-      .then(response => response.json() as Point)
+      .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  saveGeom(airportId : number, geom : Point) : Promise<Point>{
+  updateFeature(airportId : number, point : Point) : Promise<Point>{
+
+    let jsonGeom = JSON.parse(new GeoJSON().writeGeometry(point));
+
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/airports/${airportId}/geometry`, geom)
+      .patch(`${AppSettings.API_ENDPOINT}/airports/${airportId}/feature`, {geometry: jsonGeom})
       .toPromise()
       .then(response => response.json() as Point)
       .catch(this.handleError)

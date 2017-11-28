@@ -24,20 +24,24 @@ const analysisRoutes : Routes = [
         ]
       },
       {
-        path:':caseId/wizard/stages/object',
+        path:':analysisId/stages/object',
         component: AnalysisWizardObjectComponent
       },
       {
-        path:':caseId/wizard/stages/exception',
+        path:':analysisId/stages/exception',
         component: AnalysisWizardExceptionComponent
       },
       {
-        path:':caseId/wizard/stages/analysis',
+        path:':analysisId/stages/analysis',
         component: AnalysisWizardAnalysisComponent
       },
       {
-        path:':caseId/wizard/stages/inform',
+        path:':analysisId/stages/inform',
         component: AnalysisWizardInformComponent
+      },
+      {
+        path:':analysisId/exceptions',
+        loadChildren: 'app/exception/exception.module#ExceptionModule'
       },
       {
         path: '',

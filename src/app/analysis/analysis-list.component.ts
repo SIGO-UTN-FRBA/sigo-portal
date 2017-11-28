@@ -1,11 +1,11 @@
 import {Component, OnInit} from "@angular/core";
 import {AnalysisCase} from "./analysisCase";
 import {ApiError} from "../main/apiError";
-import {AnalysisCaseService} from "./analysisCase.service";
+import {AnalysisService} from "./analysis.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AirportService} from "../airport/airport.service";
-import AnalysisWizardStages from "./analysisWizardStages";
+import {Analysis} from "./analysis";
 
 @Component({
   template:`
@@ -18,7 +18,7 @@ import AnalysisWizardStages from "./analysisWizardStages";
         <app-empty-indicator type="result" entity="cases"></app-empty-indicator>
       </div>
       <div *ngSwitchCase="indicator.ERROR">
-        <app-error-indicator [error]="onInitError"></app-error-indicator>
+        <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
       </div>
 
       <ul *ngSwitchCase="indicator.ACTIVE" class="media-list">
@@ -28,9 +28,22 @@ import AnalysisWizardStages from "./analysisWizardStages";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/analysis/{{analysis.id}}/wizard/{{stages[analysis.status]}}">{{analysis.airport.codeFIR}}</a>
+              <a routerLink="/analysis/{{analysis.id}}/stages/{{stages[analysis.stageId]}}">{{analysis.airport.codeFIR}}</a>
+              <span class="label label-info">{{stages[analysis.stageId]}}</span>
             </h4>
             <p>{{analysis.airport.nameFIR}}</p>
+            <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
+            <p>Edition: <i>{{analysis.editionDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
+            <p>User: <i>Mark Otto</i></p>
+          </div>
+          <div class="media-right">
+            <button type="button" 
+                    (click)="cloneCase(analysis.id)"
+                    *ngIf="analysis.statusId == 2"
+                    class="btn btn-primary btn-sm" 
+                    i18n="@@commons.button.new">
+              New
+            </button>
           </div>
         </li>
       </ul>
@@ -40,20 +53,22 @@ import AnalysisWizardStages from "./analysisWizardStages";
 
 export class AnalysisCaseListComponent implements OnInit {
 
-  results : AnalysisCase[];
+  results : Analysis[];
   status : number;
   indicator;
   onInitError : ApiError;
   stages: Array<string>;
 
   constructor(
-    private caseService : AnalysisCaseService,
+    private caseService : AnalysisService,
     private airportService : AirportService,
-    private route: ActivatedRoute
+    private analysisService : AnalysisService,
+    private route: ActivatedRoute,
+    private router : Router
   ){
     this.results = [];
     this.indicator = STATUS_INDICATOR;
-    this.stages = AnalysisWizardStages;
+    this.stages = this.analysisService.stages();
   }
 
   ngOnInit(): void {
@@ -65,8 +80,17 @@ export class AnalysisCaseListComponent implements OnInit {
       .search(this.route.snapshot.queryParamMap)
       .then(data => this.results = data)
       .then(()=> Promise.all(this.results.map(r => this.airportService.get(r.airportId).then((airport) => r.airport = airport))))
-      .then(()=> this.status = STATUS_INDICATOR.ACTIVE)
+      .then(()=> {
+        (this.results.length > 0) ? this.status = STATUS_INDICATOR.ACTIVE : this.status = STATUS_INDICATOR.EMPTY;
+      })
       .catch(error => this.status=STATUS_INDICATOR.ERROR);
 
+  }
+
+  cloneCase(caseId: number) {
+    this.analysisService
+      .create(caseId)
+      .then(data => this.router.navigate([`/analysis/${data.id}/stages/object`]))
+    //TODO catch and show error
   }
 }

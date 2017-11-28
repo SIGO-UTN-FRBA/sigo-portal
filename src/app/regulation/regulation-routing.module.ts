@@ -18,7 +18,7 @@ const regulationRoutes : Routes = [
         }
       },
       {
-        path: '0/detail',
+        path: 'icao14/detail',
         component: RegulationDetailICAOComponent,
         data:{
           breadcrumb: {active: true, name: 'ICAO Annex 14'}
