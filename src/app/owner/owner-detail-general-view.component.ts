@@ -43,7 +43,7 @@ import {ObjectOwnerService} from "./owner.service";
           <app-loading-indicator></app-loading-indicator>
         </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-          <app-error-indicator [error]="onInitError"></app-error-indicator>
+          <app-error-indicator [errors]="onInitError"></app-error-indicator>
         </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
@@ -88,7 +88,7 @@ import {ObjectOwnerService} from "./owner.service";
   `
 })
 
-export class objectOwnerDetailGeneralViewComponent implements OnInit {
+export class ObjectOwnerDetailGeneralViewComponent implements OnInit {
 
   objectOwner : ObjectOwner;
   @Input() objectOwnerId : number;
