@@ -34,6 +34,10 @@ const routes :Routes = [
         component: null
       },
       {
+        path: 'dynamic_surface/:exceptionId/detail',
+        component: null
+      },
+      {
         path: 'rule/icao14/:exceptionId/detail',
         component: ExceptionDetailRuleIcao14
       }

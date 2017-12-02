@@ -53,7 +53,8 @@ export class AnalysisExceptionService extends ApiService {
   types() : ExceptionType[]{
     return [
       {name: "Surface", code: "surface", ordinal:0},
-      {name:"Rule", code:"rule", ordinal:1}
+      {name:"Rule", code:"rule", ordinal:1},
+      {name: "Dynamic Surface", code: "dynamic_surface", ordinal:2}
     ] ;
   }
 }
