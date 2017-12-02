@@ -18,6 +18,7 @@ import {RegulationFaaService} from "../regulation/regulation-faa.service";
 import {ExceptionDetailRuleIcao14} from "./exception-detail-rule-icao";
 import {ExceptionDetailRuleIcaoEdit} from "./exception-detail-rule-icao-edit";
 import {ExceptionDetailRuleIcaoView} from "./exception-detail-rule-icao-view";
+import {ExceptionNewDynamicSurfaceComponent} from "./exception-new-dynamic_surface.component";
 
 @NgModule({
   imports:[
@@ -33,6 +34,7 @@ import {ExceptionDetailRuleIcaoView} from "./exception-detail-rule-icao-view";
     ExceptionNewRuleComponent,
     ExceptionNewRuleIcao14Component,
     ExceptionNewSurfaceComponent,
+    ExceptionNewDynamicSurfaceComponent,
     ExceptionDetailRuleIcao14,
     ExceptionDetailRuleIcaoView,
     ExceptionDetailRuleIcaoEdit
