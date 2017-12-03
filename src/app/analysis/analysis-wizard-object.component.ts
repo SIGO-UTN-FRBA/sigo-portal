@@ -20,6 +20,7 @@ import {AppError} from "../main/ierror";
 import {BlockTemplateComponent} from "../commons/block-template.component";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {AnalysisObjectService} from "./analysis-object.service";
+import {AnalysisWizardService} from "./analysis-wizard.service";
 
 @Component({
   providers: [ OlComponent ],
@@ -89,13 +90,18 @@ import {AnalysisObjectService} from "./analysis-object.service";
                 <app-loading-indicator></app-loading-indicator>
               </div>
               <div *ngSwitchCase="indicator.ERROR" >
-                <app-error-indicator></app-error-indicator>
+                <app-error-indicator [errors]="[onUpdateError]"></app-error-indicator>
               </div>
               <div *ngSwitchCase="indicator.EMPTY" >
                 <app-empty-indicator entity="placed objects" type="included"></app-empty-indicator>
               </div>
               
               <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
+                
+                <ng-container *ngIf="onIncludeError">
+                  <app-error-indicator [errors]="[onIncludeError]"></app-error-indicator>
+                </ng-container>
+                
                 <table class="table table-hover">
                   <tr>
                     <th>#</th>
@@ -115,7 +121,7 @@ import {AnalysisObjectService} from "./analysis-object.service";
                         {{types[analysisObject.object.typeId].description}}
                       </td>
                       <td>
-                        <input type="checkbox" [(ngModel)]="analysisObject.included">
+                        <input type="checkbox" [(ngModel)]="analysisObject.included" (ngModelChange)="includeObject(analysisObject.id, $event)">
                       </td>
                     </tr>
                   </tbody>
@@ -165,6 +171,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   onInitError:ApiError;
   onUpdateError:ApiError;
   onSubmitError:AppError;
+  onIncludeError:ApiError;
   types:PlacedObjectType[];
   airportFeature: Feature;
   private olmap: OlComponent;
@@ -181,6 +188,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     private objectCatalogService: PlacedObjectCatalogService,
     private airportService: AirportService,
     private analysisObjectService: AnalysisObjectService,
+    private wizardService: AnalysisWizardService,
     private route: ActivatedRoute,
     private router: Router
   ){
@@ -196,6 +204,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     this.initStatus = STATUS_INDICATOR.LOADING;
     this.onInitError = null;
     this.updateStatus = null;
+    this.onIncludeError = null;
 
     let p1 = this.objectCatalogService
       .listTypeObject()
@@ -234,14 +243,14 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   }
 
   private resolveDataObjects() : Promise<any> {
-      return Promise.all(
-        this.analysisObjects
-          .map(a =>
-            this.objectService
-              .get(a.objectId)
-              .then(o => a.object = o)
-          )
-      );
+    return Promise.all(
+      this.analysisObjects
+        .map(a =>
+          this.objectService
+            .get(a.objectId)
+            .then(o => a.object = o)
+        )
+    );
   }
 
   private resolveFeatureObjects() : Promise<any> {
@@ -335,12 +344,8 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    //2. actualizar objectos del caso
-    //3. actualizar stage del caso
-    Promise.all(this.analysisObjects.map( o => this.analysisObjectService.update(this.analysisId, o.id, o.included)))
-      .then(() => {
-        return this.analysisService.update(this.analysisId, 1);
-      })
+    //2. actualizar stage
+    this.wizardService.next(this.analysisId)
       .then( () =>{
         this.blockUI.stop();
         return this.router.navigate([`/analysis/${this.analysisId}/stages/exception`])
@@ -349,5 +354,16 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
         this.onSubmitError = error;
         this.blockUI.stop();
       });
+  }
+
+  includeObject(analysisObjectId: number, $event: Event) {
+
+    this.onIncludeError = null;
+
+    let analysisObject = this.analysisObjects.filter(o => o.id == analysisObjectId)[0];
+
+    this.analysisObjectService
+      .update(this.analysisId, analysisObjectId, analysisObject.included)
+      .catch((error) => this.onIncludeError = error);
   }
 }

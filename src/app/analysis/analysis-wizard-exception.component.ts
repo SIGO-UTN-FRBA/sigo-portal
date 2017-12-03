@@ -10,6 +10,7 @@ import {AnalysisExceptionService, ExceptionType} from "../exception/analysis-exc
 import {AnalysisException} from "../exception/analysisException";
 import {EnumItem} from "../commons/enumItem";
 import {RegulationService, RegulationType} from "../regulation/regulation.service";
+import {AnalysisWizardService} from "./analysis-wizard.service";
 
 @Component({
   template:`
@@ -128,6 +129,7 @@ export class AnalysisWizardExceptionComponent implements OnInit {
     private analysisService: AnalysisService,
     private exceptionService: AnalysisExceptionService,
     private regulationService: RegulationService,
+    private wizardService: AnalysisWizardService,
     private route: ActivatedRoute,
     private router: Router
   ){
@@ -160,8 +162,8 @@ export class AnalysisWizardExceptionComponent implements OnInit {
 
     this.blockUI.start("Processing...");
 
-    this.analysisService
-      .update(this.analysisId, 2)
+    this.wizardService
+      .next(this.analysisId)
       .then( () =>{
         this.blockUI.stop();
         return this.router.navigate([`/analysis/${this.analysisId}/stages/analysis`])
@@ -175,7 +177,8 @@ export class AnalysisWizardExceptionComponent implements OnInit {
   onPrevious(){
     this.onSubmitError = null;
 
-    this.analysisService.update(this.analysisId, 0)
+    this.wizardService
+      .previous(this.analysisId)
       .then( () => this.router.navigate([`/analysis/${this.analysisId}/stages/object`]))
       .catch((error) => this.onSubmitError = error);
   }

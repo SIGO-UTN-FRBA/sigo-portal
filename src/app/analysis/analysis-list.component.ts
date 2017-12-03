@@ -6,6 +6,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AirportService} from "../airport/airport.service";
 import {Analysis} from "./analysis";
+import {AnalysisWizardService} from "./analysis-wizard.service";
 
 @Component({
   template:`
@@ -63,12 +64,13 @@ export class AnalysisCaseListComponent implements OnInit {
     private caseService : AnalysisService,
     private airportService : AirportService,
     private analysisService : AnalysisService,
+    private wizardService: AnalysisWizardService,
     private route: ActivatedRoute,
     private router : Router
   ){
     this.results = [];
     this.indicator = STATUS_INDICATOR;
-    this.stages = this.analysisService.stages();
+    this.stages = this.wizardService.stages();
   }
 
   ngOnInit(): void {

@@ -21,6 +21,7 @@ import {BlockTemplateComponent} from "../commons/block-template.component";
 import {AnalysisObjectService} from "./analysis-object.service";
 import {AnalysisExceptionService} from "../exception/analysis-exception.service";
 import {RegulationService} from "../regulation/regulation.service";
+import {AnalysisWizardService} from "./analysis-wizard.service";
 
 @NgModule({
   imports:[
@@ -48,7 +49,8 @@ import {RegulationService} from "../regulation/regulation.service";
     PlacedObjectCatalogService,
     AnalysisObjectService,
     AnalysisExceptionService,
-    RegulationService
+    RegulationService,
+    AnalysisWizardService
   ],
   entryComponents: [
     BlockTemplateComponent
