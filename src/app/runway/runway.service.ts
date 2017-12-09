@@ -7,6 +7,7 @@ import {Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
+import {RunwayStrip} from "./runwayStrip";
 
 @Injectable()
 
@@ -64,6 +65,22 @@ export class RunwayService extends ApiService {
       .patch(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/feature`, {geometry: jsonGeom})
       .toPromise()
       .then(response => response.json() as Polygon)
+      .catch(this.handleError)
+  }
+
+  getStrip(airportId: number, runwayId: number) : Promise<RunwayStrip> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/strip`)
+      .toPromise()
+      .then(response => response.json() as RunwayStrip)
+      .catch(this.handleError)
+  }
+
+  updateStrip(airportId: number, runwayId: number, strip : RunwayStrip) : Promise<RunwayStrip> {
+    return this.http
+      .put(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/strip`, strip)
+      .toPromise()
+      .then(response => response.json() as RunwayStrip)
       .catch(this.handleError)
   }
 
