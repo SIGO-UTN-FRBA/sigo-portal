@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {RunwayStrip} from "./runwayStrip";
-import {RunwayService} from "./runway.service";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
+import {DirectionService} from "./direction.service";
 
 @Component({
   selector: 'app-runway-strip-edit',
@@ -98,10 +98,11 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
   `
 })
 
-export class RunwayDetailStripEditComponent implements OnInit {
+export class DirectionDetailStripEditComponent implements OnInit {
 
   @Input() airportId : number;
   @Input() runwayId : number;
+  @Input() directionId : number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
   indicator;
@@ -111,7 +112,7 @@ export class RunwayDetailStripEditComponent implements OnInit {
   strip:RunwayStrip;
 
   constructor(
-    private runwayService:RunwayService
+    private directionService:DirectionService
   ){
     this.indicator = STATUS_INDICATOR;
   }
@@ -120,8 +121,8 @@ export class RunwayDetailStripEditComponent implements OnInit {
     this.onInitError = null;
     this.status = STATUS_INDICATOR.LOADING;
 
-    this.runwayService
-      .getStrip(this.airportId,this.runwayId)
+    this.directionService
+      .getStrip(this.airportId,this.runwayId, this.directionId)
       .then(data => {
         this.strip = data;
         this.status = STATUS_INDICATOR.ACTIVE;
@@ -136,8 +137,8 @@ export class RunwayDetailStripEditComponent implements OnInit {
 
     this.onSubmitError = null;
 
-    this.runwayService
-      .updateStrip(this.airportId, this.runwayId, this.strip)
+    this.directionService
+      .updateStrip(this.airportId, this.runwayId, this.directionId, this.strip)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError = error);
   };

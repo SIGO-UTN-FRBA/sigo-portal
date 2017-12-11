@@ -33,18 +33,18 @@ import {DirectionDistancesService} from "./direction-distances.service";
 
       <br>
 
-      <app-direction-classification-view *ngIf="!edit_classification"
-                                         [(edit)]="edit_classification"
-                                         [airportId]="airportId"
-                                         [runwayId]="runwayId"
-                                         [directionId]="directionId">
-      </app-direction-classification-view>
-      <app-direction-classification-edit *ngIf="edit_classification"
-                                         [(edit)]="edit_classification"
-                                         [airportId]="airportId"
-                                         [runwayId]="runwayId"
-                                         [directionId]="directionId">
-      </app-direction-classification-edit>
+      <app-runway-strip-view *ngIf="!edit_strip" 
+                             [(edit)]="edit_strip" 
+                             [airportId]="airportId" 
+                             [runwayId]="runwayId"
+                             [directionId]="directionId">
+      </app-runway-strip-view>
+      <app-runway-strip-edit *ngIf="edit_strip" 
+                             [(edit)]="edit_strip" 
+                             [airportId]="airportId" 
+                             [runwayId]="runwayId"
+                             [directionId]="directionId">
+      </app-runway-strip-edit>
 
       <br>
       
@@ -61,6 +61,21 @@ import {DirectionDistancesService} from "./direction-distances.service";
                                    [directionId]="directionId">
       </app-direction-approach-edit>
       
+      <br>
+
+      <app-direction-classification-view *ngIf="!edit_classification"
+                                         [(edit)]="edit_classification"
+                                         [airportId]="airportId"
+                                         [runwayId]="runwayId"
+                                         [directionId]="directionId">
+      </app-direction-classification-view>
+      <app-direction-classification-edit *ngIf="edit_classification"
+                                         [(edit)]="edit_classification"
+                                         [airportId]="airportId"
+                                         [runwayId]="runwayId"
+                                         [directionId]="directionId">
+      </app-direction-classification-edit>
+
       <br>
 
       <app-direction-takeoff-view *ngIf="!edit_takeoff" 
@@ -105,6 +120,7 @@ export class DirectionDetailComponent implements OnInit{
   edit_approach : boolean;
   edit_takeoff : boolean;
   edit_classification: boolean;
+  edit_strip:boolean;
   airportId : number;
   runwayId : number;
   directionId : number;
@@ -117,6 +133,7 @@ export class DirectionDetailComponent implements OnInit{
     this.edit_approach = false;
     this.edit_takeoff = false;
     this.edit_classification = false;
+    this.edit_strip = false;
   }
 
   ngOnInit(): void {

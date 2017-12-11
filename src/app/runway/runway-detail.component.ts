@@ -20,11 +20,6 @@ import {ActivatedRoute} from '@angular/router';
 
       <br>
 
-      <app-runway-strip-view *ngIf="!edit_strip" [(edit)]="edit_strip" [airportId]="airportId" [runwayId]="runwayId"></app-runway-strip-view>
-      <app-runway-strip-edit *ngIf="edit_strip" [(edit)]="edit_strip" [airportId]="airportId" [runwayId]="runwayId"></app-runway-strip-edit>
-
-      <br>
-
       <app-runway-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId"></app-runway-geometry-view>
       <app-runway-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry" [airportId]="airportId" [runwayId]="runwayId"></app-runway-geometry-edit>
 
@@ -42,14 +37,12 @@ export class RunwayDetailComponent implements OnInit{
   airportId: number;
   edit_general: boolean;
   edit_geometry: boolean;
-  edit_strip:boolean;
 
   constructor(
     private route: ActivatedRoute,
   ){
     this.edit_general = false;
     this.edit_geometry = false;
-    this.edit_strip = false;
   }
 
   ngOnInit(): void {

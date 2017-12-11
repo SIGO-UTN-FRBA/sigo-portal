@@ -24,6 +24,8 @@ import {DirectionDetailClassificationEditComponent} from "./direction-detail-cla
 import {DirectionClassificationService} from "./direction-classification.service";
 import {RegulationIcaoService} from "../regulation/regulation-icao.service";
 import {RegulationFaaService} from "../regulation/regulation-faa.service";
+import {DirectionDetailStripViewComponent} from "./direction-detail-strip-view.component";
+import {DirectionDetailStripEditComponent} from "./direction-detail-strip-edit.component";
 
 
 
@@ -48,6 +50,8 @@ import {RegulationFaaService} from "../regulation/regulation-faa.service";
     DirectionDetailDistancesViewComponent,
     DirectionDetailClassificationViewComponent,
     DirectionDetailClassificationEditComponent,
+    DirectionDetailStripViewComponent,
+    DirectionDetailStripEditComponent,
     DirectionNewComponent
   ],
   providers:[
