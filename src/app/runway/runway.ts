@@ -1,3 +1,5 @@
+import {RunwayDirection} from "../direction/runwayDirection";
+
 export class Runway {
   id: number;
   name: string;
@@ -5,4 +7,5 @@ export class Runway {
   length: number;
   surfaceId: number;
   airportId: number;
+  directions: RunwayDirection[] = [];
 }

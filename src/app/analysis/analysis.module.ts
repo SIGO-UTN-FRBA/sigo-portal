@@ -22,6 +22,8 @@ import {AnalysisObjectService} from "./analysis-object.service";
 import {AnalysisExceptionService} from "../exception/analysis-exception.service";
 import {RegulationService} from "../regulation/regulation.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";
+import {RunwayService} from "../runway/runway.service";
+import {DirectionService} from "../direction/direction.service";
 
 @NgModule({
   imports:[
@@ -50,7 +52,9 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
     AnalysisObjectService,
     AnalysisExceptionService,
     RegulationService,
-    AnalysisWizardService
+    AnalysisWizardService,
+    RunwayService,
+    DirectionService
   ],
   entryComponents: [
     BlockTemplateComponent
