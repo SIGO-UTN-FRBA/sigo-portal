@@ -8,7 +8,6 @@ import {AppError} from "../main/ierror";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {AnalysisExceptionService, ExceptionType} from "../exception/analysis-exception.service";
 import {AnalysisException} from "../exception/analysisException";
-import {EnumItem} from "../commons/enumItem";
 import {RegulationService, RegulationType} from "../regulation/regulation.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";
 
@@ -32,7 +31,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
       <div class="panel panel-default">
         <div class="panel-heading">
           <div class="row">
-            <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@analysis.wizard.object.section.exceptions.title">
+            <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@analysis.wizard.exception.section.exceptions.title">
               Exceptions
             </h3>
             <div class="col-md-6 btn-group">
@@ -147,7 +146,6 @@ export class AnalysisWizardExceptionComponent implements OnInit {
       .then(() => this.exceptionService.list(this.analysisId))
       .then(data => {
         this.exceptions=data;
-        debugger;
         (this.exceptions.length > 0) ? this.initStatus = STATUS_INDICATOR.ACTIVE : this.initStatus = STATUS_INDICATOR.EMPTY;
       })
       .catch(error =>{
