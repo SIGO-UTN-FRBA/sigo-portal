@@ -141,11 +141,11 @@ export class ExceptionDetailRuleIcaoView implements OnInit {
           this.exception = data as AnalysisExceptionRule;
           this.overrideValue =  this.exception.value;
         })
-        .then(()=> this.regulationService.getRule(this.exception.olsRuleId))
+        .then(()=> this.regulationService.getRule(this.exception.ruleId))
         .then(data => {
           this.rule = data;
           this.defaultValue = this.rule.value;
-          this.property = this.rule.property;
+          this.property = this.rule.propertyName;
         })
         .then(()=> this.regulationService.listICAOAnnex14Surfaces())
         .then(data => this.surface = data[this.rule.surface].value)

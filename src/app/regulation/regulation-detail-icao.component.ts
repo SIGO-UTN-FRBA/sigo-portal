@@ -142,7 +142,7 @@ export class FilterRulesBySurface implements PipeTransform {
                 <h4>{{surface.value}}</h4>
                 <div  *ngFor="let rule of (rules | filterBySurface: surface.key : filter.classification : filter.category : filter.code )"
                       class="form-group">
-                  <label class="col-sm-2 control-label">{{rule.property}}</label>
+                  <label class="col-sm-2 control-label">{{rule.propertyName}}</label>
                   <p class="col-sm-10 form-control-static">{{rule.value}}</p>
                 </div>
               </li>

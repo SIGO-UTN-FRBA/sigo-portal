@@ -1,10 +1,11 @@
 export class RuleICAOAnnex14 {
   id:number;
-  ruleId:number;
+  regulationId:number;
   surface:number;
   runwayClassification:number;
   runwayCategory:number;
   runwayCodeNumber:number;
-  property:string;
+  propertyName:string;
+  propertyCode:string;
   value:number;
 }

@@ -125,7 +125,7 @@ import {AnalysisExceptionRule} from "./analysisExceptionRule";
                 (ngModelChange)="updateRule()"
                 required>
                 <option *ngFor="let rule of rules" [value]="rule.id">
-                  {{rule.property}}
+                  {{rule.propertyName}}
                 </option>
               </select>
             </div>
@@ -297,9 +297,8 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
     let exception = new AnalysisExceptionRule(
       null,
       this.analysisId,
-      `Override "${rule.property}" property in "${surface.value}" surface (old: ${this.defaultValue}, new: ${this.overrideValue})`,
+      `Override "${rule.propertyName}" property in "${surface.value}" surface (old: ${this.defaultValue}, new: ${this.overrideValue})`,
       rule.id,
-      rule.property,
       this.overrideValue,
       0
     );
