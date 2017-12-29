@@ -24,6 +24,7 @@ import {RegulationService} from "../regulation/regulation.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";
 import {RunwayService} from "../runway/runway.service";
 import {DirectionService} from "../direction/direction.service";
+import {AnalysisSurfaceService} from "./analysis-surface.service";
 
 @NgModule({
   imports:[
@@ -54,7 +55,8 @@ import {DirectionService} from "../direction/direction.service";
     RegulationService,
     AnalysisWizardService,
     RunwayService,
-    DirectionService
+    DirectionService,
+    AnalysisSurfaceService
   ],
   entryComponents: [
     BlockTemplateComponent

@@ -14,6 +14,10 @@ import {AnalysisService} from "./analysis.service";
 import {Runway} from "../runway/runway";
 import {Analysis} from "./analysis";
 import {RunwayDirection} from "../direction/runwayDirection";
+import {AnalysisSurfaceService} from "./analysis-surface.service";
+import {Airport} from "../airport/airport";
+import {AirportService} from "../airport/airport.service";
+import Feature = ol.Feature;
 
 @Component({
   template:`
@@ -80,22 +84,21 @@ import {RunwayDirection} from "../direction/runwayDirection";
                   [ngClass]="{'active': (selectedDirection != null && direction.id == selectedDirection.id)}"
                   role="presentation"
               >
-                <a (click)="showDirection(direction)"
+                <a (click)="loadDirectionFeatures(direction)"
                    style="cursor: pointer"
                 >
                   {{direction.name}}
                 </a>
               </li>
             </ul>
-            <!--
-            <app-map #mapObjects
+             <app-map #mapObjects
                      (map)="map"
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
-                     [layers]="['runway']"
+                     [layers]="['airport','runway', 'icaoannex14surfaces']"
             >
-            </app-map> -->
+            </app-map>
           </ng-container>
         </div>
       </div>
@@ -134,13 +137,12 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   onInitSpatialError:ApiError;
   onSubmitError:AppError;
   analysisId:number;
-/*
   private olmap: OlComponent;
   @ViewChild('mapObjects') set content(content: OlComponent) {
     this.olmap = content;
   }
   map:Map;
-*/
+  airportFeature:Feature;
   runways:Runway[];
   analysis:Analysis;
   directions: RunwayDirection[];
@@ -151,6 +153,8 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     private analysisService: AnalysisService,
     private runwayService: RunwayService,
     private directionService: DirectionService,
+    private surfacesService: AnalysisSurfaceService,
+    private airportService: AirportService,
     private route: ActivatedRoute,
     private router: Router
   ){
@@ -185,6 +189,8 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
           )
         )
       })
+      .then(()=> this.airportService.getFeature(this.analysis.airportId))
+      .then(data => this.airportFeature = data)
       .then(()=>
         this.directions =
           this.runways.map( r => r.directions)
@@ -227,7 +233,16 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
       .catch((error) => this.onSubmitError = error);
   }
 
-  showDirection(direction: RunwayDirection) {
+  loadDirectionFeatures(direction: RunwayDirection) {
     this.selectedDirection = direction;
+
+    this.olmap.clearSurfaceLayers();
+
+    this.olmap.setCenter(this.airportFeature.getGeometry().transform('EPSG:4326', 'EPSG:3857')['getCoordinates']());
+    this.olmap.setZoom(11);
+
+    this.surfacesService.get(this.analysisId, direction.id)
+      .then(data => data.forEach(f => this.olmap.addSurface(f)))
+      //TODO .catch()
   }
 }

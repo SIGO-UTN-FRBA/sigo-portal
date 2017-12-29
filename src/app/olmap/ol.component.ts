@@ -296,6 +296,49 @@ import Circle = ol.style.Circle;
     return layer;
   }
 
+  clearSurfaceLayers() {
+    this.getICAOAnnex14SurfaceInnerHorizontalLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceStripLayer().getSource().clear();
+  }
+
+  getICAOAnnex14SurfaceStripLayer() : VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceStrip'))
+      return this.olLayers['surfaceStrip'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: '#494e53', width:1})
+      })
+    });
+
+    layer.setProperties({"title":"Strip"});
+
+    this.olLayers['surfaceStrip'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceInnerHorizontalLayer() : VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceInnerHorizontal'))
+      return this.olLayers['surfaceInnerHorizontal'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: '#8fb5da', width:1})
+      })
+    });
+
+    layer.setProperties({"title":"Inner Horizontal"});
+
+    this.olLayers['surfaceInnerHorizontal'] = layer;
+
+    return layer;
+  }
+
   getStamenTonerBaseLayer(){
 
     let OSM = new Tile({
@@ -464,6 +507,21 @@ import Circle = ol.style.Circle;
     return this;
   }
 
+  public addSurface(feature: Feature) : OlComponent {
+
+    this[`add${feature.get('class')}`](feature);
+
+    return this;
+  }
+
+  private addICAOAnnex14SurfaceStrip(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceStripLayer());
+  }
+
+  private addICAOAnnex14SurfaceInnerHorizontal(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceInnerHorizontalLayer());
+  }
+
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
 
     feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
@@ -471,10 +529,10 @@ import Circle = ol.style.Circle;
     layer.getSource().addFeature(feature);
 
     if(options != null && options.center)
-      this.map.getView().setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
+      this.setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
 
     if(options != null && options.zoom)
-      this.map.getView().setZoom(options.zoom);
+      this.setZoom(options.zoom);
   }
 
   toggleLayer = (layer, evt) => {
@@ -487,6 +545,22 @@ import Circle = ol.style.Circle;
     }
 
   };
+
+  setCenter(coordinate:ol.Coordinate):OlComponent{
+
+    //'EPSG:3857'
+
+    this.map.getView().setCenter(coordinate);
+
+    return this;
+  }
+
+  setZoom(level:number):OlComponent{
+
+    this.map.getView().setZoom(level);
+
+    return this;
+  }
 
   ngOnInit() {
     this.createMap();
@@ -543,7 +617,20 @@ import Circle = ol.style.Circle;
   }
 
   private setupSurfaceLayerGroup(layerGroups: Array<ol.layer.Group>) {
-    //TODO incluir superficies
+
+    if(this.layers.includes('icaoannex14surfaces')){
+
+      let layers = new ol.Collection<ol.layer.Base>();
+
+      layers.push(this.getICAOAnnex14SurfaceStripLayer());
+      layers.push(this.getICAOAnnex14SurfaceInnerHorizontalLayer());
+
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set("title","Object");
+
+      layerGroups.push(group);
+    }
   }
 
   private setupObjectLayerGroup(layerGroups: Array<ol.layer.Group>) {
