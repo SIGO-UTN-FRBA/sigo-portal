@@ -1,4 +1,4 @@
-export class AnalysisException {
+export class AnalysisException {AnalysisException
   id:number;
   typeId:number;
   caseId:number;

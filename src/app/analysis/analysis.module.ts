@@ -1,4 +1,4 @@
-import {NgModule} from "@angular/core";
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from "@angular/core";
 import {AnalysisService} from "./analysis.service";
 import {AnalysisComponent} from "./analysis.component";
 import {CommonModule} from "@angular/common";
@@ -25,6 +25,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
 import {RunwayService} from "../runway/runway.service";
 import {DirectionService} from "../direction/direction.service";
 import {AnalysisSurfaceService} from "./analysis-surface.service";
+import {AnalysisObstacleService} from "./analysis-obstacle.service";
 
 @NgModule({
   imports:[
@@ -56,11 +57,13 @@ import {AnalysisSurfaceService} from "./analysis-surface.service";
     AnalysisWizardService,
     RunwayService,
     DirectionService,
-    AnalysisSurfaceService
+    AnalysisSurfaceService,
+    AnalysisObstacleService
   ],
   entryComponents: [
     BlockTemplateComponent
-  ]
+  ],
+  schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })
 
 export class AnalysisModule {
