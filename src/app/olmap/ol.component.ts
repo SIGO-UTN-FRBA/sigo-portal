@@ -299,6 +299,7 @@ import Circle = ol.style.Circle;
   clearSurfaceLayers() {
     this.getICAOAnnex14SurfaceInnerHorizontalLayer().getSource().clear();
     this.getICAOAnnex14SurfaceStripLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceConicalLayer().getSource().clear();
   }
 
   getICAOAnnex14SurfaceStripLayer() : VectorLayer {
@@ -309,7 +310,8 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: '#494e53', width:1})
+        stroke: new ol.style.Stroke({color: 'rgb(94, 94, 94)', width:2}),
+        //fill: new ol.style.Fill({color: 'rgb(94, 94, 94, 0.6)'})
       })
     });
 
@@ -328,13 +330,34 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: '#8fb5da', width:1})
+        stroke: new ol.style.Stroke({color: 'rgb(25, 150, 222)', width:2}),
+        //fill: new ol.style.Fill({color: 'rgb(25, 150, 222, 0.6)'})
       })
     });
 
     layer.setProperties({"title":"Inner Horizontal"});
 
     this.olLayers['surfaceInnerHorizontal'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceConicalLayer() : VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceConical'))
+      return this.olLayers['surfaceConical'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(25, 80, 178)', width:2}),
+        //fill: new ol.style.Fill({color: 'rgb(25, 96, 178, 0.6)'})
+      })
+    });
+
+    layer.setProperties({"title":"Conical"});
+
+    this.olLayers['surfaceConical'] = layer;
 
     return layer;
   }
@@ -522,6 +545,10 @@ import Circle = ol.style.Circle;
     this.addFeature(feature, this.getICAOAnnex14SurfaceInnerHorizontalLayer());
   }
 
+  private addICAOAnnex14SurfaceConical(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceConicalLayer());
+  }
+
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
 
     feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
@@ -624,10 +651,11 @@ import Circle = ol.style.Circle;
 
       layers.push(this.getICAOAnnex14SurfaceStripLayer());
       layers.push(this.getICAOAnnex14SurfaceInnerHorizontalLayer());
+      layers.push(this.getICAOAnnex14SurfaceConicalLayer());
 
       let group = new ol.layer.Group();
       group.setLayers(layers);
-      group.set("title","Object");
+      group.set("title","OLS");
 
       layerGroups.push(group);
     }
