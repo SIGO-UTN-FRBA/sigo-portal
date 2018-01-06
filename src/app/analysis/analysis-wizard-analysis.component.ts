@@ -296,7 +296,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     this.surfacesService.get(this.analysisId, direction.id)
       .then(data => data.forEach(f => this.olmap.addSurface(f)))
-      //TODO .catch()
+      .catch(error => alert(JSON.stringify(error))); //TODO catch error
   }
 
   toggleExclusion(obstacle: AnalysisObstacle) {

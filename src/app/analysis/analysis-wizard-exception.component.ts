@@ -193,7 +193,6 @@ export class AnalysisWizardExceptionComponent implements OnInit {
       .then(() => this.exceptionService.list(this.analysisId))
       .then(data => {
         this.exceptions=data;
-        debugger;
         (this.exceptions.length > 0) ? this.initStatus = STATUS_INDICATOR.ACTIVE : this.initStatus = STATUS_INDICATOR.EMPTY;
       })
       .catch((error) => this.onSubmitError = error)
