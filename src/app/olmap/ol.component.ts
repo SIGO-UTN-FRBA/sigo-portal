@@ -382,6 +382,26 @@ import Circle = ol.style.Circle;
     return layer;
   }
 
+  getICAOAnnex14SurfaceApproachSecondSectionLayer():VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceApproachSecondSection'))
+    return this.olLayers['surfaceApproachSecondSection'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(237, 196, 196)', width:2}),
+        //fill: new ol.style.Fill({color: 'rgb(25, 96, 178, 0.6)'})
+      })
+    });
+
+    layer.setProperties({"title":"Approach Second Section"});
+
+    this.olLayers['surfaceApproachSecondSection'] = layer;
+
+    return layer;
+  }
+
   getStamenTonerBaseLayer(){
 
     let OSM = new Tile({
@@ -573,6 +593,10 @@ import Circle = ol.style.Circle;
     this.addFeature(feature, this.getICAOAnnex14SurfaceApproachFirstSectionLayer());
   }
 
+  private addICAOAnnex14SurfaceApproachSecondSection(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceApproachSecondSectionLayer());
+  }
+
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
 
     feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
@@ -677,6 +701,7 @@ import Circle = ol.style.Circle;
       layers.push(this.getICAOAnnex14SurfaceInnerHorizontalLayer());
       layers.push(this.getICAOAnnex14SurfaceConicalLayer());
       layers.push(this.getICAOAnnex14SurfaceApproachFirstSectionLayer());
+      layers.push(this.getICAOAnnex14SurfaceApproachSecondSectionLayer());
 
       let group = new ol.layer.Group();
       group.setLayers(layers);
