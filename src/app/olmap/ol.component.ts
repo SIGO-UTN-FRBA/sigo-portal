@@ -310,8 +310,8 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'rgb(94, 94, 94)', width:2}),
-        //fill: new ol.style.Fill({color: 'rgb(94, 94, 94, 0.6)'})
+        stroke: new ol.style.Stroke({color: 'rgb(214, 214, 194)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(214, 214, 194, 0.5)' })
       })
     });
 
@@ -330,8 +330,8 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'rgb(25, 150, 222)', width:2}),
-        //fill: new ol.style.Fill({color: 'rgb(25, 150, 222, 0.6)'})
+        stroke: new ol.style.Stroke({color: 'rgb(61, 153, 255)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(61, 153, 255, 0.5)' })
       })
     });
 
@@ -350,8 +350,8 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'rgb(25, 80, 178)', width:2}),
-        //fill: new ol.style.Fill({color: 'rgb(25, 96, 178, 0.6)'})
+        stroke: new ol.style.Stroke({color: 'rgb(0, 77, 230)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(0, 77, 230, 0.5)' })
       })
     });
 
@@ -370,8 +370,8 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'rgb(205, 92, 92)', width:2}),
-        //fill: new ol.style.Fill({color: 'rgb(25, 96, 178, 0.6)'})
+        stroke: new ol.style.Stroke({color: 'rgb(255, 77, 77)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(255, 77, 77, 0.5)' })
       })
     });
 
@@ -390,8 +390,8 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'rgb(237, 196, 196)', width:2}),
-        //fill: new ol.style.Fill({color: 'rgb(25, 96, 178, 0.6)'})
+        stroke: new ol.style.Stroke({color: 'rgb(255, 102, 102)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(255, 102, 102, 0.5)' })
       })
     });
 
@@ -697,8 +697,8 @@ import Circle = ol.style.Circle;
 
       let layers = new ol.Collection<ol.layer.Base>();
 
-      layers.push(this.getICAOAnnex14SurfaceStripLayer());
       layers.push(this.getICAOAnnex14SurfaceInnerHorizontalLayer());
+      layers.push(this.getICAOAnnex14SurfaceStripLayer());
       layers.push(this.getICAOAnnex14SurfaceConicalLayer());
       layers.push(this.getICAOAnnex14SurfaceApproachFirstSectionLayer());
       layers.push(this.getICAOAnnex14SurfaceApproachSecondSectionLayer());
