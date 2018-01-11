@@ -3,7 +3,6 @@ import {ApiService} from "../main/api.service";
 import {Http} from "@angular/http";
 import {AppSettings} from "../main/app-settings";
 import {AnalysisException} from "./analysisException";
-import {AnalysisExceptionRule} from "./analysisExceptionRule";
 
 @Injectable()
 export class AnalysisExceptionService extends ApiService {

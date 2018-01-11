@@ -8,6 +8,13 @@ import {RuleICAOAnnex14} from "../regulation/ruleICAO";
 import {EnumItem} from "../commons/enumItem";
 import {ListItem} from "../commons/listItem";
 import {AnalysisExceptionRule} from "./analysisExceptionRule";
+import {RunwayDirection} from "../direction/runwayDirection";
+import {AnalysisService} from "../analysis/analysis.service";
+import {RunwayService} from "../runway/runway.service";
+import {DirectionService} from "../direction/direction.service";
+import {Runway} from "../runway/runway";
+import {DirectionClassificationService} from "../direction/direction-classification.service";
+import {RunwayClassificationICAOAnnex14} from "../direction/runwayClassification";
 
 @Component({
   template:`
@@ -33,59 +40,19 @@ import {AnalysisExceptionRule} from "./analysisExceptionRule";
           <div class="row">
             <div class="col-md-6 col-sm-12 form-group">
               <label
-                for="inputClassification"
+                for="inputDirection"
                 class="control-label"
-                i18n="@@exception.rule.detail.section.general.inputClassification">
-                Classification
+                i18n="@@exception.rule.detail.section.general.inputDirection">
+                Direction
               </label>
               <select
-                name="inputClassification"
+                name="inputDirection"
                 class="form-control"
-                [(ngModel)]="filter.classification"
+                [(ngModel)]="filter.direction"
                 (ngModelChange)="updateSurfaces()"
                 required>
-                <option *ngFor="let item of classifications" [value]="item.id">
-                  {{item.description}}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 col-sm-12 form-group">
-              <label
-                for="inputCategory"
-                class="control-label"
-                i18n="@@exception.rule.detail.section.general.inputCategory">
-                Category
-              </label>
-              <select
-                name="inputCategory"
-                class="form-control"
-                [(ngModel)]="filter.category"
-                (ngModelChange)="updateSurfaces()"
-                required>
-                <option *ngFor="let item of categories" [value]="item.id">
-                  {{item.description}}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 col-sm-12 form-group">
-              <label
-                for="inputNumberCode"
-                class="control-label"
-                i18n="@@exception.rule.detail.section.general.inputNumberCode">
-                Number Code
-              </label>
-              <select
-                name="inputNumberCode"
-                class="form-control"
-                [(ngModel)]="filter.code"
-                (ngModelChange)="updateSurfaces()"
-                required>
-                <option *ngFor="let item of numberCodes" [value]="item.id">
-                  {{item.description}}
+                <option *ngFor="let direction of directions" [value]="direction.id">
+                  {{direction.name}}
                 </option>
               </select>
             </div>
@@ -125,7 +92,7 @@ import {AnalysisExceptionRule} from "./analysisExceptionRule";
                 (ngModelChange)="updateRule()"
                 required>
                 <option *ngFor="let rule of rules" [value]="rule.id">
-                  {{rule.property}}
+                  {{rule.propertyName}}
                 </option>
               </select>
             </div>
@@ -194,21 +161,26 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
   indicator;
   onInitError:AppError;
   onSubmitError:AppError;
-  filter:{classification:number, category:number, code:number, surface:number, rule:number};
-  classifications:EnumItem[];
-  categories:EnumItem[];
-  numberCodes:EnumItem[];
+  filter:{direction:number, surface:number, rule:number};
   surfaces:ListItem[];
   rules:RuleICAOAnnex14[];
   properties:string[];
   defaultValue: any;
   overrideValue: any;
+  airportId:number;
+  runways:Runway[];
+  directions:RunwayDirection[];
+  private classification: RunwayClassificationICAOAnnex14;
 
   constructor(
-    private exceptionService:AnalysisExceptionService,
-    private regulationService:RegulationIcaoService,
-    private route:ActivatedRoute,
-    private router:Router
+    private analysisService: AnalysisService,
+    private runwayService: RunwayService,
+    private directionService: DirectionService,
+    private classificationService: DirectionClassificationService,
+    private exceptionService: AnalysisExceptionService,
+    private regulationService: RegulationIcaoService,
+    private route: ActivatedRoute,
+    private router: Router
   ){
     this.indicator=STATUS_INDICATOR;
   }
@@ -221,25 +193,34 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
     this.onInitError=null;
     this.defaultValue=null;
 
+    this.surfaces = [];
+    this.properties = [];
+
     this.analysisId = this.route.parent.parent.snapshot.params['analysisId'];
 
-    let p1 = this.regulationService
-      .listICAOAnnex14RunwayClassifications()
-      .then(data => this.classifications=data)
-      .catch(error => Promise.reject(error));
-
-    let p2 = this.regulationService
-      .listICAOAnnex14RunwayCategories()
-      .then(data => this.categories=data)
-      .catch(error => Promise.reject(error));
-
-    let p3 = this.regulationService
-      .listICAOAnnex14RunwayCodeNumbers()
-      .then(data => this.numberCodes=data)
-      .catch(error => Promise.reject(error));
-
-    Promise.all([p1,p2,p3])
-      .then(()=>this.onInitStatus=STATUS_INDICATOR.ACTIVE)
+    this.analysisService.get(this.analysisId)
+      .then(data => {
+        this.airportId = data.airportId;
+        return this.runwayService.list(this.airportId);
+      })
+      .then(data => {
+        this.runways = data;
+        return Promise.all(
+          this.runways.map( r =>
+            this.directionService.list(r.airportId,r.id)
+              .then( data => {
+                r.directions = data;
+                r.directions.forEach((d => d.runway = r));
+              })
+          )
+        )
+      })
+      .then(()=>
+        this.directions =
+          this.runways.map( r => r.directions)
+            .reduce((a,b)=> a.concat(b), [])
+      )
+      .then(()=> this.onInitStatus=STATUS_INDICATOR.ACTIVE)
       .catch(error => {
         this.onInitError=error;
         this.onInitStatus=STATUS_INDICATOR.ERROR;
@@ -247,7 +228,7 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
   }
 
   private initializeFilters() {
-    this.filter={classification:null, category:null, code:null, surface:null, rule: null};
+    this.filter={direction: null, surface: null, rule: null};
   }
 
   updateSurfaces() {
@@ -255,10 +236,15 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
     this.filter.surface=null;
     this.updateProperties();
 
-    if(this.filter.classification != null && this.filter.code != null && this.filter.category != null){
-      this.regulationService
-        .searchSurfaces(this.filter.classification, this.filter.category, this.filter.code)
-        .then(data => this.surfaces=data); //TODO handle errors
+    if(this.filter.direction !== null){
+      let direction = this.selectedDirection();
+
+      this.classificationService.get(this.airportId, direction.runwayId, direction.id)
+        .then( data => {
+          this.classification = data as RunwayClassificationICAOAnnex14;
+          return this.regulationService.searchSurfaces(this.classification.runwayClassification, this.classification.runwayCategory, this.classification.runwayTypeNumber);
+        })
+        .then(data => this.surfaces = data); //TODO handle errors
     }
   }
 
@@ -269,7 +255,7 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
 
     if(this.filter.surface != null){
       this.regulationService
-        .getRules(this.filter.surface, this.filter.classification, this.filter.category, this.filter.code)
+        .getRules(this.filter.surface, this.classification.runwayClassification, this.classification.runwayCategory, this.classification.runwayTypeNumber)
         .then(data => this.rules = data) //TODO handle errors
     }
   }
@@ -284,7 +270,7 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
   }
 
   onCancel(){
-    this.router.navigate([`/analysis/${this.analysisId}/stages/exception`])
+    return this.router.navigate([`/analysis/${this.analysisId}/stages/exception`])
   }
 
   onSubmit(){
@@ -293,15 +279,16 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
 
     let rule = this.selectedRule();
     let surface = this.selectedSurface();
+    let direction = this.selectedDirection();
 
     let exception = new AnalysisExceptionRule(
       null,
       this.analysisId,
-      `Override "${rule.property}" property in "${surface.value}" surface (old: ${this.defaultValue}, new: ${this.overrideValue})`,
+      `Override "${rule.propertyName}" property in "${surface.value}" surface for runway ${direction.name} (old: ${this.defaultValue}, new: ${this.overrideValue})`,
       rule.id,
-      rule.property,
       this.overrideValue,
-      0
+      0,
+      direction.id
     );
 
     this.exceptionService
@@ -316,5 +303,9 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
 
   private selectedSurface() : ListItem{
     return this.surfaces.filter(s => s.key == this.filter.surface)[0];
+  }
+
+  private selectedDirection() : RunwayDirection {
+    return this.directions.filter(d => d.id == this.filter.direction)[0];
   }
 }

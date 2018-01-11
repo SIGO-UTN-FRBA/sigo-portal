@@ -296,6 +296,156 @@ import Circle = ol.style.Circle;
     return layer;
   }
 
+  clearSurfaceLayers() {
+    this.getICAOAnnex14SurfaceInnerHorizontalLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceStripLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceConicalLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceTransitionalLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceApproachFirstSectionLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceApproachSecondSectionLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceTakeoffClimbLayer().getSource().clear();
+  }
+
+  getICAOAnnex14SurfaceStripLayer() : VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceStrip'))
+      return this.olLayers['surfaceStrip'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(214, 214, 194)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(214, 214, 194, 0.5)' })
+      })
+    });
+
+    layer.setProperties({"title":"Strip"});
+
+    this.olLayers['surfaceStrip'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceInnerHorizontalLayer() : VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceInnerHorizontal'))
+      return this.olLayers['surfaceInnerHorizontal'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(61, 153, 255)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(61, 153, 255, 0.5)' })
+      })
+    });
+
+    layer.setProperties({"title":"Inner Horizontal"});
+
+    this.olLayers['surfaceInnerHorizontal'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceConicalLayer() : VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceConical'))
+      return this.olLayers['surfaceConical'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(0, 77, 230)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(0, 77, 230, 0.5)' })
+      })
+    });
+
+    layer.setProperties({"title":"Conical"});
+
+    this.olLayers['surfaceConical'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceApproachFirstSectionLayer():VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceApproachFirstSection'))
+      return this.olLayers['surfaceApproachFirstSection'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(255, 77, 77)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(255, 77, 77, 0.5)' })
+      })
+    });
+
+    layer.setProperties({"title":"Approach First Section"});
+
+    this.olLayers['surfaceApproachFirstSection'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceApproachSecondSectionLayer():VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceApproachSecondSection'))
+    return this.olLayers['surfaceApproachSecondSection'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(255, 102, 102)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(255, 102, 102, 0.5)' })
+      })
+    });
+
+    layer.setProperties({"title":"Approach Second Section"});
+
+    this.olLayers['surfaceApproachSecondSection'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceTransitionalLayer():VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceTransitional'))
+      return this.olLayers['surfaceTransitional'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(204, 0, 204)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(204, 0, 204, 0.5)' })
+      })
+    });
+
+    layer.setProperties({"title":"Transitional"});
+
+    this.olLayers['surfaceTransitional'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceTakeoffClimbLayer():VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceTakeoffClimb'))
+      return this.olLayers['surfaceTakeoffClimb'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(255, 204, 0)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(255, 204, 0, 0.5)' })
+      })
+    });
+
+    layer.setProperties({"title":"Takeoff Climb"});
+
+    this.olLayers['surfaceTakeoffClimb'] = layer;
+
+    return layer;
+  }
+
   getStamenTonerBaseLayer(){
 
     let OSM = new Tile({
@@ -464,6 +614,41 @@ import Circle = ol.style.Circle;
     return this;
   }
 
+  public addSurface(feature: Feature) : OlComponent {
+
+    this[`add${feature.get('class')}`](feature);
+
+    return this;
+  }
+
+  private addICAOAnnex14SurfaceStrip(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceStripLayer());
+  }
+
+  private addICAOAnnex14SurfaceInnerHorizontal(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceInnerHorizontalLayer());
+  }
+
+  private addICAOAnnex14SurfaceConical(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceConicalLayer());
+  }
+
+  private addICAOAnnex14SurfaceApproachFirstSection(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceApproachFirstSectionLayer());
+  }
+
+  private addICAOAnnex14SurfaceApproachSecondSection(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceApproachSecondSectionLayer());
+  }
+
+  private addICAOAnnex14SurfaceTransitional(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceTransitionalLayer());
+  }
+
+  private addICAOAnnex14SurfaceTakeoffClimb(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceTakeoffClimbLayer());
+  }
+
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
 
     feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
@@ -471,10 +656,10 @@ import Circle = ol.style.Circle;
     layer.getSource().addFeature(feature);
 
     if(options != null && options.center)
-      this.map.getView().setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
+      this.setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
 
     if(options != null && options.zoom)
-      this.map.getView().setZoom(options.zoom);
+      this.setZoom(options.zoom);
   }
 
   toggleLayer = (layer, evt) => {
@@ -487,6 +672,22 @@ import Circle = ol.style.Circle;
     }
 
   };
+
+  setCenter(coordinate:ol.Coordinate):OlComponent{
+
+    //'EPSG:3857'
+
+    this.map.getView().setCenter(coordinate);
+
+    return this;
+  }
+
+  setZoom(level:number):OlComponent{
+
+    this.map.getView().setZoom(level);
+
+    return this;
+  }
 
   ngOnInit() {
     this.createMap();
@@ -543,7 +744,25 @@ import Circle = ol.style.Circle;
   }
 
   private setupSurfaceLayerGroup(layerGroups: Array<ol.layer.Group>) {
-    //TODO incluir superficies
+
+    if(this.layers.includes('icaoannex14surfaces')){
+
+      let layers = new ol.Collection<ol.layer.Base>();
+
+      layers.push(this.getICAOAnnex14SurfaceInnerHorizontalLayer());
+      layers.push(this.getICAOAnnex14SurfaceStripLayer());
+      layers.push(this.getICAOAnnex14SurfaceConicalLayer());
+      layers.push(this.getICAOAnnex14SurfaceApproachFirstSectionLayer());
+      layers.push(this.getICAOAnnex14SurfaceApproachSecondSectionLayer());
+      layers.push(this.getICAOAnnex14SurfaceTransitionalLayer());
+      layers.push(this.getICAOAnnex14SurfaceTakeoffClimbLayer());
+
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set("title","OLS");
+
+      layerGroups.push(group);
+    }
   }
 
   private setupObjectLayerGroup(layerGroups: Array<ol.layer.Group>) {

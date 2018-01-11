@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
 import {Http} from "@angular/http";
-import {AnalysisObject} from "./analysisObject";
 import {AppSettings} from "../main/app-settings";
 import {AnalysisCase} from "./analysisCase";
 

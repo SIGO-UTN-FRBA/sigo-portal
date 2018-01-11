@@ -7,6 +7,7 @@ import {Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
+import {RunwayStrip} from "../direction/runwayStrip";
 
 @Injectable()
 

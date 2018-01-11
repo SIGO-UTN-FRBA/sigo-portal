@@ -5,6 +5,8 @@ import {AnalysisExceptionService} from "./analysis-exception.service";
 import {RuleICAOAnnex14} from "../regulation/ruleICAO";
 import {AnalysisExceptionRule} from "./analysisExceptionRule";
 import {RegulationIcaoService} from "../regulation/regulation-icao.service";
+import {RunwayDirection} from "../direction/runwayDirection";
+import {DirectionService} from "../direction/direction.service";
 
 @Component({
   selector: 'app-exception-rule-general-view',
@@ -48,26 +50,10 @@ import {RegulationIcaoService} from "../regulation/regulation-icao.service";
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
-              <label class="control-label" i18n="@@exception.rule.detail.section.general.inputClassification">
-                Classification
+              <label class="control-label" i18n="@@exception.rule.detail.section.general.inputDirection">
+                Direction
               </label>
-              <p class="form-control-static">{{classification}}</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 col-sm-12 form-group">
-              <label class="control-label" i18n="@@exception.rule.detail.section.general.inputCategory">
-                Category
-              </label>
-              <p class="form-control-static">{{category}}</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 col-sm-12 form-group">
-              <label class="control-label" i18n="@@exception.rule.detail.section.general.inputNumberCode">
-                Number Code
-              </label>
-              <p class="form-control-static">{{code}}</p>
+              <p class="form-control-static">{{direction.name}}</p>
             </div>
           </div>
           <div class="row">
@@ -115,17 +101,16 @@ export class ExceptionDetailRuleIcaoView implements OnInit {
   @Input() analysisId:number;
   exception:AnalysisExceptionRule;
   rule:RuleICAOAnnex14;
-  classification: string;
-  category: string;
-  code: string;
   defaultValue: number;
   overrideValue: number;
   property: string;
   surface: string;
+  direction: RunwayDirection;
 
   constructor(
     private exceptionService:AnalysisExceptionService,
-    private regulationService:RegulationIcaoService
+    private regulationService:RegulationIcaoService,
+    private directionService: DirectionService
   ){
     this.indicator=STATUS_INDICATOR;
   }
@@ -141,20 +126,16 @@ export class ExceptionDetailRuleIcaoView implements OnInit {
           this.exception = data as AnalysisExceptionRule;
           this.overrideValue =  this.exception.value;
         })
-        .then(()=> this.regulationService.getRule(this.exception.olsRuleId))
+        .then( ()=> this.directionService.get(1,1,this.exception.directionId))
+        .then(data => this.direction = data)
+        .then(()=> this.regulationService.getRule(this.exception.ruleId))
         .then(data => {
           this.rule = data;
           this.defaultValue = this.rule.value;
-          this.property = this.rule.property;
+          this.property = this.rule.propertyName;
         })
         .then(()=> this.regulationService.listICAOAnnex14Surfaces())
         .then(data => this.surface = data[this.rule.surface].value)
-        .then(()=> this.regulationService.listICAOAnnex14RunwayClassifications())
-        .then(data => this.classification = data[this.rule.runwayClassification].description)
-        .then(() => this.regulationService.listICAOAnnex14RunwayCategories())
-        .then(data => this.category = data[this.rule.runwayCategory].description)
-        .then(() => this.regulationService.listICAOAnnex14RunwayCodeNumbers())
-        .then(data => this.code = data[this.rule.runwayCodeNumber].description)
         .then(()=> this.onInitStatus=STATUS_INDICATOR.ACTIVE)
         .catch(error => {
           this.onInitError = error;

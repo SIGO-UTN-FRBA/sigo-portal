@@ -11,6 +11,7 @@ import Polygon = ol.geom.Polygon;
 import "rxjs/add/operator/toPromise";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
+import {RunwayStrip} from "./runwayStrip";
 
 @Injectable()
 
@@ -138,6 +139,22 @@ export class DirectionService extends ApiService {
       .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/sections/takeoff/clearway/feature`)
       .toPromise()
       .then(response => new GeoJSON().readFeature(response.json()))
+      .catch(this.handleError)
+  }
+
+  getStrip(airportId: number, runwayId: number, directionId:number) : Promise<RunwayStrip> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/strip`)
+      .toPromise()
+      .then(response => response.json() as RunwayStrip)
+      .catch(this.handleError)
+  }
+
+  updateStrip(airportId: number, runwayId: number, directionId:number, strip : RunwayStrip) : Promise<RunwayStrip> {
+    return this.http
+      .put(`${AppSettings.API_ENDPOINT}/airports/${airportId}/runways/${runwayId}/directions/${directionId}/strip`, strip)
+      .toPromise()
+      .then(response => response.json() as RunwayStrip)
       .catch(this.handleError)
   }
 }
