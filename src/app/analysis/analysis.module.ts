@@ -26,6 +26,9 @@ import {RunwayService} from "../runway/runway.service";
 import {DirectionService} from "../direction/direction.service";
 import {AnalysisSurfaceService} from "./analysis-surface.service";
 import {AnalysisObstacleService} from "./analysis-obstacle.service";
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
+import {AnalysisResultService} from './analysis-result.service';
 
 @NgModule({
   imports:[
@@ -43,7 +46,8 @@ import {AnalysisObstacleService} from "./analysis-obstacle.service";
     AnalysisWizardObjectComponent,
     AnalysisWizardExceptionComponent,
     AnalysisWizardAnalysisComponent,
-    AnalysisWizardInformComponent
+    AnalysisWizardInformComponent,
+    AnalysisModalAnalysisComponent
   ],
   providers: [
     AnalysisCaseService,
@@ -58,10 +62,14 @@ import {AnalysisObstacleService} from "./analysis-obstacle.service";
     RunwayService,
     DirectionService,
     AnalysisSurfaceService,
-    AnalysisObstacleService
+    AnalysisObstacleService,
+    BsModalService,
+    BsModalRef,
+    AnalysisResultService
   ],
   entryComponents: [
-    BlockTemplateComponent
+    BlockTemplateComponent,
+    AnalysisModalAnalysisComponent
   ],
   schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })
