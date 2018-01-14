@@ -52,7 +52,7 @@ import {AnalysisResult} from './analysisResult';
             <div class="clearfix"></div>
           </div>
         </div>
-        <div [ngSwitch]="initObstaclesStatus" class="panel-body" style="max-height: 30em; overflow: auto;">
+        <div [ngSwitch]="initObstaclesStatus" class="panel-body" style="max-height: 40em; overflow: auto;">
           <div *ngSwitchCase="indicator.LOADING">
             <app-loading-indicator></app-loading-indicator>
           </div>

@@ -46,7 +46,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
             Objects
           </h3>
         </div>
-        <div [ngSwitch]="initStatus" class="panel-body">
+        <div [ngSwitch]="initStatus" class="panel-body" style="max-height: 40em; overflow: auto;">
           <div *ngSwitchCase="indicator.LOADING" >
               <app-loading-indicator></app-loading-indicator>
           </div>
