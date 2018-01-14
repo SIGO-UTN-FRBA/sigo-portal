@@ -139,7 +139,8 @@ export class AnalysisModalAnalysisComponent implements OnInit {
   ngOnInit(): void {
     this.resultService
       .getReasons()
-      .then(data => this.reasons = data);
+      .then(data => this.reasons = data)
+      .then(()=> this.updateFilteredReasons());
       //TODO catch error
   }
 
@@ -162,7 +163,12 @@ export class AnalysisModalAnalysisComponent implements OnInit {
   updateKeep() {
     this.result.reason = null;
     this.result.reasonDetail = "";
-    this.filteredReasons = this.reasons.filter( reason =>
-      reason.obstacle == this.result.obstacle && reason.keep == this.result.keep)
+    this.updateFilteredReasons();
+  }
+
+  updateFilteredReasons() {
+    this.filteredReasons = this.reasons.filter(reason =>
+      reason.obstacle == this.result.obstacle && reason.keep == this.result.keep
+    );
   }
 }

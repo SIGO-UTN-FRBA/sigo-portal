@@ -306,12 +306,12 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     let modalRef : BsModalRef = this.modalService.show(AnalysisModalAnalysisComponent);
 
-    //TODO onHide update resumeSummary
     this.modalService.onHide.subscribe((reason: string) => {
 
-      this.obstacleService
-        .get(obstacle.caseId, obstacle.id)
-        .then(data => obstacle.resultSummary = data.resultSummary);
+      if(reason == 'submit')
+        this.obstacleService
+          .get(obstacle.caseId, obstacle.id)
+          .then(data => obstacle.resultSummary = data.resultSummary);
     });
 
     //TODO onShow load data
@@ -320,8 +320,9 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     if(obstacle.resultId)
       this.resultService
         .get(obstacle.caseId, obstacle.id)
-        .then(data => modalRef.content.result = data);
+        .then(data => modalRef.content.result = data)
+        .then(() => modalRef.content.updateFilteredReasons());
     else
-        modalRef.content.result = new AnalysisResult().initialize(obstacle)
+      modalRef.content.result = new AnalysisResult().initialize(obstacle);
   }
 }
