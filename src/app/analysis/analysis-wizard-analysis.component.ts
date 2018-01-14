@@ -15,11 +15,12 @@ import {Runway} from "../runway/runway";
 import {Analysis} from "./analysis";
 import {RunwayDirection} from "../direction/runwayDirection";
 import {AnalysisSurfaceService} from "./analysis-surface.service";
-import {Airport} from "../airport/airport";
 import {AirportService} from "../airport/airport.service";
 import Feature = ol.Feature;
 import {AnalysisObstacleService} from "./analysis-obstacle.service";
 import {AnalysisObstacle} from "./analysisObstacle";
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
 
 @Component({
   template:`
@@ -63,26 +64,17 @@ import {AnalysisObstacle} from "./analysisObstacle";
             <table class="table table-hover">
               <tr>
                 <th>#</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.included">Included / Excluded</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.name">Name</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.objectHeight">Object Height [m]</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.surfaceHeight">Surface Height [m]</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.penetration">Penetration [m]</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.direction">Direction</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.surface">Surface</th>
+                <th i18n="@@analysis.wizard.analysis.section.obstacles.result">Result</th>
               </tr>
               <tbody>
               <tr *ngFor="let obstacle of obstacles; index as i;">
                 <td><strong>{{i + 1}}</strong></td>
-                <td>
-                  <button type="button" class="btn btn-default btn-sm" (click)="toggleExclusion(obstacle)">
-                      <span class="glyphicon"
-                            [ngClass]="{'glyphicon-ok-circle': !obstacle.excluded, 'glyphicon-ban-circle': obstacle.excluded}"
-                            aria-hidden="true">
-                        
-                      </span>
-                  </button>
-                </td>
                 <td>
                   <a [routerLink]="['/objects', obstacle.objectType, obstacle.objectId]">
                     {{obstacle.objectName}}
@@ -93,6 +85,14 @@ import {AnalysisObstacle} from "./analysisObstacle";
                 <td>{{obstacle.penetration}}</td>
                 <td>{{obstacle.directionName}}</td>
                 <td>{{obstacle.surfaceName}}</td>
+                <td>
+                  <p>{{obstacle.resultSummary}}</p>
+                  <button type="button" class="btn btn-default btn-sm" (click)="editResult(obstacle)">
+                      <span class="glyphicon glyphicon-pencil" aria-hidden="true">
+                        
+                      </span>
+                  </button>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -189,6 +189,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   directions: RunwayDirection[];
   selectedDirection: RunwayDirection;
   obstacles:AnalysisObstacle[];
+  bsModalRef: BsModalRef;
 
   constructor(
     private wizardService: AnalysisWizardService,
@@ -199,7 +200,8 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     private airportService: AirportService,
     private obstacleService: AnalysisObstacleService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modalService: BsModalService
   ){
     this.indicator = STATUS_INDICATOR;
   }
@@ -282,7 +284,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     this.wizardService
       .previous(this.analysisId)
-      .then( () => this.router.navigate([`/analysis/${this.analysisId}/stages/object`]))
+      .then( () => this.router.navigate([`/analysis/${this.analysisId}/stages/exception`]))
       .catch((error) => this.onSubmitError = error);
   }
 
@@ -299,7 +301,9 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
       .catch(error => alert(JSON.stringify(error))); //TODO catch error
   }
 
-  toggleExclusion(obstacle: AnalysisObstacle) {
-    //TODO update excluded -> open modal dialog to write justification.
+  editResult(obstacle: AnalysisObstacle) {
+
+    this.modalService.show(AnalysisModalAnalysisComponent);
+    //TODO onHide update resumesummary
   }
 }
