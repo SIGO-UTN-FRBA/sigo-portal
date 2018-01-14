@@ -21,6 +21,8 @@ import {AnalysisObstacleService} from "./analysis-obstacle.service";
 import {AnalysisObstacle} from "./analysisObstacle";
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
+import {AnalysisResultService} from './analysis-result.service';
+import {AnalysisResult} from './analysisResult';
 
 @Component({
   template:`
@@ -199,6 +201,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     private surfacesService: AnalysisSurfaceService,
     private airportService: AirportService,
     private obstacleService: AnalysisObstacleService,
+    private resultService: AnalysisResultService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: BsModalService
@@ -303,7 +306,14 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
   editResult(obstacle: AnalysisObstacle) {
 
-    this.modalService.show(AnalysisModalAnalysisComponent);
-    //TODO onHide update resumesummary
+    let modalRef : BsModalRef = this.modalService.show(AnalysisModalAnalysisComponent);
+
+    //TODO onHide update resumeSummary
+    //TODO onShow load data
+
+    this.resultService
+      .get(obstacle.caseId, obstacle.id)
+      .then(data => modalRef.content.result = data)
+      .catch(() => modalRef.content.result = new AnalysisResult().initialize(obstacle));
   }
 }

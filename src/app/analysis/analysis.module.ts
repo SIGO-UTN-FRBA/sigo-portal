@@ -26,7 +26,7 @@ import {RunwayService} from "../runway/runway.service";
 import {DirectionService} from "../direction/direction.service";
 import {AnalysisSurfaceService} from "./analysis-surface.service";
 import {AnalysisObstacleService} from "./analysis-obstacle.service";
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {BsModalRef, BsModalService, ComponentLoaderFactory, ModalModule, PositioningService} from 'ngx-bootstrap';
 import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
 import {AnalysisResultService} from './analysis-result.service';
 
@@ -37,7 +37,8 @@ import {AnalysisResultService} from './analysis-result.service';
     AnalysisRoutingModule,
     CommonsModule,
     OlmapModule,
-    BlockUIModule
+    BlockUIModule,
+    ModalModule
   ],
   declarations: [
     AnalysisComponent,
@@ -65,7 +66,9 @@ import {AnalysisResultService} from './analysis-result.service';
     AnalysisObstacleService,
     BsModalService,
     BsModalRef,
-    AnalysisResultService
+    AnalysisResultService,
+    ComponentLoaderFactory,
+    PositioningService
   ],
   entryComponents: [
     BlockTemplateComponent,
