@@ -24,7 +24,7 @@ export class AnalysisResultService extends ApiService {
       .put(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/obstacles/${obstacleId}/result`, result)
       .toPromise()
       .then(response => response.json() as AnalysisResult)
-      .catch(this.handleError)
+      //.catch(this.handleError)
   }
 
   getReasons(): Promise<AnalysisResultReason[]> {

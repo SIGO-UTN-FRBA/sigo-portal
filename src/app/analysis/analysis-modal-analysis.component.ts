@@ -148,10 +148,11 @@ export class AnalysisModalAnalysisComponent implements OnInit {
   }
 
   onSubmit(){
+    debugger;
     this.resultService
       .save(this.obstacle.caseId, this.result.obstacleId, this.result)
       .then(() => this.bsModalRef.hide()) //TODO update summary
-      .catch() //TODO catch error
+      //TODO catch error .catch()
   }
 
   updateObstacle() {

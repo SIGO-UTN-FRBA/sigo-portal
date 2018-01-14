@@ -73,6 +73,7 @@ import {AnalysisResult} from './analysisResult';
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.direction">Direction</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.surface">Surface</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.result">Result</th>
+                <th></th>
               </tr>
               <tbody>
               <tr *ngFor="let obstacle of obstacles; index as i;">
@@ -87,8 +88,8 @@ import {AnalysisResult} from './analysisResult';
                 <td>{{obstacle.penetration}}</td>
                 <td>{{obstacle.directionName}}</td>
                 <td>{{obstacle.surfaceName}}</td>
+                <td>{{obstacle.resultSummary}}</td>
                 <td>
-                  <p>{{obstacle.resultSummary}}</p>
                   <button type="button" class="btn btn-default btn-sm" (click)="editResult(obstacle)">
                       <span class="glyphicon glyphicon-pencil" aria-hidden="true">
                         
@@ -310,6 +311,8 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     //TODO onHide update resumeSummary
     //TODO onShow load data
+
+    modalRef.content.obstacle = obstacle;
 
     this.resultService
       .get(obstacle.caseId, obstacle.id)
