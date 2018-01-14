@@ -27,4 +27,30 @@ export class ObjectOwnerService extends ApiService {
       .then(response => response.json() as ObjectOwner)
       .catch(this.handleError)
   }
+
+  update(objectOwner: ObjectOwner) : Promise<ObjectOwner> {
+    return this.http
+      .put(`${AppSettings.API_ENDPOINT}/owners/${objectOwner.id}`, objectOwner)
+      .toPromise()
+      .then(response => response.json() as ObjectOwner)
+      .catch(this.handleError)
+  }
+
+  save(objectOwner: ObjectOwner) : Promise<ObjectOwner> {
+    return this.http
+      .post(`${AppSettings.API_ENDPOINT}/owners`, objectOwner)
+      .toPromise()
+      .then( response => response.json() as ObjectOwner)
+      .catch(this.handleError)
+  }
+
+  delete(ownerId: number) : Promise<void> {
+    return this.http
+      .delete(`${AppSettings.API_ENDPOINT}/owners/${ownerId}`)
+      .toPromise()
+      .then(()=> null)
+      .catch(this.handleError);
+  }
+
+
 }

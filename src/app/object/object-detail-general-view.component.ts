@@ -85,7 +85,7 @@ import {PoliticalLocation} from "../location/location";
                   <label for="ownerId" class="control-label" i18n="@@object.detail.section.general.ownerId">
                     Owner
                   </label>
-                  <p class="form-control-static"><a>{{owner.name}}</a></p>
+                  <p class="form-control-static"><a routerLink="/owners/{{owner.id}}/detail">{{owner.name}}</a></p>
                 </div>
               </div>
 

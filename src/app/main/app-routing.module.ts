@@ -30,6 +30,10 @@ const appRoutes: Routes = [
     loadChildren: 'app/analysis/analysis.module#AnalysisModule'
   },
   {
+    path: 'owners',
+    loadChildren: 'app/owner/owner.module#ObjectOwnerModule'
+  },
+  {
     path: '**',
     component: PageNotFoundComponent
   }
