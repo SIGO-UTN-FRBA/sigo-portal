@@ -91,9 +91,7 @@ import {AnalysisResult} from './analysisResult';
                 <td>{{obstacle.resultSummary}}</td>
                 <td>
                   <button type="button" class="btn btn-default btn-sm" (click)="editResult(obstacle)">
-                      <span class="glyphicon glyphicon-pencil" aria-hidden="true">
-                        
-                      </span>
+                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                   </button>
                 </td>
               </tr>
@@ -192,7 +190,6 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   directions: RunwayDirection[];
   selectedDirection: RunwayDirection;
   obstacles:AnalysisObstacle[];
-  bsModalRef: BsModalRef;
 
   constructor(
     private wizardService: AnalysisWizardService,
@@ -310,13 +307,21 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     let modalRef : BsModalRef = this.modalService.show(AnalysisModalAnalysisComponent);
 
     //TODO onHide update resumeSummary
-    //TODO onShow load data
+    this.modalService.onHide.subscribe((reason: string) => {
 
+      this.obstacleService
+        .get(obstacle.caseId, obstacle.id)
+        .then(data => obstacle.resultSummary = data.resultSummary);
+    });
+
+    //TODO onShow load data
     modalRef.content.obstacle = obstacle;
 
-    this.resultService
-      .get(obstacle.caseId, obstacle.id)
-      .then(data => modalRef.content.result = data)
-      .catch(() => modalRef.content.result = new AnalysisResult().initialize(obstacle));
+    if(obstacle.resultId)
+      this.resultService
+        .get(obstacle.caseId, obstacle.id)
+        .then(data => modalRef.content.result = data);
+    else
+        modalRef.content.result = new AnalysisResult().initialize(obstacle)
   }
 }

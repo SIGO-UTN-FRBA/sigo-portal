@@ -17,4 +17,12 @@ export class AnalysisObstacleService extends ApiService {
       .then(response => response.json() as AnalysisObstacle[])
       .catch(this.handleError)
   }
+
+  get(analysisId: number, obstacleId: number):Promise<AnalysisObstacle>{
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/obstacles/${obstacleId}`)
+      .toPromise()
+      .then(response => response.json() as AnalysisObstacle)
+      .catch(this.handleError)
+  }
 }
