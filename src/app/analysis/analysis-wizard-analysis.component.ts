@@ -23,6 +23,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
 import {AnalysisResultService} from './analysis-result.service';
 import {AnalysisResult} from './analysisResult';
+import {UiError} from '../main/uiError';
 
 @Component({
   template:`
@@ -268,6 +269,15 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     this.blockUI.start("Processing...");
 
+    //1. validate
+    if(!this.obstacles.every(o => o.hasOwnProperty("resultId") && o.resultId !== null)){
+      this.onSubmitError = new UiError("All obstacles must be analysed, there are some registers without a result.", "Error");
+      this.blockUI.stop();
+      return;
+    }
+
+    //2. perform
+
     this.wizardService
       .next(this.analysisId)
       .then( () =>{
@@ -307,11 +317,12 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     let modalRef : BsModalRef = this.modalService.show(AnalysisModalAnalysisComponent);
 
     this.modalService.onHide.subscribe((reason: string) => {
-
-      if(reason == 'submit')
-        this.obstacleService
-          .get(obstacle.caseId, obstacle.id)
-          .then(data => obstacle.resultSummary = data.resultSummary);
+      this.obstacleService
+        .get(obstacle.caseId, obstacle.id)
+        .then(data => {
+          obstacle.resultSummary = data.resultSummary;
+          obstacle.resultId = data.resultId;
+        });
     });
 
     //TODO onShow load data
