@@ -55,7 +55,7 @@ export class PlacedObjectService extends ApiService {
 
   update(placedObject: PlacedObject) : Promise<PlacedObject> {
     return this.http
-      .put(`${AppSettings.API_ENDPOINT}/objects/${placedObject.id}`, PlacedObject)
+      .put(`${AppSettings.API_ENDPOINT}/objects/${placedObject.id}`, placedObject)
       .toPromise()
       .then(response => response.json() as PlacedObject)
       .catch(this.handleError)
