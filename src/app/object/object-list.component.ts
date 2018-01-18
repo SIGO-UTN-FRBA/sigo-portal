@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {PlacedObject} from "./object";
+import {PlacedObject} from "./placedObject";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";

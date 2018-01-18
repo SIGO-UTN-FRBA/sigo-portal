@@ -446,6 +446,31 @@ import Circle = ol.style.Circle;
     return layer;
   }
 
+  clearTerrainLayer(): OlComponent{
+    this.getTerrainLayer().getSource().clear();
+    return this;
+  }
+
+  getTerrainLayer() {
+    if(this.olLayers.hasOwnProperty('terrain'))
+      return this.olLayers['terrain'];
+
+    let layer = new VectorLayer({
+
+      visible: true,
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'brown', width:2})
+      })
+    });
+
+    layer.setProperties({"title":"Terrain Level Curves"});
+
+    this.olLayers['terrain'] = layer;
+
+    return layer;
+  }
+
   getStamenTonerBaseLayer(){
 
     let OSM = new Tile({
@@ -597,6 +622,13 @@ import Circle = ol.style.Circle;
     return this;
   }
 
+  public addTerrainLevelCurve(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+
+    this.addFeature(feature, this.getTerrainLayer(), options);
+
+    return this;
+  }
+
   public addObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     switch (feature.get("class")){
@@ -608,6 +640,9 @@ import Circle = ol.style.Circle;
         break;
       case "Overhead Wire":
         this.addWiringObject(feature, options);
+        break;
+      case "Terrain Level Curve":
+        this.addTerrainLevelCurve(feature, options);
         break;
     }
 
@@ -698,6 +733,7 @@ import Circle = ol.style.Circle;
     let layerGroups : Array<ol.layer.Group>= [];
 
     this.setupBaseLayerGroup(layerGroups);
+    this.setupTerrainLayerGroup(layerGroups);
     this.setupAirportLayerGroup(layerGroups);
     this.setupSurfaceLayerGroup(layerGroups);
     this.setupObjectLayerGroup(layerGroups);
@@ -712,6 +748,18 @@ import Circle = ol.style.Circle;
     baseLayersGroup.set("title", "Base maps");
 
     layerGroups.push(baseLayersGroup);
+  }
+
+  private setupTerrainLayerGroup(layerGroups: Array<ol.layer.Group>){
+    if(this.layers.includes('terrain')){
+      debugger;
+      let layers = new ol.Collection<ol.layer.Base>();
+      this.layers.push(this.getTerrainLayer());
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set("title","Terrain");
+      layerGroups.push(group);
+    }
   }
 
   private setupAirportLayerGroup(layerGroups: Array<ol.layer.Group>) {

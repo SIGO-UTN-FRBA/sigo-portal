@@ -3,7 +3,7 @@ import {AnalysisCaseService} from "./analysis-case.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AnalysisObject} from "./analysisObject";
 import {PlacedObjectService} from "../object/object.service";
-import {PlacedObject} from "../object/object";
+import {PlacedObject} from "../object/placedObject";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
 import {PlacedObjectType} from "../object/objectType";
@@ -110,7 +110,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                     <th i18n="@@analysis.wizard.object.section.objects.included">Included</th>
                   </tr>
                   <tbody>
-                    <tr *ngFor="let analysisObject of analysisObjects; index as i;">
+                    <tr *ngFor="let analysisObject of onlyPlacedObjects; index as i;">
                       <td><strong>{{i+1}}</strong></td>
                       <td>
                         <a [routerLink]="['/objects', analysisObject.object.typeId, analysisObject.object.id]">
@@ -134,7 +134,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
-                     [layers]="['airport', 'runway', 'individual', 'building', 'wire']"
+                     [layers]="['airport', 'runway', 'individual', 'building', 'wire', 'terrain']"
             >
             </app-map>
           </ng-container>
@@ -175,6 +175,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   types:PlacedObjectType[];
   airportFeature: Feature;
   private olmap: OlComponent;
+  onlyPlacedObjects: AnalysisObject[];
   @ViewChild('mapObjects') set content(content: OlComponent) {
     this.olmap = content;
   }
@@ -244,10 +245,9 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
   private resolveDataObjects() : Promise<any> {
     return Promise.all(
-      this.analysisObjects
-        .map(a =>
+      this.analysisObjects.map(a =>
           this.objectService
-            .get(a.objectId)
+            .get(a.objectId, a.objectTypeId)
             .then(o => a.object = o)
         )
     );
@@ -266,7 +266,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     let p2 = Promise.all(
       this.analysisObjects.map(a =>
         this.objectService
-          .getFeature(a.object.id)
+          .getFeature(a.object.id,a.objectTypeId)
           .then(f => a.object.feature = f)
       )
     );
@@ -322,10 +322,12 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
       .then(data => this.analysisObjects = data)
       .then(() => this.resolveDataObjects())
       .then(() => this.resolveFeatureObjects())
+      .then(() => this.filterObjectsToList())
   }
 
   private clearMapLayers() : OlComponent {
     return this.olmap
+      .clearTerrainLayer()
       .clearObjectLayers()
       .clearAirportLayer()
       .clearRunwayLayer();
@@ -365,5 +367,9 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     this.analysisObjectService
       .update(this.analysisId, analysisObjectId, analysisObject.included)
       .catch((error) => this.onIncludeError = error);
+  }
+
+  private filterObjectsToList() {
+    this.onlyPlacedObjects = this.analysisObjects.filter(a => a.objectTypeId != 3);
   }
 }

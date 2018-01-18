@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {PlacedObjectService} from "./object.service";
 import {PlacedObjectCatalogService} from "./object-catalog.service";
-import {PlacedObject} from "./object";
+import {PlacedObject} from "./placedObject";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
 import {PlacedObjectType} from "./objectType";

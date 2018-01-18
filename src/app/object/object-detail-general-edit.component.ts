@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {PlacedObject} from "./object";
+import {PlacedObject} from "./placedObject";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {PlacedObjectService} from "./object.service";
@@ -254,7 +254,8 @@ import {LocationService} from "../location/location.service";
 export class PlacedObjectDetailGeneralEditComponent implements OnInit {
 
   placedObject: PlacedObject;
-  @Input() placedObjectId : number;
+  @Input() placedObjectId: number;
+  @Input() objectTypeId: number;
   @Input() edit: boolean;
   @Output() editChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   status: number;
@@ -266,8 +267,6 @@ export class PlacedObjectDetailGeneralEditComponent implements OnInit {
   lightings: ObjectLighting[];
   marks: ObjectMarkIndicator[];
   owners: ListItem[];
-
-
 
   constructor(
     private objectService : PlacedObjectService,
@@ -312,7 +311,7 @@ export class PlacedObjectDetailGeneralEditComponent implements OnInit {
       .catch(error => Promise.reject(error));
 
     let p6 = this.objectService
-      .get(this.placedObjectId)
+      .get(this.placedObjectId, this.objectTypeId)
       .then( data => this.placedObject = data)
       .catch(error => Promise.reject(error));
 

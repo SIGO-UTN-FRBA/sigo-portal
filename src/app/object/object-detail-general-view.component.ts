@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {PlacedObject} from "./object";
+import {PlacedObject} from "./placedObject";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {Router} from "@angular/router";
 import {PlacedObjectService} from "./object.service";
@@ -155,6 +155,7 @@ export class PlacedObjectDetailGeneralViewComponent implements OnInit {
 
   placedObject: PlacedObject;
   @Input() placedObjectId : number;
+  @Input() objectTypeId: number;
   indicator;
   status : number;
   @Input() edit : boolean;
@@ -199,7 +200,7 @@ export class PlacedObjectDetailGeneralViewComponent implements OnInit {
       .catch(error => Promise.reject(error));
 
     let p4 = this.objectService
-      .get(this.placedObjectId)
+      .get(this.placedObjectId, this.objectTypeId)
       .then( data => this.placedObject = data)
       .then(()=> this.locationService.get(this.placedObject.locationId))
       .then(data => this.politicalLocation = data )

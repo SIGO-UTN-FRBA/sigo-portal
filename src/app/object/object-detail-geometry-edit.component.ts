@@ -108,7 +108,7 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
-      .getFeature(this.placedObjectId)
+      .getFeature(this.placedObjectId, this.placedObjectType)
       .then( data => {
         this.feature = data;
         if(data.getGeometry()){
@@ -142,7 +142,7 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
     }
 
     this.placedObjectService
-      .updateFeature(this.placedObjectId, geom)
+      .updateFeature(this.placedObjectId, this.placedObjectType, geom)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError= error);
   };
