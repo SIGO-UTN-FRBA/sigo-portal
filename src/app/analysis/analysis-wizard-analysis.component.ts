@@ -85,9 +85,9 @@ import {ElevatedObjectService} from '../object/object.service';
                     {{obstacle.objectName}}
                   </a>
                 </td>
-                <td>{{obstacle.objectHeight}}</td>
-                <td>{{obstacle.surfaceHeight}}</td>
-                <td>{{obstacle.penetration}}</td>
+                <td>{{obstacle.objectHeight | number}}</td>
+                <td>{{obstacle.surfaceHeight | number}}</td>
+                <td>{{obstacle.penetration | number}}</td>
                 <td>{{obstacle.directionName}}</td>
                 <td>{{obstacle.surfaceName}}</td>
                 <td>{{obstacle.resultSummary}}</td>
