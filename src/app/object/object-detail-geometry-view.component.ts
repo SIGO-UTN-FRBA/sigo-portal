@@ -4,8 +4,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {ApiError} from "../main/apiError";
-import Geometry = ol.geom.Geometry;
-import {PlacedObjectService} from "./object.service";
+import {ElevatedObjectService} from "./object.service";
 import PlacedObjectTypes from "./objectType";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
@@ -86,7 +85,7 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
   coordinatesText : string;
 
   constructor(
-    private placedObjectService : PlacedObjectService,
+    private placedObjectService : ElevatedObjectService,
   ){
     this.indicator = STATUS_INDICATOR;
   }
@@ -98,7 +97,7 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
-      .getFeature(this.placedObjectId)
+      .getFeature(this.placedObjectId, this.placedObjectType)
       .then((data) => {
 
         if(!data.getGeometry())

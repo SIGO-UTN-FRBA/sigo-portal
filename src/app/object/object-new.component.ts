@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
-import {PlacedObjectService} from "./object.service";
+import {ElevatedObjectService} from "./object.service";
 import {PlacedObjectCatalogService} from "./object-catalog.service";
-import {PlacedObject} from "./object";
+import {PlacedObject} from "./placedObject";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
 import {PlacedObjectType} from "./objectType";
@@ -272,7 +272,7 @@ export class PlacedObjectNewComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private objectService: PlacedObjectService,
+    private objectService: ElevatedObjectService,
     private catalogService: PlacedObjectCatalogService,
     private ownerService: ObjectOwnerService,
     private locationService: LocationService

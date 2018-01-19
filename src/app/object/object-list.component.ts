@@ -1,9 +1,9 @@
 import {Component, OnInit} from "@angular/core";
-import {PlacedObject} from "./object";
+import {PlacedObject} from "./placedObject";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {PlacedObjectService} from "./object.service";
+import {ElevatedObjectService} from "./object.service";
 
 @Component({
   template: `
@@ -44,7 +44,7 @@ export class PlacedObjectListComponent implements OnInit {
   onInitError : ApiError;
 
   constructor(
-    private objectService : PlacedObjectService,
+    private objectService : ElevatedObjectService,
     private router : Router,
     private route : ActivatedRoute
   ){

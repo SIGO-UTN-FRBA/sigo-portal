@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {PlacedObjectService} from "./object.service";
+import {ElevatedObjectService} from "./object.service";
 import Geometry = ol.geom.Geometry;
 import PlacedObjectTypes, {PlacedObjectType} from './objectType';
 import {Feature} from "openlayers";
@@ -94,7 +94,7 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
   geometryType :string;
 
   constructor(
-    private placedObjectService : PlacedObjectService,
+    private placedObjectService : ElevatedObjectService,
   ){
     this.indicator = STATUS_INDICATOR;
   }
@@ -108,7 +108,7 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
-      .getFeature(this.placedObjectId)
+      .getFeature(this.placedObjectId, this.placedObjectType)
       .then( data => {
         this.feature = data;
         if(data.getGeometry()){
@@ -142,7 +142,7 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
     }
 
     this.placedObjectService
-      .updateFeature(this.placedObjectId, geom)
+      .updateFeature(this.placedObjectId, this.placedObjectType, geom)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError= error);
   };

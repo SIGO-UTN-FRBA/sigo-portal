@@ -14,7 +14,7 @@ import {AnalysisWizardExceptionComponent} from "./analysis-wizard-exception.comp
 import {AnalysisWizardInformComponent} from "./analysis-wizard-inform.component";
 import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component";
 import {AnalysisCaseService} from "./analysis-case.service";
-import {PlacedObjectService} from "../object/object.service";
+import {ElevatedObjectService} from "../object/object.service";
 import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 import {BlockUIModule} from "ng-block-ui";
 import {BlockTemplateComponent} from "../commons/block-template.component";
@@ -54,7 +54,7 @@ import {AnalysisResultService} from './analysis-result.service';
     AnalysisCaseService,
     AnalysisService,
     AirportService,
-    PlacedObjectService,
+    ElevatedObjectService,
     PlacedObjectCatalogService,
     AnalysisObjectService,
     AnalysisExceptionService,

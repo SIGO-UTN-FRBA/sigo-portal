@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
 import {Http} from "@angular/http";
-import {PlacedObject} from "./object";
+import {PlacedObject} from "./placedObject";
 import {AppSettings} from "../main/app-settings";
 import {ParamMap} from "@angular/router";
 import Geometry = ol.geom.Geometry;
@@ -14,7 +14,7 @@ import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
 
 @Injectable()
-export class PlacedObjectService extends ApiService {
+export class ElevatedObjectService extends ApiService {
 
   constructor(http: Http){super(http)}
 
@@ -29,9 +29,9 @@ export class PlacedObjectService extends ApiService {
       .catch(this.handleError)
   }
 
-  get(objectId : number) : Promise<PlacedObject>{
+  get(objectId : number, typeId:number) : Promise<PlacedObject>{
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/objects/${objectId}`)
+      .get(`${AppSettings.API_ENDPOINT}/objects/${objectId}?type=${typeId}`)
       .toPromise()
       .then(response => response.json() as PlacedObject)
       .catch(this.handleError);
@@ -61,20 +61,20 @@ export class PlacedObjectService extends ApiService {
       .catch(this.handleError)
   }
 
-  getFeature(placedObjectId : number) : Promise<Feature> {
+  getFeature(placedObjectId : number, typeId: number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/feature`)
+      .get(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/feature?type=${typeId}`)
       .toPromise()
       .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  updateFeature(placedObjectId : number, geom : Geometry) : Promise<Geometry>{
+  updateFeature(placedObjectId : number, typeId:number, geom : Geometry) : Promise<Geometry>{
 
     let jsonGeom = JSON.parse(new GeoJSON().writeGeometry(geom));
 
     return this.http
-      .patch(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/feature`, {geometry: jsonGeom})
+      .patch(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/feature?type=${typeId}`, {geometry: jsonGeom})
       .toPromise()
       .then(response => response.json() as Geometry)
       .catch(this.handleError)
