@@ -24,6 +24,7 @@ import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.componen
 import {AnalysisResultService} from './analysis-result.service';
 import {AnalysisResult} from './analysisResult';
 import {UiError} from '../main/uiError';
+import {ElevatedObjectService} from '../object/object.service';
 
 @Component({
   template:`
@@ -139,7 +140,7 @@ import {UiError} from '../main/uiError';
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
-                     [layers]="['icaoannex14surfaces']"
+                     [layers]="['icaoannex14surfaces','terrain', 'airport', 'runway', 'objects']"
             >
             </app-map>
           </ng-container>
@@ -201,6 +202,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     private airportService: AirportService,
     private obstacleService: AnalysisObstacleService,
     private resultService: AnalysisResultService,
+    private objectService: ElevatedObjectService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: BsModalService
@@ -299,17 +301,43 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
       .catch((error) => this.onSubmitError = error);
   }
 
-  loadDirectionFeatures(direction: RunwayDirection) {
+  loadDirectionFeatures(direction: RunwayDirection): Promise<any> {
     this.selectedDirection = direction;
 
-    this.olmap.clearSurfaceLayers();
+    this.clearMapLayers();
 
     this.olmap.setCenter(this.airportFeature.getGeometry().transform('EPSG:4326', 'EPSG:3857')['getCoordinates']());
     this.olmap.setZoom(11);
 
-    this.surfacesService.get(this.analysisId, direction.id)
+    let p1 = this.resolveSurfaceFeatures(direction);
+
+    let p2 = this.resolveObjectFeatures();
+
+    return Promise.all([p1,p2]);
+  }
+
+  private resolveObjectFeatures() {
+    return this.obstacles.map(o =>
+      this.objectService
+        .getFeature(o.objectId, o.objectType)
+        .then(data => this.olmap.addObject(data))
+        .catch(error => Promise.reject(error))
+    );
+  }
+
+  private resolveSurfaceFeatures(direction: RunwayDirection) :Promise<any>{
+    return this.surfacesService
+      .get(this.analysisId, direction.id)
       .then(data => data.forEach(f => this.olmap.addSurface(f)))
-      .catch(error => alert(JSON.stringify(error))); //TODO catch error
+      .catch(error => Promise.reject(error));
+  }
+
+  private clearMapLayers() : OlComponent {
+    return this.olmap
+      .clearTerrainLayer()
+      .clearObjectLayers()
+      .clearAirportLayer()
+      .clearRunwayLayer();
   }
 
   editResult(obstacle: AnalysisObstacle) {

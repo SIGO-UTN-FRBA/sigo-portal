@@ -14,7 +14,7 @@ import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
 
 @Injectable()
-export class PlacedObjectService extends ApiService {
+export class ElevatedObjectService extends ApiService {
 
   constructor(http: Http){super(http)}
 

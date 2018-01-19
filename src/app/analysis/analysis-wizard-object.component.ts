@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from "@angular/core";
 import {AnalysisCaseService} from "./analysis-case.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AnalysisObject} from "./analysisObject";
-import {PlacedObjectService} from "../object/object.service";
+import {ElevatedObjectService} from "../object/object.service";
 import {PlacedObject} from "../object/placedObject";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
@@ -185,7 +185,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   constructor(
     private analysisService: AnalysisService,
     private caseService: AnalysisCaseService,
-    private objectService: PlacedObjectService,
+    private objectService: ElevatedObjectService,
     private objectCatalogService: PlacedObjectCatalogService,
     private airportService: AirportService,
     private analysisObjectService: AnalysisObjectService,
@@ -340,7 +340,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     this.blockUI.start("Processing...");
 
     //1. verificar que existan objetos includos
-    if(!this.analysisObjects.some(o => o.included)){
+    if(this.analysisObjects.length > 0 && !this.analysisObjects.some(o => o.included)){
       this.onSubmitError = new UiError("There is not object included into analysis case","Error");
       this.blockUI.stop();
       return;

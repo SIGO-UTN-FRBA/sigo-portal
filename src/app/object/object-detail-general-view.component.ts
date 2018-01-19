@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {PlacedObject} from "./placedObject";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {Router} from "@angular/router";
-import {PlacedObjectService} from "./object.service";
+import {ElevatedObjectService} from "./object.service";
 import {ApiError} from "../main/apiError";
 import {PlacedObjectType} from "./objectType";
 import {PlacedObjectCatalogService} from "./object-catalog.service";
@@ -169,7 +169,7 @@ export class PlacedObjectDetailGeneralViewComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private objectService : PlacedObjectService,
+    private objectService : ElevatedObjectService,
     private catalogService : PlacedObjectCatalogService,
     private locationService: LocationService,
     private ownerService: ObjectOwnerService

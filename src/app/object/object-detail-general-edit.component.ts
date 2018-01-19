@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {PlacedObject} from "./placedObject";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {PlacedObjectService} from "./object.service";
+import {ElevatedObjectService} from "./object.service";
 import {PlacedObjectCatalogService} from "./object-catalog.service";
 import {PlacedObjectType} from "./objectType";
 import {ObjectMarkIndicator} from "./objectMarkIndicator";
@@ -269,7 +269,7 @@ export class PlacedObjectDetailGeneralEditComponent implements OnInit {
   owners: ListItem[];
 
   constructor(
-    private objectService : PlacedObjectService,
+    private objectService : ElevatedObjectService,
     private catalogService : PlacedObjectCatalogService,
     private ownerService: ObjectOwnerService,
     private locationService: LocationService
