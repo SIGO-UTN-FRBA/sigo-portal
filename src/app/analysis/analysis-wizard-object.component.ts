@@ -46,7 +46,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
             Objects
           </h3>
         </div>
-        <div [ngSwitch]="initStatus" class="panel-body" style="max-height: 40em; overflow: auto;">
+        <div [ngSwitch]="initStatus" class="panel-body">
           <div *ngSwitchCase="indicator.LOADING" >
               <app-loading-indicator></app-loading-indicator>
           </div>
@@ -96,7 +96,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                 <app-empty-indicator entity="placed objects" type="included"></app-empty-indicator>
               </div>
               
-              <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
+              <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive" style="max-height: 40em; overflow: auto;">
                 
                 <ng-container *ngIf="onIncludeError">
                   <app-error-indicator [errors]="[onIncludeError]"></app-error-indicator>
