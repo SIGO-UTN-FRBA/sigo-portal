@@ -5,6 +5,7 @@ import {ExceptionNewRuleComponent} from "./exception-new-rule.component";
 import {ExceptionNewComponent} from "./exception-new.component";
 import {ExceptionNewRuleIcao14Component} from "./exception-new-rule-icao.component";
 import {ExceptionDetailRuleIcao14} from "./exception-detail-rule-icao.component";
+import {ExceptionNewSurfaceComponent} from './exception-new-surface.component';
 
 const routes :Routes = [
   {
@@ -17,7 +18,7 @@ const routes :Routes = [
       },
       {
         path: 'new/surface',
-        component: null
+        component: ExceptionNewSurfaceComponent
       },
       {
         path: 'new/rule',
