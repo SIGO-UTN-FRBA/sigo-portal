@@ -91,7 +91,7 @@ import {DirectionService} from "../direction/direction.service";
     </div>`
 })
 
-export class ExceptionDetailRuleIcaoView implements OnInit {
+export class ExceptionDetailRuleIcaoViewComponent implements OnInit {
   onInitStatus:number;
   indicator;
   onInitError:AppError;

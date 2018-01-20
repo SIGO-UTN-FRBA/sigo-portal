@@ -4,8 +4,9 @@ import {ExceptionComponent} from "./exception.component";
 import {ExceptionNewRuleComponent} from "./exception-new-rule.component";
 import {ExceptionNewComponent} from "./exception-new.component";
 import {ExceptionNewRuleIcao14Component} from "./exception-new-rule-icao.component";
-import {ExceptionDetailRuleIcao14} from "./exception-detail-rule-icao.component";
+import {ExceptionDetailRuleIcao14Component} from "./exception-detail-rule-icao.component";
 import {ExceptionNewSurfaceComponent} from './exception-new-surface.component';
+import {ExceptionDetailSurfaceComponent} from './exception-detail-surface.component';
 
 const routes :Routes = [
   {
@@ -21,6 +22,14 @@ const routes :Routes = [
         component: ExceptionNewSurfaceComponent
       },
       {
+        path: 'surface/:exceptionId/detail',
+        component: ExceptionDetailSurfaceComponent
+      },
+      {
+        path: 'dynamic_surface/:exceptionId/detail',
+        component: null
+      },
+      {
         path: 'new/rule',
         component: ExceptionNewRuleComponent,
         children: [
@@ -31,16 +40,8 @@ const routes :Routes = [
         ]
       },
       {
-        path: 'surface/:exceptionId/detail',
-        component: null
-      },
-      {
-        path: 'dynamic_surface/:exceptionId/detail',
-        component: null
-      },
-      {
         path: 'rule/icao14/:exceptionId/detail',
-        component: ExceptionDetailRuleIcao14
+        component: ExceptionDetailRuleIcao14Component
       }
     ]
   }
