@@ -1,15 +1,15 @@
 
 export class AnalysisObstacle {
   id: number;
-  surfaceId: number;
-  surfaceName: string;
+  caseId: number;
+  restrictionId: number;
+  restrictionName: string;
+  restrictionTypeId: number;
+  restrictionHeight: number;
   objectId: number;
   objectName: string;
   objectType: number;
-  caseId: number;
-  exceptionId: number;
   objectHeight: number;
-  surfaceHeight: number;
   penetration: number;
   coordinate: number[];
   directionId: number;

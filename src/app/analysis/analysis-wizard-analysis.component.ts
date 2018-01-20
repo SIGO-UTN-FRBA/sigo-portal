@@ -70,10 +70,10 @@ import {ElevatedObjectService} from '../object/object.service';
                 <th>#</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.name">Name</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.objectHeight">Object Height [m]</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.surfaceHeight">Surface Height [m]</th>
+                <th i18n="@@analysis.wizard.analysis.section.obstacles.restrictionHeight">Restriction Height [m]</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.penetration">Penetration [m]</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.direction">Direction</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.surface">Surface</th>
+                <th i18n="@@analysis.wizard.analysis.section.obstacles.surface">Restriction</th>
                 <th i18n="@@analysis.wizard.analysis.section.obstacles.result">Result</th>
                 <th></th>
               </tr>
@@ -86,14 +86,14 @@ import {ElevatedObjectService} from '../object/object.service';
                   </a>
                 </td>
                 <td>{{obstacle.objectHeight | number}}</td>
-                <td>{{obstacle.surfaceHeight | number}}</td>
+                <td>{{obstacle.restrictionHeight | number}}</td>
                 <td>{{obstacle.penetration | number}}</td>
-                <td>{{obstacle.directionName}}</td>
-                <td>{{obstacle.surfaceName}}</td>
+                <td>{{obstacle.directionId ? obstacle.directionName : "-" }}</td>
+                <td>[{{obstacle.restrictionTypeId == 1 ? "Exception" : "OLS"}}] {{obstacle.restrictionName}}</td>
                 <td>{{obstacle.resultSummary}}</td>
                 <td>
                   <button type="button" class="btn btn-default btn-sm" (click)="editResult(obstacle)">
-                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                   </button>
                 </td>
               </tr>
@@ -223,7 +223,9 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     this.obstacleService.list(this.analysisId)
       .then(data => {
-        this.obstacles = data.sort((a,b) => a.directionName.localeCompare(b.directionName));
+        this.obstacles = data.sort((a,b) =>
+          (a.directionId && b.directionName) ? a.directionName.localeCompare(b.directionName) : -1
+        );
         this.initObstaclesStatus = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
