@@ -26,6 +26,7 @@ import {AnalysisResult} from './analysisResult';
 import {UiError} from '../main/uiError';
 import {ElevatedObjectService} from '../object/object.service';
 import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
+import {AnalysisObjectService} from './analysis-object.service';
 
 @Component({
   template:`
@@ -183,6 +184,9 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   onSubmitError:AppError;
   analysisId:number;
   private olmap: OlComponent;
+  private runwayFeatures: Feature[];
+  private exceptionFeatures: Feature[];
+  private objectFeatures: Feature[];
   @ViewChild('mapObjects') set content(content: OlComponent) {
     this.olmap = content;
   }
@@ -204,6 +208,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     private obstacleService: AnalysisObstacleService,
     private resultService: AnalysisResultService,
     private objectService: ElevatedObjectService,
+    private analysisObjectService: AnalysisObjectService,
     private exceptionService: AnalysisExceptionSurfaceService,
     private route: ActivatedRoute,
     private router: Router,
@@ -223,6 +228,12 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     this.initObstaclesStatus = STATUS_INDICATOR.LOADING;
     this.initSpatialStatus = STATUS_INDICATOR.LOADING;
 
+    this.runwayFeatures = [];
+    this.airportFeature = null;
+    this.directions = [];
+    this.objectFeatures = [];
+    this.exceptionFeatures = [];
+
     this.obstacleService.list(this.analysisId)
       .then(data => {
         this.obstacles = data.sort((a,b) =>
@@ -240,30 +251,78 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
         this.analysis = data;
         return this.runwayService.list(data.airportId)
       })
-      .then(data => {
-        this.runways = data;
-        return Promise.all(
-          this.runways.map( r =>
-            this.directionService.list(r.airportId,r.id)
-              .then( data => {
-                r.directions = data;
-                r.directions.forEach((d => d.runway = r));
-              })
-          )
-        )
-      })
-      .then(()=> this.airportService.getFeature(this.analysis.airportId))
-      .then(data => this.airportFeature = data)
-      .then(()=>
-        this.directions =
-          this.runways.map( r => r.directions)
-            .reduce((a,b)=> a.concat(b), [])
-      )
+      .then(data => {this.runways = data;})
+      .then( () => this.resolveRunways())
+      .then(()=> this.resolveAirportFeature())
+      .then(()=> this.resolveRunwayFeatures())
+      .then(()=> this.resolveExceptionFeatures())
+      .then(()=> this.resolveObjectFeatures())
+      .then(()=> this.directions = this.runways.map( r => r.directions).reduce((a,b)=> a.concat(b), []))
       .then( () => this.initSpatialStatus = STATUS_INDICATOR.ACTIVE)
       .catch(error => {
         this.onInitSpatialError = error;
         this.initSpatialStatus = STATUS_INDICATOR.ERROR;
       })
+  }
+
+  private resolveAirportFeature(): Promise<any>{
+    return this.airportService
+      .getFeature(this.analysis.airportId)
+      .then(data => this.airportFeature = data)
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveRunwayFeatures(): Promise<any>{
+    return Promise.all(
+      this.runways.map(r =>
+        this.runwayService.getFeature(r.airportId, r.id)
+          .then(data => this.runwayFeatures.push(data))
+          .catch(error => Promise.reject(error))
+      )
+    );
+  }
+
+  private resolveRunways(): Promise<any>{
+    return Promise.all(
+      this.runways.map( r =>
+        this.directionService.list(r.airportId,r.id)
+          .then( data => {
+            r.directions = data;
+            r.directions.forEach((d => d.runway = r));
+          })
+          .catch(error => Promise.reject(error))
+      )
+    )
+  }
+
+  private resolveObjectFeatures(): Promise<any> {
+
+    return this.analysisObjectService
+      .list(this.analysisId)
+      .then( data =>
+        Promise.all(
+          data.map(o => this.objectService
+            .getFeature(o.objectId, o.objectTypeId)
+            .then(data => this.objectFeatures.push(data))
+            .catch(error => Promise.reject(error))
+          )
+        )
+      );
+  }
+
+  private resolveExceptionFeatures(): Promise<any> {
+
+    return this.exceptionService
+      .list(this.analysisId)
+      .then(data =>
+        data.map( e =>
+          this.exceptionService
+            .getFeature(this.analysisId, e.id)
+            .then( data => this.exceptionFeatures.push(data))
+            .catch(error => Promise.reject(error))
+        )
+      )
+      .catch(error => Promise.reject(error))
   }
 
   ngAfterViewInit(): void {
@@ -313,48 +372,39 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     this.olmap.setCenter(this.airportFeature.getGeometry().transform('EPSG:4326', 'EPSG:3857')['getCoordinates']());
     this.olmap.setZoom(11);
 
-    let p1 = this.resolveSurfaceFeatures(direction);
+    this.includeAirportFeatures();
 
-    let p2 = this.resolveExceptionFeatures();
+    this.includeExceptionFeatures();
 
-    let p3 = this.resolveObjectFeatures();
+    this.includeObjectFeatures();
 
-    return Promise.all([p1,p2, p3]);
+    return Promise.all([
+      this.includeSurfaceFeatures(direction),
+      this.includeDirectionFeatures(direction)
+    ]);
   }
 
-  private resolveExceptionFeatures(): Promise<any> {
-
-    return Promise.all(
-      this.obstacles
-        .filter((o,index,array)=>
-          o.restrictionTypeId == 1 && array.map(other => other.restrictionId).indexOf(o.restrictionId) === index
-        )
-        .map( o =>
-          this.exceptionService
-            .getFeature(this.analysisId, o.restrictionId)
-            .then( data => this.olmap.addException(data))
-            .catch(error => Promise.reject(error))
-        )
-    );
+  private includeAirportFeatures() {
+    this.olmap.addAirport(this.airportFeature);
+    this.runwayFeatures.forEach( f => this.olmap.addRunway(f))
   }
 
-  private resolveObjectFeatures(): Promise<any> {
-
-    return Promise.all(
-      this.obstacles
-        .filter((o,index,array) =>
-          array.map(other => `${other.objectId}${other.objectType}`).indexOf(`${o.objectId}${o.objectType}`) === index
-        )
-        .map(o =>
-          this.objectService
-            .getFeature(o.objectId, o.objectType)
-            .then(data => this.olmap.addObject(data))
-            .catch(error => Promise.reject(error))
-        )
-    );
+  private includeDirectionFeatures(direction: RunwayDirection): Promise<any> {
+    return this.directionService
+      .getFeature(this.analysis.airportId, direction.runwayId, direction.id)
+      .then(data => this.olmap.addDirection(data))
+      .catch(error => Promise.reject(error));
   }
 
-  private resolveSurfaceFeatures(direction: RunwayDirection): Promise<any>{
+  includeExceptionFeatures(){
+    this.exceptionFeatures.forEach(f => this.olmap.addException(f));
+  }
+
+  includeObjectFeatures(){
+    this.objectFeatures.forEach(f => this.olmap.addObject(f));
+  }
+
+  private includeSurfaceFeatures(direction: RunwayDirection): Promise<any>{
 
     return this.surfacesService
       .get(this.analysisId, direction.id)
@@ -396,4 +446,5 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     else
       modalRef.content.result = new AnalysisResult().initialize(obstacle);
   }
+
 }

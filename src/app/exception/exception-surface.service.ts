@@ -11,6 +11,14 @@ export class AnalysisExceptionSurfaceService extends ApiService {
 
   constructor(http:Http){super(http)}
 
+  list(analysisId:number): Promise<AnalysisExceptionSurface[]> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions?type=0`)
+      .toPromise()
+      .then(response => response.json() as AnalysisExceptionSurface[])
+      .catch(this.handleError)
+  }
+
   get(analysisId:number, exceptionId:number):Promise<AnalysisExceptionSurface>{
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions/surface/${exceptionId}`)
