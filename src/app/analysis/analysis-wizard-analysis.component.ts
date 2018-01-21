@@ -25,6 +25,7 @@ import {AnalysisResultService} from './analysis-result.service';
 import {AnalysisResult} from './analysisResult';
 import {UiError} from '../main/uiError';
 import {ElevatedObjectService} from '../object/object.service';
+import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
 
 @Component({
   template:`
@@ -140,7 +141,7 @@ import {ElevatedObjectService} from '../object/object.service';
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
-                     [layers]="['icaoannex14surfaces','terrain', 'airport', 'runway', 'objects']"
+                     [layers]="['icaoannex14surfaces','terrain', 'airport', 'runway', 'objects', 'exception']"
             >
             </app-map>
           </ng-container>
@@ -203,6 +204,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     private obstacleService: AnalysisObstacleService,
     private resultService: AnalysisResultService,
     private objectService: ElevatedObjectService,
+    private exceptionService: AnalysisExceptionSurfaceService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: BsModalService
@@ -313,21 +315,47 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     let p1 = this.resolveSurfaceFeatures(direction);
 
-    let p2 = this.resolveObjectFeatures();
+    let p2 = this.resolveExceptionFeatures();
 
-    return Promise.all([p1,p2]);
+    let p3 = this.resolveObjectFeatures();
+
+    return Promise.all([p1,p2, p3]);
   }
 
-  private resolveObjectFeatures() {
-    return this.obstacles.map(o =>
-      this.objectService
-        .getFeature(o.objectId, o.objectType)
-        .then(data => this.olmap.addObject(data))
-        .catch(error => Promise.reject(error))
+  private resolveExceptionFeatures(): Promise<any> {
+
+    return Promise.all(
+      this.obstacles
+        .filter((o,index,array)=>
+          o.restrictionTypeId == 1 && array.map(other => other.restrictionId).indexOf(o.restrictionId) === index
+        )
+        .map( o =>
+          this.exceptionService
+            .getFeature(this.analysisId, o.restrictionId)
+            .then( data => this.olmap.addException(data))
+            .catch(error => Promise.reject(error))
+        )
     );
   }
 
-  private resolveSurfaceFeatures(direction: RunwayDirection) :Promise<any>{
+  private resolveObjectFeatures(): Promise<any> {
+
+    return Promise.all(
+      this.obstacles
+        .filter((o,index,array) =>
+          array.map(other => `${other.objectId}${other.objectType}`).indexOf(`${o.objectId}${o.objectType}`) === index
+        )
+        .map(o =>
+          this.objectService
+            .getFeature(o.objectId, o.objectType)
+            .then(data => this.olmap.addObject(data))
+            .catch(error => Promise.reject(error))
+        )
+    );
+  }
+
+  private resolveSurfaceFeatures(direction: RunwayDirection): Promise<any>{
+
     return this.surfacesService
       .get(this.analysisId, direction.id)
       .then(data => data.forEach(f => this.olmap.addSurface(f)))
@@ -339,7 +367,9 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
       .clearTerrainLayer()
       .clearObjectLayers()
       .clearAirportLayer()
-      .clearRunwayLayer();
+      .clearRunwayLayer()
+      .clearSurfaceLayers()
+      .clearExceptionLayer();
   }
 
   editResult(obstacle: AnalysisObstacle) {

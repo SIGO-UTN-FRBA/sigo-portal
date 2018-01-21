@@ -19,7 +19,7 @@ import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 import {BlockUIModule} from "ng-block-ui";
 import {BlockTemplateComponent} from "../commons/block-template.component";
 import {AnalysisObjectService} from "./analysis-object.service";
-import {AnalysisExceptionService} from "../exception/analysis-exception.service";
+import {AnalysisExceptionService} from "../exception/exception.service";
 import {RegulationService} from "../regulation/regulation.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";
 import {RunwayService} from "../runway/runway.service";
@@ -29,6 +29,8 @@ import {AnalysisObstacleService} from "./analysis-obstacle.service";
 import {BsModalRef, BsModalService, ComponentLoaderFactory, ModalModule, PositioningService} from 'ngx-bootstrap';
 import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
 import {AnalysisResultService} from './analysis-result.service';
+import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
+import {AnalysisExceptionRuleService} from '../exception/exception-rule.service';
 
 @NgModule({
   imports:[
@@ -58,6 +60,8 @@ import {AnalysisResultService} from './analysis-result.service';
     PlacedObjectCatalogService,
     AnalysisObjectService,
     AnalysisExceptionService,
+    AnalysisExceptionSurfaceService,
+    AnalysisExceptionRuleService,
     RegulationService,
     AnalysisWizardService,
     RunwayService,

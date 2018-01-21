@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ApiError} from "../main/apiError";
 import {AppError} from "../main/ierror";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {AnalysisExceptionService, ExceptionType} from "../exception/analysis-exception.service";
+import {AnalysisExceptionService, ExceptionType} from "../exception/exception.service";
 import {AnalysisException} from "../exception/analysisException";
 import {RegulationService, RegulationType} from "../regulation/regulation.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";

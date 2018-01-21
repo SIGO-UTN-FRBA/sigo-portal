@@ -1,11 +1,9 @@
 import {Component, OnInit} from "@angular/core";
-import {AnalysisExceptionService} from "./analysis-exception.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {RegulationIcaoService} from "../regulation/regulation-icao.service";
 import {AppError} from "../main/ierror";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {RuleICAOAnnex14} from "../regulation/ruleICAO";
-import {EnumItem} from "../commons/enumItem";
 import {ListItem} from "../commons/listItem";
 import {AnalysisExceptionRule} from "./analysisExceptionRule";
 import {RunwayDirection} from "../direction/runwayDirection";
@@ -15,6 +13,7 @@ import {DirectionService} from "../direction/direction.service";
 import {Runway} from "../runway/runway";
 import {DirectionClassificationService} from "../direction/direction-classification.service";
 import {RunwayClassificationICAOAnnex14} from "../direction/runwayClassification";
+import {AnalysisExceptionRuleService} from './exception-rule.service';
 
 @Component({
   template:`
@@ -177,7 +176,7 @@ export class ExceptionNewRuleIcao14Component implements OnInit {
     private runwayService: RunwayService,
     private directionService: DirectionService,
     private classificationService: DirectionClassificationService,
-    private exceptionService: AnalysisExceptionService,
+    private exceptionService: AnalysisExceptionRuleService,
     private regulationService: RegulationIcaoService,
     private route: ActivatedRoute,
     private router: Router

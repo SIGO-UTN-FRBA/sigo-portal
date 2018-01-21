@@ -448,6 +448,30 @@ import Circle = ol.style.Circle;
     return layer;
   }
 
+  clearExceptionLayer(): OlComponent{
+    this.getExceptionLayer().getSource().clear();
+    return this;
+  }
+
+  getExceptionLayer(): VectorLayer{
+    if(this.olLayers.hasOwnProperty('exception'))
+      return this.olLayers['exception'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(139,0,0)', width:1}),
+        fill: new ol.style.Fill({color: 'rgba(139,0,0, 0.7)' })
+      })
+    });
+
+    layer.setProperties({'title':'Exception'});
+
+    this.olLayers['exception'] = layer;
+
+    return layer;
+  }
+
   clearTerrainLayer(): OlComponent{
     this.getTerrainLayer().getSource().clear();
     return this;
@@ -681,6 +705,13 @@ import Circle = ol.style.Circle;
     return this;
   }
 
+  public addException(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+
+    this.addFeature(feature, this.getExceptionLayer(), options);
+
+    return this;
+  }
+
   public addObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     switch (feature.get('class')){
@@ -788,6 +819,7 @@ import Circle = ol.style.Circle;
     this.setupTerrainLayerGroup(layerGroups);
     this.setupAirportLayerGroup(layerGroups);
     this.setupSurfaceLayerGroup(layerGroups);
+    this.setupExceptionLayerGroup(layerGroups);
     this.setupObjectLayerGroup(layerGroups);
 
     return layerGroups;
@@ -838,6 +870,19 @@ import Circle = ol.style.Circle;
       let group = new ol.layer.Group();
       group.setLayers(layers);
       group.set('title','Airport');
+      layerGroups.push(group);
+    }
+  }
+
+  private setupExceptionLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    if(this.layers.includes('exception')){
+      let layers = new ol.Collection<ol.layer.Base>();
+      layers.push(this.getExceptionLayer());
+
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set('title','Exceptions');
+
       layerGroups.push(group);
     }
   }

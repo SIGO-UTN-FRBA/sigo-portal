@@ -1,9 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {STATUS_INDICATOR} from '../commons/status-indicator';
-import {AnalysisExceptionService} from './analysis-exception.service';
 import {AppError} from '../main/ierror';
 import {AnalysisExceptionSurface} from './analysisExceptionSurface';
-import GeoJSON = ol.format.GeoJSON;
+import {AnalysisExceptionSurfaceService} from './exception-surface.service';
 
 @Component({
   selector: 'app-exception-surface-general-view',
@@ -94,7 +93,7 @@ export class ExceptionDetailSurfaceViewComponent implements OnInit {
   coordinatesText: string;
 
   constructor(
-    private exceptionService: AnalysisExceptionService
+    private exceptionService: AnalysisExceptionSurfaceService
   ){
     this.indicator=STATUS_INDICATOR;
   }

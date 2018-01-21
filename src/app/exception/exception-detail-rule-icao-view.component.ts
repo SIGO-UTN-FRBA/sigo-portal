@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {AppError} from "../main/ierror";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import {AnalysisExceptionService} from "./analysis-exception.service";
 import {RuleICAOAnnex14} from "../regulation/ruleICAO";
 import {AnalysisExceptionRule} from "./analysisExceptionRule";
 import {RegulationIcaoService} from "../regulation/regulation-icao.service";
 import {RunwayDirection} from "../direction/runwayDirection";
 import {DirectionService} from "../direction/direction.service";
+import {AnalysisExceptionRuleService} from './exception-rule.service';
 
 @Component({
   selector: 'app-exception-rule-general-view',
@@ -108,7 +108,7 @@ export class ExceptionDetailRuleIcaoViewComponent implements OnInit {
   direction: RunwayDirection;
 
   constructor(
-    private exceptionService:AnalysisExceptionService,
+    private exceptionService:AnalysisExceptionRuleService,
     private regulationService:RegulationIcaoService,
     private directionService: DirectionService
   ){

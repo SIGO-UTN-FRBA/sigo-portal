@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {AppError} from '../main/ierror';
 import {ActivatedRoute, Router} from '@angular/router';
 import {STATUS_INDICATOR} from '../commons/status-indicator';
-import {AnalysisExceptionService} from './analysis-exception.service';
 import Polygon = ol.geom.Polygon;
 import {AnalysisExceptionSurface} from './analysisExceptionSurface';
 import {UiError} from '../main/uiError';
 import GeoJSON = ol.format.GeoJSON;
+import {AnalysisExceptionSurfaceService} from './exception-surface.service';
 
 @Component({
   template:`
@@ -121,7 +121,7 @@ export class ExceptionNewSurfaceComponent implements OnInit {
   heightAmls: number;
 
   constructor(
-    private exceptionService: AnalysisExceptionService,
+    private exceptionService: AnalysisExceptionSurfaceService,
     private route: ActivatedRoute,
     private router: Router
   ){

@@ -11,7 +11,7 @@ import {ExceptionNewSurfaceComponent} from "./exception-new-surface.component";
 import {ExceptionNewRuleIcao14Component} from "./exception-new-rule-icao.component";
 import {RegulationService} from "../regulation/regulation.service";
 import {AnalysisService} from "../analysis/analysis.service";
-import {AnalysisExceptionService} from "./analysis-exception.service";
+import {AnalysisExceptionService} from "./exception.service";
 import {AirportService} from "../airport/airport.service";
 import {RegulationIcaoService} from "../regulation/regulation-icao.service";
 import {RegulationFaaService} from "../regulation/regulation-faa.service";
@@ -24,6 +24,8 @@ import {RunwayService} from "../runway/runway.service";
 import {DirectionService} from "../direction/direction.service";
 import {ExceptionDetailSurfaceComponent} from './exception-detail-surface.component';
 import {ExceptionDetailSurfaceViewComponent} from './exception-detail-surface-view.component';
+import {AnalysisExceptionSurfaceService} from './exception-surface.service';
+import {AnalysisExceptionRuleService} from './exception-rule.service';
 
 @NgModule({
   imports:[
@@ -55,7 +57,9 @@ import {ExceptionDetailSurfaceViewComponent} from './exception-detail-surface-vi
     RegulationFaaService,
     DirectionClassificationService,
     RunwayService,
-    DirectionService
+    DirectionService,
+    AnalysisExceptionSurfaceService,
+    AnalysisExceptionRuleService,
   ],
   schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })
