@@ -375,7 +375,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
   private updateObject(analysisObject: AnalysisObject): Promise<any> {
     return this.analysisObjectService
-      .update(this.analysisId, analysisObject.objectId, analysisObject.included)
+      .update(this.analysisId, analysisObject.id, analysisObject.included)
       .catch((error) => this.onIncludeError = error);
   }
 
