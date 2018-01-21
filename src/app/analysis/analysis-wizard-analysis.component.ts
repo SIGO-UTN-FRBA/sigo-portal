@@ -234,7 +234,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     this.objectFeatures = [];
     this.exceptionFeatures = [];
 
-    this.obstacleService.list(this.analysisId)
+    this.obstacleService.list(this.analysisId, false)
       .then(data => {
         this.obstacles = data.sort((a,b) =>
           (a.directionId && b.directionName) ? a.directionName.localeCompare(b.directionName) : -1
