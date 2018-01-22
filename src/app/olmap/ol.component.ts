@@ -594,7 +594,7 @@ import Circle = ol.style.Circle;
       element: container,
       autoPan: true,
       positioning: 'bottom-center',
-      stopEvent: false,
+      stopEvent: true,
       offset: [0, -5]
     });
 
@@ -604,7 +604,7 @@ import Circle = ol.style.Circle;
      * Add a click handler to hide the popup.
      * @return {boolean} Don't follow the href.
      */
-    closer.onclick = function() {
+    closer.onclick = function(): boolean {
       overlay.setPosition(undefined);
       closer.blur();
       return false;
