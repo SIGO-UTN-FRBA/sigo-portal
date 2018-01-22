@@ -89,10 +89,14 @@ import {AnalysisObjectService} from './analysis-object.service';
                 </td>
                 <td>{{obstacle.objectHeight | number}}</td>
                 <td>{{obstacle.restrictionHeight | number}}</td>
-                <td>{{obstacle.penetration | number}}</td>
+                <td [ngClass]="{'danger': obstacle.penetration > 0, 'success': obstacle.penetration < 0}">
+                  {{obstacle.penetration | number}}
+                </td>
                 <td>{{obstacle.directionId ? obstacle.directionName : "-" }}</td>
                 <td>[{{obstacle.restrictionTypeId == 1 ? "Exception" : "OLS"}}] {{obstacle.restrictionName}}</td>
-                <td>{{obstacle.resultSummary}}</td>
+                <td [ngClass]="{'warning': obstacle.resultSummary != undefined && !obstacle.resultSummary.startsWith(pasiveReason)}">
+                  {{obstacle.resultSummary}}
+                </td>
                 <td>
                   <button type="button" class="btn btn-default btn-sm" (click)="editResult(obstacle)">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -197,6 +201,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   directions: RunwayDirection[];
   selectedDirection: RunwayDirection;
   obstacles:AnalysisObstacle[];
+  pasiveReason: string = "Obstacle: 'false'. Keep: 'true'";
 
   constructor(
     private wizardService: AnalysisWizardService,
