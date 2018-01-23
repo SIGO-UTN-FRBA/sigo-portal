@@ -361,7 +361,7 @@ export class AnalysisWizardInformComponent implements OnInit {
       .finish(this.analysisId)
       .then( () =>{
         this.blockUI.stop();
-        return this.router.navigate([`/analysis/search/list?id=${this.analysis.airportId}`])
+        return this.router.navigateByUrl(`/analysis/search/list?id=${this.analysis.airportId}`)
       })
       .catch((error) => {
         this.onSubmitError = error;
