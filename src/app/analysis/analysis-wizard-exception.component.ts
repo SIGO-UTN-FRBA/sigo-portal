@@ -15,9 +15,9 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
   template:`
     <h1>
       <ng-container i18n="@@analysis.wizard.object.title">Analysis: Apply exceptions </ng-container>
-      <small class="pull-right">Stage 2/4</small>
+      <small class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 2/4</small>
     </h1>
-    <p i18n="@@wizard.object.main_description">
+    <p i18n="@@analysis.wizard.object.main_description">
       This section allows users to define which exceptions are going to be applied into the case.
     </p>
 
@@ -95,12 +95,12 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
           <li class="next">
             <a (click)="onNext()" style="cursor: pointer">
               <ng-container i18n="@@commons.wizard.next">Next </ng-container>
-              <span aria-hidden="true">&rarr;</span>
+              <span aria-hidden="true">&#9658;</span>
             </a>
           </li>
           <li class="previous">
             <a (click)="onPrevious()" style="cursor: pointer">
-              <span aria-hidden="true">&larr;</span>
+              <span aria-hidden="true">&#9668;</span>
               <ng-container i18n="@@commons.wizard.previous"> Previous</ng-container>
             </a>
           </li>

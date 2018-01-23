@@ -27,7 +27,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
   template:`
     <h1>
       <ng-container i18n="@@analysis.wizard.object.title">Analysis: Define objects</ng-container>
-      <small class="pull-right">Stage 1/4</small>
+      <small class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 1/4</small>
     </h1>
     <p i18n="@@wizard.object.main_description">
       This section allows users to define which objects are going to be analyzed.
@@ -133,6 +133,9 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                 <br>
               </div>
             </ng-container>
+
+            <br>
+            
             <app-map #mapObjects
                      (map)="map"
                      [rotate]="true"
@@ -151,8 +154,8 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
         <ul class="pager">
           <li class="next">
             <a (click)="onNext()" style="cursor: pointer">
-              <ng-container i18n="@@commons.wizard.next">Next</ng-container>
-              <span aria-hidden="true">&rarr;</span>
+              <ng-container i18n="@@commons.wizard.next">Next </ng-container>
+              <span aria-hidden="true">&#9658;</span>
             </a>
           </li>
         </ul>

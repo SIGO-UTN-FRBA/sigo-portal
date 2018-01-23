@@ -32,7 +32,7 @@ import {AnalysisObjectService} from './analysis-object.service';
   template:`
     <h1>
       <ng-container i18n="@@analysis.wizard.object.title">Analysis: Analyze obstacles</ng-container>
-      <small class="pull-right">Stage 3/4</small>
+      <small class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 3/4</small>
     </h1>
     <p i18n="@@wizard.object.main_description">
       This section allows users to analyze the obstacles detected as a result of the application of the regulation.
@@ -53,7 +53,6 @@ import {AnalysisObjectService} from './analysis-object.service';
                 i18n="@@analysis.wizard.analysis.section.obstacles.title">
               Obstacles
             </h3>
-            <div class="clearfix"></div>
           </div>
         </div>
         <div [ngSwitch]="initObstaclesStatus" class="panel-body" style="max-height: 40em; overflow: auto;">
@@ -67,6 +66,65 @@ import {AnalysisObjectService} from './analysis-object.service';
             <app-error-indicator [errors]="[onInitObstaclesError]"></app-error-indicator>
           </div>
           <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
+
+            <div class="well well-lg">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="inputName" i18n="@@analysis.wizard.inform.filter.name">Object</label>
+                  <input type="text"
+                         name="inputName"
+                         [(ngModel)]="filterName"
+                         class="form-control" 
+                         placeholder="Type a name..">
+                </div>
+                <div class="form-group">
+                  <label for="inputPenetration" i18n="@@analysis.wizard.inform.filter.penetration">Penetration</label>
+                  <select name="inputPenetration"
+                          [(ngModel)]="filterPenetration"
+                          class="form-control">
+                    <option [ngValue]="null">All</option>
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="inputDirection" i18n="@@analysis.wizard.inform.filter.directions">Directions</label>
+                  <select name="inputDirection"
+                          [(ngModel)]="filterDirection"
+                          class="form-control">
+                    <option [ngValue]="null">All</option>
+                    <option *ngFor="let direction of directions" [ngValue]="direction.id">{{direction.name}}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="inputRestriction" i18n="@@analysis.wizard.inform.filter.restriction">Restriction</label>
+                  <select name="inputRestriction"
+                          [(ngModel)]="filterRestriction"
+                          class="form-control">
+                    <option [ngValue]="null">All</option>
+                    <option [ngValue]="1">Exception</option>
+                    <option [ngValue]="0">OLS</option>
+                  </select>
+                </div>
+                <button type="button" 
+                        class="btn btn-primary" 
+                        (click)="onFilter()"
+                        i18n="@@commons.button.filter"
+                >
+                  Filter
+                </button>
+                <button type="button" 
+                        class="btn btn-default"
+                        (click)="onClear()"
+                        i18n="@@commons.button.clear"
+                >
+                  Clear
+                </button>
+              </form>
+            </div>
+            
+            <br>
+            
             <table class="table table-hover">
               <tr>
                 <th>#</th>
@@ -80,7 +138,7 @@ import {AnalysisObjectService} from './analysis-object.service';
                 <th></th>
               </tr>
               <tbody>
-              <tr *ngFor="let obstacle of obstacles; index as i;">
+              <tr *ngFor="let obstacle of filteredObstacles; index as i;">
                 <td><strong>{{i + 1}}</strong></td>
                 <td>
                   <a [routerLink]="['/objects', obstacle.objectType, obstacle.objectId]">
@@ -94,7 +152,7 @@ import {AnalysisObjectService} from './analysis-object.service';
                 </td>
                 <td>{{obstacle.directionId ? obstacle.directionName : "-" }}</td>
                 <td>[{{obstacle.restrictionTypeId == 1 ? "Exception" : "OLS"}}] {{obstacle.restrictionName}}</td>
-                <td [ngClass]="{'warning': obstacle.resultSummary != undefined && !obstacle.resultSummary.startsWith(pasiveReason)}">
+                <td [ngClass]="{'warning': obstacle.resultSummary != undefined && !obstacle.resultSummary.startsWith(passiveReason)}">
                   {{obstacle.resultSummary}}
                 </td>
                 <td>
@@ -160,12 +218,12 @@ import {AnalysisObjectService} from './analysis-object.service';
           <li class="next">
             <a (click)="onNext()" style="cursor: pointer">
               <ng-container i18n="@@commons.wizard.next">Next</ng-container>
-              <span aria-hidden="true">&rarr;</span>
+              <span aria-hidden="true">&#9658;</span>
             </a>
           </li>
           <li class="previous">
             <a (click)="onPrevious()" style="cursor: pointer">
-              <span aria-hidden="true">&larr;</span>
+              <span aria-hidden="true">&#9668;</span>
               <ng-container i18n="@@commons.wizard.previous"> Previous</ng-container>
             </a>
           </li>
@@ -187,12 +245,12 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   onInitSpatialError:ApiError;
   onSubmitError:AppError;
   analysisId:number;
-  private olmap: OlComponent;
+  private olMap: OlComponent;
   private runwayFeatures: Feature[];
   private exceptionFeatures: Feature[];
   private objectFeatures: Feature[];
   @ViewChild('mapObjects') set content(content: OlComponent) {
-    this.olmap = content;
+    this.olMap = content;
   }
   map:Map;
   airportFeature:Feature;
@@ -201,7 +259,13 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   directions: RunwayDirection[];
   selectedDirection: RunwayDirection;
   obstacles:AnalysisObstacle[];
-  pasiveReason: string = "Obstacle: 'false'. Keep: 'true'";
+  filteredObstacles:AnalysisObstacle[];
+  passiveReason: string = "Obstacle: 'false'. Keep: 'true'";
+
+  filterName: string;
+  filterPenetration: boolean;
+  filterDirection: number;
+  filterRestriction: number;
 
   constructor(
     private wizardService: AnalysisWizardService,
@@ -263,6 +327,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
       .then(()=> this.resolveExceptionFeatures())
       .then(()=> this.resolveObjectFeatures())
       .then(()=> this.directions = this.runways.map( r => r.directions).reduce((a,b)=> a.concat(b), []))
+      .then(()=> this.onClear())
       .then( () => this.initSpatialStatus = STATUS_INDICATOR.ACTIVE)
       .catch(error => {
         this.onInitSpatialError = error;
@@ -374,8 +439,8 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     this.clearMapLayers();
 
-    this.olmap.setCenter(this.airportFeature.getGeometry().transform('EPSG:4326', 'EPSG:3857')['getCoordinates']());
-    this.olmap.setZoom(11);
+    this.olMap.setCenter(this.airportFeature.getGeometry().transform('EPSG:4326', 'EPSG:3857')['getCoordinates']());
+    this.olMap.setZoom(11);
 
     this.includeAirportFeatures();
 
@@ -390,35 +455,35 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   }
 
   private includeAirportFeatures() {
-    this.olmap.addAirport(this.airportFeature);
-    this.runwayFeatures.forEach( f => this.olmap.addRunway(f))
+    this.olMap.addAirport(this.airportFeature);
+    this.runwayFeatures.forEach( f => this.olMap.addRunway(f))
   }
 
   private includeDirectionFeatures(direction: RunwayDirection): Promise<any> {
     return this.directionService
       .getFeature(this.analysis.airportId, direction.runwayId, direction.id)
-      .then(data => this.olmap.addDirection(data))
+      .then(data => this.olMap.addDirection(data))
       .catch(error => Promise.reject(error));
   }
 
   includeExceptionFeatures(){
-    this.exceptionFeatures.forEach(f => this.olmap.addException(f));
+    this.exceptionFeatures.forEach(f => this.olMap.addException(f));
   }
 
   includeObjectFeatures(){
-    this.objectFeatures.forEach(f => this.olmap.addObject(f));
+    this.objectFeatures.forEach(f => this.olMap.addObject(f));
   }
 
   private includeSurfaceFeatures(direction: RunwayDirection): Promise<any>{
 
     return this.surfacesService
       .get(this.analysisId, direction.id)
-      .then(data => data.forEach(f => this.olmap.addSurface(f)))
+      .then(data => data.forEach(f => this.olMap.addSurface(f)))
       .catch(error => Promise.reject(error));
   }
 
   private clearMapLayers() : OlComponent {
-    return this.olmap
+    return this.olMap
       .clearTerrainLayer()
       .clearObjectLayers()
       .clearAirportLayer()
@@ -452,4 +517,20 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
       modalRef.content.result = new AnalysisResult().initialize(obstacle);
   }
 
+  onFilter(){
+    this.filteredObstacles = this.obstacles.filter( o =>
+      (this.filterName == null || this.filterName.length == 0 || o.objectName.toLocaleUpperCase().includes(this.filterName.toLocaleUpperCase()))
+        && (this.filterRestriction == null || o.restrictionTypeId == this.filterRestriction)
+          && (this.filterDirection == null || o.directionId == this.filterDirection)
+            && (this.filterPenetration == null || (o.penetration > 0) == this.filterPenetration)
+    );
+  }
+
+  onClear(){
+    this.filterName = null;
+    this.filterPenetration = null;
+    this.filterDirection = null;
+    this.filterRestriction = null;
+    this.filteredObstacles = this.obstacles;
+  }
 }
