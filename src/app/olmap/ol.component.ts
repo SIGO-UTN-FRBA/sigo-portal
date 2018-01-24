@@ -50,7 +50,7 @@ import Circle = ol.style.Circle;
   }
 
   clearAirportLayer() : OlComponent {
-    this.getAirportLayer().getSource().clear();
+    this.getAirportLayer().getSource().clear(false);
 
     return this;
   }
@@ -78,15 +78,16 @@ import Circle = ol.style.Circle;
   }
 
   clearRunwayLayer() : OlComponent {
-    this.getRunwayLayer().getSource().clear();
+
+    this.getRunwayLayer().getSource().clear(false);
 
     return this;
   }
 
   getRunwayLayer() : VectorLayer {
 
-    if(this.olLayers.runway != null)
-      return this.olLayers.runway;
+    if(this.olLayers.hasOwnProperty('runway'))
+      return this.olLayers['runway'];
 
     let runwayLayer = new VectorLayer({
       source: this.createDefaultVectorSource(),
@@ -98,13 +99,13 @@ import Circle = ol.style.Circle;
 
     runwayLayer.setProperties({'title':'Runway'});
 
-    this.olLayers.runway = runwayLayer;
+    this.olLayers['runway'] = runwayLayer;
 
     return runwayLayer;
   }
 
   clearDirectionLayer() : OlComponent {
-    this.getDirectionLayer().getSource().clear();
+    this.getDirectionLayer().getSource().clear(false);
 
     return this;
   }
@@ -133,7 +134,7 @@ import Circle = ol.style.Circle;
   }
 
   clearDisplacedThresholdLayer() : OlComponent {
-    this.getDisplacedThresholdLayer().getSource().clear();
+    this.getDisplacedThresholdLayer().getSource().clear(false);
 
     return this;
   }
@@ -159,7 +160,7 @@ import Circle = ol.style.Circle;
   }
 
   clearStopwayLayer() : OlComponent {
-    this.getStopwayLayer().getSource().clear();
+    this.getStopwayLayer().getSource().clear(false);
 
     return this;
   }
@@ -184,7 +185,7 @@ import Circle = ol.style.Circle;
   }
 
   clearClearwayLayer() : OlComponent {
-    this.getClearwayLayer().getSource().clear();
+    this.getClearwayLayer().getSource().clear(false);
 
     return this;
   }
@@ -210,15 +211,15 @@ import Circle = ol.style.Circle;
 
   clearObjectLayers() : OlComponent {
 
-    this.getIndividualObjectLayer().getSource().clear();
-    this.getBuildingObjectLayer().getSource().clear();
-    this.getWiringObjectLayer().getSource().clear();
+    this.clearIndividualObjectLayer()
+      .clearBuildingObjectLayer()
+      .clearWiringObjectLayer();
 
     return this;
   }
 
   clearIndividualObjectLayer() : OlComponent {
-    this.getIndividualObjectLayer().getSource().clear();
+    this.getIndividualObjectLayer().getSource().clear(false);
 
     return this;
   }
@@ -248,7 +249,7 @@ import Circle = ol.style.Circle;
   }
 
   clearBuildingObjectLayer() : OlComponent{
-    this.getBuildingObjectLayer().getSource().clear();
+    this.getBuildingObjectLayer().getSource().clear(false);
 
     return this;
   }
@@ -273,7 +274,7 @@ import Circle = ol.style.Circle;
   }
 
   clearWiringObjectLayer() : OlComponent {
-    this.getWiringObjectLayer().getSource().clear();
+    this.getWiringObjectLayer().getSource().clear(false);
 
     return this;
   }
@@ -297,13 +298,13 @@ import Circle = ol.style.Circle;
   }
 
   clearSurfaceLayers() : OlComponent{
-    this.getICAOAnnex14SurfaceInnerHorizontalLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceStripLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceConicalLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceTransitionalLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceApproachFirstSectionLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceApproachSecondSectionLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceTakeoffClimbLayer().getSource().clear();
+    this.getICAOAnnex14SurfaceInnerHorizontalLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceStripLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceConicalLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceTransitionalLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceApproachFirstSectionLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceApproachSecondSectionLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceTakeoffClimbLayer().getSource().clear(false);
 
     return this;
   }
@@ -449,7 +450,7 @@ import Circle = ol.style.Circle;
   }
 
   clearExceptionLayer(): OlComponent{
-    this.getExceptionLayer().getSource().clear();
+    this.getExceptionLayer().getSource().clear(false);
     return this;
   }
 
@@ -473,7 +474,7 @@ import Circle = ol.style.Circle;
   }
 
   clearTerrainLayer(): OlComponent{
-    this.getTerrainLayer().getSource().clear();
+    this.getTerrainLayer().getSource().clear(false);
     return this;
   }
 
