@@ -30,7 +30,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
           <div class="media-body">
             <h4 class="media-heading">
               <a routerLink="/analysis/{{analysis.id}}/stages/{{stages[analysis.stageId]}}">{{analysis.airport.codeFIR}}</a>
-              <span class="label label-info">{{stages[analysis.stageId]}}</span>
+              <span class="label" [ngClass]="{'label-info': analysis.statusId <= 1, 'label-default': analysis.statusId == 2, 'label-danger': analysis.statusId == 3}">{{stages[analysis.stageId]}}</span>
             </h4>
             <p>{{analysis.airport.nameFIR}}</p>
             <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>

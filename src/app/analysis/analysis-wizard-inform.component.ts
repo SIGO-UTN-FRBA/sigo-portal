@@ -53,7 +53,7 @@ import Feature = ol.Feature;
         
         <div [ngSwitch]="initObstaclesStatus" class="panel-body">
           <div *ngSwitchCase="indicator.LOADING">
-            <app-loading-indicator></app-loading-indicator>
+            <apgip-loading-indicator></apgip-loading-indicator>
           </div>
           <div *ngSwitchCase="indicator.EMPTY">
             <app-empty-indicator type="relation" entity="obstacles"></app-empty-indicator>
@@ -160,7 +160,7 @@ import Feature = ol.Feature;
       </div>
       <br>
 
-      <nav>
+      <nav *ngIf="analysis.statusId <= 1">
         <ul class="pager">
           <li class="next">
             <a (click)="onFinish()" style="cursor: pointer">
