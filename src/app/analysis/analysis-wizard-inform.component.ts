@@ -28,7 +28,7 @@ import Feature = ol.Feature;
   template:`
     <h1>
       <ng-container i18n="@@analysis.wizard.inform.title">Analysis: Inform</ng-container>
-      <small class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 4/4</small>
+      <small *ngIf="analysis.statusId <= 1" class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 4/4</small>
     </h1>
     <p i18n="@@analysis.wizard.inform.main_description">
       This section allows users to study the final results of analysis.
