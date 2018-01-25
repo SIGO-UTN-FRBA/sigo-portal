@@ -7,7 +7,6 @@ import Point = ol.geom.Point;
 import {ApiService} from "../main/api.service";
 import {ParamMap} from "@angular/router";
 import {Feature} from "openlayers";
-import JSONFeature = ol.format.JSONFeature;
 import GeoJSON = ol.format.GeoJSON;
 
 

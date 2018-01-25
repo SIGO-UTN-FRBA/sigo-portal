@@ -50,7 +50,7 @@ import Circle = ol.style.Circle;
   }
 
   clearAirportLayer() : OlComponent {
-    this.getAirportLayer().getSource().clear();
+    this.getAirportLayer().getSource().clear(false);
 
     return this;
   }
@@ -70,7 +70,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    airportLayer.setProperties({"title":"Airport"});
+    airportLayer.setProperties({'title':'Airport'});
 
     this.olLayers.airport = airportLayer;
 
@@ -78,15 +78,16 @@ import Circle = ol.style.Circle;
   }
 
   clearRunwayLayer() : OlComponent {
-    this.getRunwayLayer().getSource().clear();
+
+    this.getRunwayLayer().getSource().clear(false);
 
     return this;
   }
 
   getRunwayLayer() : VectorLayer {
 
-    if(this.olLayers.runway != null)
-      return this.olLayers.runway;
+    if(this.olLayers.hasOwnProperty('runway'))
+      return this.olLayers['runway'];
 
     let runwayLayer = new VectorLayer({
       source: this.createDefaultVectorSource(),
@@ -96,15 +97,15 @@ import Circle = ol.style.Circle;
       })
     });
 
-    runwayLayer.setProperties({"title":"Runway"});
+    runwayLayer.setProperties({'title':'Runway'});
 
-    this.olLayers.runway = runwayLayer;
+    this.olLayers['runway'] = runwayLayer;
 
     return runwayLayer;
   }
 
   clearDirectionLayer() : OlComponent {
-    this.getDirectionLayer().getSource().clear();
+    this.getDirectionLayer().getSource().clear(false);
 
     return this;
   }
@@ -125,7 +126,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    directionLayer.setProperties({"title":"Direction"});
+    directionLayer.setProperties({'title':'Direction'});
 
     this.olLayers.direction = directionLayer;
 
@@ -133,7 +134,7 @@ import Circle = ol.style.Circle;
   }
 
   clearDisplacedThresholdLayer() : OlComponent {
-    this.getDisplacedThresholdLayer().getSource().clear();
+    this.getDisplacedThresholdLayer().getSource().clear(false);
 
     return this;
   }
@@ -151,7 +152,7 @@ import Circle = ol.style.Circle;
       map: this.map
     });
 
-    thresholdLayer.setProperties({"title":"Displaced threshold"});
+    thresholdLayer.setProperties({'title':'Displaced threshold'});
 
     this.olLayers.threshold = thresholdLayer;
 
@@ -159,7 +160,7 @@ import Circle = ol.style.Circle;
   }
 
   clearStopwayLayer() : OlComponent {
-    this.getStopwayLayer().getSource().clear();
+    this.getStopwayLayer().getSource().clear(false);
 
     return this;
   }
@@ -176,7 +177,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Stop-way"});
+    layer.setProperties({'title':'Stop-way'});
 
     this.olLayers.stopway = layer;
 
@@ -184,7 +185,7 @@ import Circle = ol.style.Circle;
   }
 
   clearClearwayLayer() : OlComponent {
-    this.getClearwayLayer().getSource().clear();
+    this.getClearwayLayer().getSource().clear(false);
 
     return this;
   }
@@ -201,7 +202,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Clear-way"});
+    layer.setProperties({'title':'Clear-way'});
 
     this.olLayers.clearway = layer;
 
@@ -210,15 +211,15 @@ import Circle = ol.style.Circle;
 
   clearObjectLayers() : OlComponent {
 
-    this.getIndividualObjectLayer().getSource().clear();
-    this.getBuildingObjectLayer().getSource().clear();
-    this.getWiringObjectLayer().getSource().clear();
+    this.clearIndividualObjectLayer()
+      .clearBuildingObjectLayer()
+      .clearWiringObjectLayer();
 
     return this;
   }
 
   clearIndividualObjectLayer() : OlComponent {
-    this.getIndividualObjectLayer().getSource().clear();
+    this.getIndividualObjectLayer().getSource().clear(false);
 
     return this;
   }
@@ -240,7 +241,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Individual object"});
+    layer.setProperties({'title':'Individual object'});
 
     this.olLayers.individual = layer;
 
@@ -248,7 +249,7 @@ import Circle = ol.style.Circle;
   }
 
   clearBuildingObjectLayer() : OlComponent{
-    this.getBuildingObjectLayer().getSource().clear();
+    this.getBuildingObjectLayer().getSource().clear(false);
 
     return this;
   }
@@ -265,7 +266,7 @@ import Circle = ol.style.Circle;
       }),
     });
 
-    layer.setProperties({"title":"Building"});
+    layer.setProperties({'title':'Building'});
 
     this.olLayers.building = layer;
 
@@ -273,7 +274,7 @@ import Circle = ol.style.Circle;
   }
 
   clearWiringObjectLayer() : OlComponent {
-    this.getWiringObjectLayer().getSource().clear();
+    this.getWiringObjectLayer().getSource().clear(false);
 
     return this;
   }
@@ -289,21 +290,23 @@ import Circle = ol.style.Circle;
       }),
     });
 
-    layer.setProperties({"title":"Wire"});
+    layer.setProperties({'title':'Wire'});
 
     this.olLayers.wiring = layer;
 
     return layer;
   }
 
-  clearSurfaceLayers() {
-    this.getICAOAnnex14SurfaceInnerHorizontalLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceStripLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceConicalLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceTransitionalLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceApproachFirstSectionLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceApproachSecondSectionLayer().getSource().clear();
-    this.getICAOAnnex14SurfaceTakeoffClimbLayer().getSource().clear();
+  clearSurfaceLayers() : OlComponent{
+    this.getICAOAnnex14SurfaceInnerHorizontalLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceStripLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceConicalLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceTransitionalLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceApproachFirstSectionLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceApproachSecondSectionLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceTakeoffClimbLayer().getSource().clear(false);
+
+    return this;
   }
 
   getICAOAnnex14SurfaceStripLayer() : VectorLayer {
@@ -319,7 +322,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Strip"});
+    layer.setProperties({'title':'Strip'});
 
     this.olLayers['surfaceStrip'] = layer;
 
@@ -339,7 +342,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Inner Horizontal"});
+    layer.setProperties({'title':'Inner Horizontal'});
 
     this.olLayers['surfaceInnerHorizontal'] = layer;
 
@@ -359,7 +362,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Conical"});
+    layer.setProperties({'title':'Conical'});
 
     this.olLayers['surfaceConical'] = layer;
 
@@ -379,7 +382,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Approach First Section"});
+    layer.setProperties({'title':'Approach First Section'});
 
     this.olLayers['surfaceApproachFirstSection'] = layer;
 
@@ -399,7 +402,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Approach Second Section"});
+    layer.setProperties({'title':'Approach Second Section'});
 
     this.olLayers['surfaceApproachSecondSection'] = layer;
 
@@ -419,7 +422,7 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Transitional"});
+    layer.setProperties({'title':'Transitional'});
 
     this.olLayers['surfaceTransitional'] = layer;
 
@@ -439,9 +442,108 @@ import Circle = ol.style.Circle;
       })
     });
 
-    layer.setProperties({"title":"Takeoff Climb"});
+    layer.setProperties({'title':'Takeoff Climb'});
 
     this.olLayers['surfaceTakeoffClimb'] = layer;
+
+    return layer;
+  }
+
+  clearExceptionLayer(): OlComponent{
+    this.getExceptionLayer().getSource().clear(false);
+    return this;
+  }
+
+  getExceptionLayer(): VectorLayer{
+    if(this.olLayers.hasOwnProperty('exception'))
+      return this.olLayers['exception'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(139,0,0)', width:1}),
+        fill: new ol.style.Fill({color: 'rgba(139,0,0, 0.7)' })
+      })
+    });
+
+    layer.setProperties({'title':'Exception'});
+
+    this.olLayers['exception'] = layer;
+
+    return layer;
+  }
+
+  clearTerrainLayer(): OlComponent{
+    this.getTerrainLayer().getSource().clear(false);
+    return this;
+  }
+
+  getTerrainLayer(): VectorLayer{
+    if(this.olLayers.hasOwnProperty('terrain'))
+      return this.olLayers['terrain'];
+
+    let layer = new VectorLayer({
+
+      visible: true,
+      source: this.createDefaultVectorSource(),
+      style: (feature, resolution) => {
+
+        let color: string;
+        let height : number = feature.getProperties().height_amls;
+
+        if(height < -100)
+          color = '#191970';
+        else if(height < -50)
+          color = '#0000CD';
+        else if(height < -10)
+          color = '#1E90FF';
+        else if(height > 4000)
+          color = '#C71585';
+        else if(height > 3500)
+          color = '#FF1493';
+        else if(height > 3000)
+          color = '#FF69B4';
+        else if(height > 2500)
+          color = '#8B4513';
+        else if(height > 2000)
+          color = '#A0522D';
+        else if(height > 1500)
+          color = '#D2691E';
+        else if(height > 1200)
+          color = '#CD853F';
+        else if(height > 1000)
+          color = '#F4A460';
+        else if(height > 800)
+          color = '#DEB887';
+        else if(height > 500)
+          color = '#BDB76B';
+        else if(height > 400)
+          color = '#BDB76B';
+        else if(height > 300)
+          color = '#6B8E23';
+        else if(height > 200)
+          color = '#ADFF2F';
+        else if(height > 100)
+          color = '#7FFF00';
+        else if(height > 75)
+          color = '#32CD32';
+        else if(height > 50)
+          color = '#228B22';
+        else if(height > 25)
+          color = '#008000';
+        else if(height > 0) {
+          color = '#006400';
+        }
+
+        return new Style({
+          stroke: new ol.style.Stroke({color: color, width:1})
+        });
+      }
+    });
+
+    layer.setProperties({'title':'Terrain Level Curves'});
+
+    this.olLayers['terrain'] = layer;
 
     return layer;
   }
@@ -493,7 +595,7 @@ import Circle = ol.style.Circle;
       element: container,
       autoPan: true,
       positioning: 'bottom-center',
-      stopEvent: false,
+      stopEvent: true,
       offset: [0, -5]
     });
 
@@ -503,7 +605,7 @@ import Circle = ol.style.Circle;
      * Add a click handler to hide the popup.
      * @return {boolean} Don't follow the href.
      */
-    closer.onclick = function() {
+    closer.onclick = function(): boolean {
       overlay.setPosition(undefined);
       closer.blur();
       return false;
@@ -523,8 +625,8 @@ import Circle = ol.style.Circle;
 
         let properties = '';
 
-        Object.keys(feature.getProperties()).filter(k => { return !(k == 'geometry' || k == 'class') }).forEach( p => {
-          properties += `<p>${p}: <i>${feature.get(p)}</i></p>`
+        Object.keys(feature.getProperties()).filter(k => { return !(k == 'geometry' || k == 'class'); }).forEach( p => {
+          properties += `<p>${p}: <i>${feature.get(p)}</i></p>`;
         });
 
         content.innerHTML = `<p><strong>${feature.get('class')}</strong></p> ${properties}`;
@@ -597,17 +699,34 @@ import Circle = ol.style.Circle;
     return this;
   }
 
+  public addTerrainLevelCurve(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+
+    this.addFeature(feature, this.getTerrainLayer(), options);
+
+    return this;
+  }
+
+  public addException(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+
+    this.addFeature(feature, this.getExceptionLayer(), options);
+
+    return this;
+  }
+
   public addObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
-    switch (feature.get("class")){
-      case "Building":
+    switch (feature.get('class')){
+      case 'Building':
         this.addBuildingObject(feature, options);
         break;
-      case "Individual Object":
+      case 'Individual Object':
         this.addIndividualObject(feature, options);
         break;
-      case "Overhead Wire":
+      case 'Overhead Wire':
         this.addWiringObject(feature, options);
+        break;
+      case 'Terrain Level Curve':
+        this.addTerrainLevelCurve(feature, options);
         break;
     }
 
@@ -698,8 +817,10 @@ import Circle = ol.style.Circle;
     let layerGroups : Array<ol.layer.Group>= [];
 
     this.setupBaseLayerGroup(layerGroups);
+    this.setupTerrainLayerGroup(layerGroups);
     this.setupAirportLayerGroup(layerGroups);
     this.setupSurfaceLayerGroup(layerGroups);
+    this.setupExceptionLayerGroup(layerGroups);
     this.setupObjectLayerGroup(layerGroups);
 
     return layerGroups;
@@ -709,36 +830,60 @@ import Circle = ol.style.Circle;
     let baseLayersGroup = new ol.layer.Group({
       layers: [this.getStamenTonerBaseLayer()]
     });
-    baseLayersGroup.set("title", "Base maps");
+    baseLayersGroup.set('title', 'Base maps');
 
     layerGroups.push(baseLayersGroup);
+  }
+
+  private setupTerrainLayerGroup(layerGroups: Array<ol.layer.Group>){
+    if(this.layers.includes('terrain')){
+      let layers = new ol.Collection<ol.layer.Base>();
+      layers.push(this.getTerrainLayer());
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set('title','Terrain');
+      layerGroups.push(group);
+    }
   }
 
   private setupAirportLayerGroup(layerGroups: Array<ol.layer.Group>) {
     let layers = new ol.Collection<ol.layer.Base>();
 
-    if(this.layers.includes("airport"))
+    if(this.layers.includes('airport'))
       layers.push(this.getAirportLayer());
 
-    if(this.layers.includes("runway"))
+    if(this.layers.includes('runway'))
       layers.push(this.getRunwayLayer());
 
-    if(this.layers.includes("direction"))
+    if(this.layers.includes('direction'))
       layers.push(this.getDirectionLayer());
 
-    if(this.layers.includes("threshold"))
+    if(this.layers.includes('threshold'))
       layers.push(this.getDisplacedThresholdLayer());
 
-    if(this.layers.includes("clearway"))
+    if(this.layers.includes('clearway'))
       layers.push(this.getClearwayLayer());
 
-    if(this.layers.includes("stopway"))
+    if(this.layers.includes('stopway'))
       layers.push(this.getStopwayLayer());
 
     if(layers.getArray().length > 0){
       let group = new ol.layer.Group();
       group.setLayers(layers);
-      group.set("title","Airport");
+      group.set('title','Airport');
+      layerGroups.push(group);
+    }
+  }
+
+  private setupExceptionLayerGroup(layerGroups: Array<ol.layer.Group>) {
+    if(this.layers.includes('exception')){
+      let layers = new ol.Collection<ol.layer.Base>();
+      layers.push(this.getExceptionLayer());
+
+      let group = new ol.layer.Group();
+      group.setLayers(layers);
+      group.set('title','Exceptions');
+
       layerGroups.push(group);
     }
   }
@@ -759,7 +904,7 @@ import Circle = ol.style.Circle;
 
       let group = new ol.layer.Group();
       group.setLayers(layers);
-      group.set("title","OLS");
+      group.set('title','OLS');
 
       layerGroups.push(group);
     }
@@ -768,19 +913,21 @@ import Circle = ol.style.Circle;
   private setupObjectLayerGroup(layerGroups: Array<ol.layer.Group>) {
     let layers = new ol.Collection<ol.layer.Base>();
 
-    if(this.layers.includes("individual"))
+    let all :boolean = this.layers.includes('objects');
+
+    if(all || this.layers.includes('individual'))
       layers.push(this.getIndividualObjectLayer());
 
-    if(this.layers.includes("building"))
+    if(all || this.layers.includes('building'))
       layers.push(this.getBuildingObjectLayer());
 
-    if(this.layers.includes("wire"))
+    if(all || this.layers.includes('wire'))
       layers.push(this.getWiringObjectLayer());
 
     if(layers.getArray().length > 0){
       let group = new ol.layer.Group();
       group.setLayers(layers);
-      group.set("title","Object");
+      group.set('title','Object');
       layerGroups.push(group);
     }
   }

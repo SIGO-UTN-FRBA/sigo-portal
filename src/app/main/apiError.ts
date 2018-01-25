@@ -1,6 +1,7 @@
 import {AppError} from "./ierror";
 
 export class ApiError implements AppError{
+  name: string;
 
   private _code : string;
   private _message : string;
@@ -10,6 +11,7 @@ export class ApiError implements AppError{
     this._code = code;
     this._message = message;
     this._raw = raw;
+    this.name = "ApiError"
   }
 
   get raw(): Response {

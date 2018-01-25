@@ -10,7 +10,7 @@ import {OlService} from "../olmap/ol.service";
 import {OlComponent} from "../olmap/ol.component";
 import {PlacedObjectListComponent} from "./object-list.component";
 import {PlacedObjectDetailComponent} from "./object-detail.component";
-import {PlacedObjectService} from "./object.service";
+import {ElevatedObjectService} from "./object.service";
 import {PlacedObjectCatalogService} from "./object-catalog.service";
 import {PlacedObjectNewComponent} from "./object-new.component";
 import {ObjectOwnerService} from "../owner/owner.service";
@@ -43,7 +43,7 @@ import {PlacedObjectDetailGeometryViewComponent} from "./object-detail-geometry-
   providers: [
     OlService,
     OlComponent,
-    PlacedObjectService,
+    ElevatedObjectService,
     PlacedObjectCatalogService,
     ObjectOwnerService,
     LocationService

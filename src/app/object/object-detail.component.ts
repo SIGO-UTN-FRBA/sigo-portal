@@ -14,8 +14,19 @@ import {ActivatedRoute} from "@angular/router";
     <hr/>
 
     <div class="container-fluid">
-      <app-object-general-view *ngIf="!edit_general" [(edit)]="edit_general" [placedObjectId]="objectId"></app-object-general-view>
-      <app-object-general-edit *ngIf="edit_general" [(edit)]="edit_general" [placedObjectId]="objectId"></app-object-general-edit>
+      <app-object-general-view *ngIf="!edit_general" 
+                               [(edit)]="edit_general" 
+                               [placedObjectId]="objectId"
+                               [objectTypeId]="objectType"
+      >
+      </app-object-general-view>
+      
+      <app-object-general-edit *ngIf="edit_general" 
+                               [(edit)]="edit_general" 
+                               [placedObjectId]="objectId"
+                               [objectTypeId]="objectType"
+      >
+      </app-object-general-edit>
 
       <br>
 

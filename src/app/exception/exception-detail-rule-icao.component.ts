@@ -6,7 +6,7 @@ import {ActivatedRoute} from "@angular/router";
     <h1 i18n="@@exception.rule.detail.title">
       Rule exception detail
     </h1>
-    <p i18n="@@exception.new.main_description">
+    <p i18n="@@exception.rule.detail.main_description">
       This section allows users to inspect a rule exception.
     </p>
     <hr/>
@@ -17,9 +17,8 @@ import {ActivatedRoute} from "@angular/router";
   `
 })
 
-export class ExceptionDetailRuleIcao14 {
+export class ExceptionDetailRuleIcao14Component {
   edit_general : boolean;
-  edit_geometry : boolean;
   exceptionId:number;
   analysisId:number;
 
@@ -27,7 +26,6 @@ export class ExceptionDetailRuleIcao14 {
     private route: ActivatedRoute
   ){
     this.edit_general = false;
-    this.edit_geometry = false;
   }
 
   ngOnInit() : void {

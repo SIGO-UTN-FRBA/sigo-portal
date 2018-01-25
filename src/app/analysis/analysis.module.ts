@@ -14,18 +14,23 @@ import {AnalysisWizardExceptionComponent} from "./analysis-wizard-exception.comp
 import {AnalysisWizardInformComponent} from "./analysis-wizard-inform.component";
 import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component";
 import {AnalysisCaseService} from "./analysis-case.service";
-import {PlacedObjectService} from "../object/object.service";
+import {ElevatedObjectService} from "../object/object.service";
 import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 import {BlockUIModule} from "ng-block-ui";
 import {BlockTemplateComponent} from "../commons/block-template.component";
 import {AnalysisObjectService} from "./analysis-object.service";
-import {AnalysisExceptionService} from "../exception/analysis-exception.service";
+import {AnalysisExceptionService} from "../exception/exception.service";
 import {RegulationService} from "../regulation/regulation.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";
 import {RunwayService} from "../runway/runway.service";
 import {DirectionService} from "../direction/direction.service";
 import {AnalysisSurfaceService} from "./analysis-surface.service";
 import {AnalysisObstacleService} from "./analysis-obstacle.service";
+import {BsModalRef, BsModalService, ComponentLoaderFactory, ModalModule, PositioningService} from 'ngx-bootstrap';
+import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
+import {AnalysisResultService} from './analysis-result.service';
+import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
+import {AnalysisExceptionRuleService} from '../exception/exception-rule.service';
 
 @NgModule({
   imports:[
@@ -34,7 +39,8 @@ import {AnalysisObstacleService} from "./analysis-obstacle.service";
     AnalysisRoutingModule,
     CommonsModule,
     OlmapModule,
-    BlockUIModule
+    BlockUIModule,
+    ModalModule
   ],
   declarations: [
     AnalysisComponent,
@@ -43,25 +49,34 @@ import {AnalysisObstacleService} from "./analysis-obstacle.service";
     AnalysisWizardObjectComponent,
     AnalysisWizardExceptionComponent,
     AnalysisWizardAnalysisComponent,
-    AnalysisWizardInformComponent
+    AnalysisWizardInformComponent,
+    AnalysisModalAnalysisComponent
   ],
   providers: [
     AnalysisCaseService,
     AnalysisService,
     AirportService,
-    PlacedObjectService,
+    ElevatedObjectService,
     PlacedObjectCatalogService,
     AnalysisObjectService,
     AnalysisExceptionService,
+    AnalysisExceptionSurfaceService,
+    AnalysisExceptionRuleService,
     RegulationService,
     AnalysisWizardService,
     RunwayService,
     DirectionService,
     AnalysisSurfaceService,
-    AnalysisObstacleService
+    AnalysisObstacleService,
+    BsModalService,
+    BsModalRef,
+    AnalysisResultService,
+    ComponentLoaderFactory,
+    PositioningService
   ],
   entryComponents: [
-    BlockTemplateComponent
+    BlockTemplateComponent,
+    AnalysisModalAnalysisComponent
   ],
   schemas:[ CUSTOM_ELEMENTS_SCHEMA ]
 })

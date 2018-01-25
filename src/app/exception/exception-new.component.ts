@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {AnalysisExceptionService, ExceptionType} from "./analysis-exception.service";
+import {AnalysisExceptionService, ExceptionType} from "./exception.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({

@@ -10,11 +10,22 @@ export class AnalysisObstacleService extends ApiService {
 
   constructor(http:Http){super(http)}
 
-  list(analysisId: number):Promise<AnalysisObstacle[]>{
+  list(analysisId: number, excepting?: boolean):Promise<AnalysisObstacle[]>{
+
+    let queryParams = (excepting !== null) ? `excepting=${excepting}` : "";
+
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/obstacles`)
+      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/obstacles?${queryParams}`)
       .toPromise()
       .then(response => response.json() as AnalysisObstacle[])
+      .catch(this.handleError)
+  }
+
+  get(analysisId: number, obstacleId: number):Promise<AnalysisObstacle>{
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/obstacles/${obstacleId}`)
+      .toPromise()
+      .then(response => response.json() as AnalysisObstacle)
       .catch(this.handleError)
   }
 }

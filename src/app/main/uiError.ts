@@ -1,6 +1,7 @@
 import {AppError} from "./ierror";
 
 export class UiError implements AppError {
+  name: string;
 
   private _element:string;
   private _message:string;
@@ -10,6 +11,7 @@ export class UiError implements AppError {
     this._message = message;
     this._type = type;
     this._element = element;
+    this.name = "UiError";
   }
 
   get type(): string {

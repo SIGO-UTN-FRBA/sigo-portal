@@ -15,17 +15,24 @@ import {Runway} from "../runway/runway";
 import {Analysis} from "./analysis";
 import {RunwayDirection} from "../direction/runwayDirection";
 import {AnalysisSurfaceService} from "./analysis-surface.service";
-import {Airport} from "../airport/airport";
 import {AirportService} from "../airport/airport.service";
 import Feature = ol.Feature;
 import {AnalysisObstacleService} from "./analysis-obstacle.service";
 import {AnalysisObstacle} from "./analysisObstacle";
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
+import {AnalysisResultService} from './analysis-result.service';
+import {AnalysisResult} from './analysisResult';
+import {UiError} from '../main/uiError';
+import {ElevatedObjectService} from '../object/object.service';
+import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
+import {AnalysisObjectService} from './analysis-object.service';
 
 @Component({
   template:`
     <h1>
       <ng-container i18n="@@analysis.wizard.object.title">Analysis: Analyze obstacles</ng-container>
-      <small class="pull-right">Stage 3/4</small>
+      <small class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 3/4</small>
     </h1>
     <p i18n="@@wizard.object.main_description">
       This section allows users to analyze the obstacles detected as a result of the application of the regulation.
@@ -46,10 +53,9 @@ import {AnalysisObstacle} from "./analysisObstacle";
                 i18n="@@analysis.wizard.analysis.section.obstacles.title">
               Obstacles
             </h3>
-            <div class="clearfix"></div>
           </div>
         </div>
-        <div [ngSwitch]="initObstaclesStatus" class="panel-body" style="max-height: 30em; overflow: auto;">
+        <div [ngSwitch]="initObstaclesStatus" class="panel-body">
           <div *ngSwitchCase="indicator.LOADING">
             <app-loading-indicator></app-loading-indicator>
           </div>
@@ -59,43 +65,118 @@ import {AnalysisObstacle} from "./analysisObstacle";
           <div *ngSwitchCase="indicator.ERROR">
             <app-error-indicator [errors]="[onInitObstaclesError]"></app-error-indicator>
           </div>
+          <div *ngSwitchCase="indicator.EMPTY">
+            <app-empty-indicator entity="obstacles" type="detected"></app-empty-indicator>
+          </div>
           <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
-            <table class="table table-hover">
-              <tr>
-                <th>#</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.included">Included / Excluded</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.name">Name</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.objectHeight">Object Height [m]</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.surfaceHeight">Surface Height [m]</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.penetration">Penetration [m]</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.direction">Direction</th>
-                <th i18n="@@analysis.wizard.analysis.section.obstacles.surface">Surface</th>
-              </tr>
-              <tbody>
-              <tr *ngFor="let obstacle of obstacles; index as i;">
-                <td><strong>{{i + 1}}</strong></td>
-                <td>
-                  <button type="button" class="btn btn-default btn-sm" (click)="toggleExclusion(obstacle)">
-                      <span class="glyphicon"
-                            [ngClass]="{'glyphicon-ok-circle': !obstacle.excluded, 'glyphicon-ban-circle': obstacle.excluded}"
-                            aria-hidden="true">
-                        
-                      </span>
-                  </button>
-                </td>
-                <td>
-                  <a [routerLink]="['/objects', obstacle.objectType, obstacle.objectId]">
-                    {{obstacle.objectName}}
-                  </a>
-                </td>
-                <td>{{obstacle.objectHeight}}</td>
-                <td>{{obstacle.surfaceHeight}}</td>
-                <td>{{obstacle.penetration}}</td>
-                <td>{{obstacle.directionName}}</td>
-                <td>{{obstacle.surfaceName}}</td>
-              </tr>
-              </tbody>
-            </table>
+
+            <div class="well well-sm">
+              <form class="form-inline">
+                <div class="form-group">
+                  <label for="inputName" i18n="@@analysis.wizard.inform.filter.name">Object</label>
+                  <input type="text"
+                         name="inputName"
+                         [(ngModel)]="filterName"
+                         class="form-control" 
+                         placeholder="Type a name..">
+                </div>
+                <div class="form-group">
+                  <label for="inputPenetration" i18n="@@analysis.wizard.inform.filter.penetration">Penetration</label>
+                  <select name="inputPenetration"
+                          [(ngModel)]="filterPenetration"
+                          class="form-control">
+                    <option [ngValue]="null">All</option>
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="inputDirection" i18n="@@analysis.wizard.inform.filter.directions">Directions</label>
+                  <select name="inputDirection"
+                          [(ngModel)]="filterDirection"
+                          class="form-control">
+                    <option [ngValue]="null">All</option>
+                    <option *ngFor="let direction of directions" [ngValue]="direction.id">{{direction.name}}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="inputRestriction" i18n="@@analysis.wizard.inform.filter.restriction">Restriction</label>
+                  <select name="inputRestriction"
+                          [(ngModel)]="filterRestriction"
+                          class="form-control">
+                    <option [ngValue]="null">All</option>
+                    <option [ngValue]="1">Exception</option>
+                    <option [ngValue]="0">OLS</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="inputPending" i18n="@@analysis.wizard.inform.filter.pending">Pending</label>
+                  <select name="inputPending"
+                          [(ngModel)]="filterPending"
+                          class="form-control">
+                    <option [ngValue]="null">All</option>
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                </div>
+                <button type="button" 
+                        class="btn btn-primary" 
+                        (click)="onFilter()"
+                        i18n="@@commons.button.filter"
+                >
+                  Filter
+                </button>
+                <button type="button" 
+                        class="btn btn-default"
+                        (click)="onClear()"
+                        i18n="@@commons.button.clear"
+                >
+                  Clear
+                </button>
+              </form>
+            </div>
+            
+            <br>
+            <div style="max-height: 45em; overflow: auto;">
+              <table class="table table-hover">
+                <tr>
+                  <th>#</th>
+                  <th i18n="@@analysis.wizard.analysis.section.obstacles.name">Name</th>
+                  <th i18n="@@analysis.wizard.analysis.section.obstacles.objectHeight">Object Height [m]</th>
+                  <th i18n="@@analysis.wizard.analysis.section.obstacles.restrictionHeight">Restriction Height [m]</th>
+                  <th i18n="@@analysis.wizard.analysis.section.obstacles.penetration">Penetration [m]</th>
+                  <th i18n="@@analysis.wizard.analysis.section.obstacles.direction">Direction</th>
+                  <th i18n="@@analysis.wizard.analysis.section.obstacles.surface">Restriction</th>
+                  <th i18n="@@analysis.wizard.analysis.section.obstacles.result">Result</th>
+                  <th></th>
+                </tr>
+                <tbody>
+                <tr *ngFor="let obstacle of filteredObstacles; index as i;">
+                  <td><strong>{{i + 1}}</strong></td>
+                  <td>
+                    <a [routerLink]="['/objects', obstacle.objectType, obstacle.objectId]">
+                      {{obstacle.objectName}}
+                    </a>
+                  </td>
+                  <td>{{obstacle.objectHeight | number}}</td>
+                  <td>{{obstacle.restrictionHeight | number}}</td>
+                  <td [ngClass]="{'danger': obstacle.penetration > 0, 'success': obstacle.penetration < 0}">
+                    {{obstacle.penetration | number}}
+                  </td>
+                  <td>{{obstacle.directionId ? obstacle.directionName : "-" }}</td>
+                  <td>[{{obstacle.restrictionTypeId == 1 ? "Exception" : "OLS"}}] {{obstacle.restrictionName}}</td>
+                  <td [ngClass]="{'warning': obstacle.resultSummary != undefined && !obstacle.resultSummary.startsWith(passiveReason)}">
+                    {{obstacle.resultSummary}}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-default btn-sm" (click)="editResult(obstacle)">
+                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -137,7 +218,7 @@ import {AnalysisObstacle} from "./analysisObstacle";
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
-                     [layers]="['icaoannex14surfaces']"
+                     [layers]="['icaoannex14surfaces','terrain', 'airport', 'runway', 'objects', 'exception', 'direction']"
             >
             </app-map>
           </ng-container>
@@ -151,12 +232,12 @@ import {AnalysisObstacle} from "./analysisObstacle";
           <li class="next">
             <a (click)="onNext()" style="cursor: pointer">
               <ng-container i18n="@@commons.wizard.next">Next</ng-container>
-              <span aria-hidden="true">&rarr;</span>
+              <span aria-hidden="true">&#9658;</span>
             </a>
           </li>
           <li class="previous">
             <a (click)="onPrevious()" style="cursor: pointer">
-              <span aria-hidden="true">&larr;</span>
+              <span aria-hidden="true">&#9668;</span>
               <ng-container i18n="@@commons.wizard.previous"> Previous</ng-container>
             </a>
           </li>
@@ -178,9 +259,12 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   onInitSpatialError:ApiError;
   onSubmitError:AppError;
   analysisId:number;
-  private olmap: OlComponent;
+  private olMap: OlComponent;
+  private runwayFeatures: Feature[];
+  private exceptionFeatures: Feature[];
+  private objectFeatures: Feature[];
   @ViewChild('mapObjects') set content(content: OlComponent) {
-    this.olmap = content;
+    this.olMap = content;
   }
   map:Map;
   airportFeature:Feature;
@@ -189,6 +273,16 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   directions: RunwayDirection[];
   selectedDirection: RunwayDirection;
   obstacles:AnalysisObstacle[];
+  filteredObstacles:AnalysisObstacle[];
+  passiveReason: string = "Obstacle: 'false'. Keep: 'true'";
+  centerCoordinates: ol.Coordinate;
+  flag: boolean;
+
+  filterName: string;
+  filterPenetration: boolean;
+  filterDirection: number;
+  filterRestriction: number;
+  filterPending: boolean;
 
   constructor(
     private wizardService: AnalysisWizardService,
@@ -198,10 +292,16 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     private surfacesService: AnalysisSurfaceService,
     private airportService: AirportService,
     private obstacleService: AnalysisObstacleService,
+    private resultService: AnalysisResultService,
+    private objectService: ElevatedObjectService,
+    private analysisObjectService: AnalysisObjectService,
+    private exceptionService: AnalysisExceptionSurfaceService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modalService: BsModalService
   ){
     this.indicator = STATUS_INDICATOR;
+    this.flag= false;
   }
 
   ngOnInit(): void {
@@ -215,48 +315,123 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     this.initObstaclesStatus = STATUS_INDICATOR.LOADING;
     this.initSpatialStatus = STATUS_INDICATOR.LOADING;
 
-    this.obstacleService.list(this.analysisId)
+    this.runwayFeatures = [];
+    this.airportFeature = null;
+    this.directions = [];
+    this.objectFeatures = [];
+    this.exceptionFeatures = [];
+
+    Promise.all([
+      this.resolveObstacles(),
+      this.resolveObstacleContext()
+    ])
+      .then(()=> this.onClear());
+  }
+
+  private resolveObstacles() {
+    return this.obstacleService.list(this.analysisId, false)
       .then(data => {
-        this.obstacles = data.sort((a,b) => a.directionName.localeCompare(b.directionName));
-        this.initObstaclesStatus = STATUS_INDICATOR.ACTIVE;
+        this.obstacles = data.sort((a, b) =>
+          (a.directionId && b.directionName) ? a.directionName.localeCompare(b.directionName) : -1
+        );
+        this.initObstaclesStatus = (data.length > 0) ? STATUS_INDICATOR.ACTIVE : STATUS_INDICATOR.EMPTY;
+
       })
       .catch(error => {
         this.onInitObstaclesError = error;
         this.initObstaclesStatus = STATUS_INDICATOR.ERROR;
       });
+  }
 
-    this.analysisService.get(this.analysisId)
+  private resolveObstacleContext() {
+    return this.analysisService.get(this.analysisId)
       .then(data => {
         this.analysis = data;
         return this.runwayService.list(data.airportId)
       })
-      .then(data => {
-        this.runways = data;
-        return Promise.all(
-          this.runways.map( r =>
-            this.directionService.list(r.airportId,r.id)
-              .then( data => {
-                r.directions = data;
-                r.directions.forEach((d => d.runway = r));
-              })
-          )
-        )
-      })
-      .then(()=> this.airportService.getFeature(this.analysis.airportId))
-      .then(data => this.airportFeature = data)
-      .then(()=>
-        this.directions =
-          this.runways.map( r => r.directions)
-            .reduce((a,b)=> a.concat(b), [])
-      )
-      .then( () => this.initSpatialStatus = STATUS_INDICATOR.ACTIVE)
+      .then(data => this.runways = data)
+      .then(() => this.resolveAirportFeature())
+      .then(() => this.resolveRunwayFeatures())
+      .then(() => this.resolveExceptionFeatures())
+      .then(() => this.resolveObjectFeatures())
+      .then(() => this.resolveRunwaysDirections())
+      .then(() => this.directions = this.runways.map(r => r.directions).reduce((a, b) => a.concat(b), []))
+      .then(() => this.initSpatialStatus = STATUS_INDICATOR.ACTIVE)
       .catch(error => {
         this.onInitSpatialError = error;
         this.initSpatialStatus = STATUS_INDICATOR.ERROR;
-      })
+      });
+  }
+
+  private resolveAirportFeature(): Promise<any>{
+    return this.airportService
+      .getFeature(this.analysis.airportId)
+      .then(data => this.airportFeature = data)
+      .then(()=> this.centerCoordinates = ol.extent.getCenter(this.airportFeature.getGeometry().transform('EPSG:4326', 'EPSG:3857').getExtent()))
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveRunwayFeatures(): Promise<any>{
+    return Promise.all(
+      this.runways.map(r =>
+        this.runwayService.getFeature(r.airportId, r.id)
+          .then(data => this.runwayFeatures.push(data))
+          .catch(error => Promise.reject(error))
+      )
+    );
+  }
+
+  private resolveRunwaysDirections(): Promise<any>{
+    return Promise.all(
+      this.runways.map( r =>
+        this.directionService.list(r.airportId,r.id)
+          .then( data => {
+            r.directions = data;
+            r.directions.forEach((d => d.runway = r));
+          })
+          .catch(error => Promise.reject(error))
+      )
+    )
+  }
+
+  private resolveObjectFeatures(): Promise<any> {
+
+    return this.analysisObjectService
+      .list(this.analysisId)
+      .then( data =>
+        Promise.all(
+          data.map(o => this.objectService
+            .getFeature(o.objectId, o.objectTypeId)
+            .then(data => this.objectFeatures.push(data))
+            .catch(error => Promise.reject(error))
+          )
+        )
+      );
+  }
+
+  private resolveExceptionFeatures(): Promise<any> {
+
+    return this.exceptionService
+      .list(this.analysisId)
+      .then(data =>
+        data.map( e =>
+          this.exceptionService
+            .getFeature(this.analysisId, e.id)
+            .then( data => this.exceptionFeatures.push(data))
+            .catch(error => Promise.reject(error))
+        )
+      )
+      .catch(error => Promise.reject(error))
   }
 
   ngAfterViewInit(): void {
+    setTimeout(()=>
+      this.relocate()
+        .includeAirportFeatures()
+        .includeObjectFeatures()
+        .includeExceptionFeatures()
+        .includeRunwayFeatures(),
+      2000);
   }
 
   onNext(){
@@ -264,6 +439,15 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     this.onSubmitError = null;
 
     this.blockUI.start("Processing...");
+
+    //1. validate
+    if(!this.obstacles.every(o => o.hasOwnProperty("resultId") && o.resultId !== null)){
+      this.onSubmitError = new UiError("All obstacles must be analysed, there are some registers without a result.", "Error");
+      this.blockUI.stop();
+      return;
+    }
+
+    //2. perform
 
     this.wizardService
       .next(this.analysisId)
@@ -282,24 +466,116 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
 
     this.wizardService
       .previous(this.analysisId)
-      .then( () => this.router.navigate([`/analysis/${this.analysisId}/stages/object`]))
+      .then( () => this.router.navigate([`/analysis/${this.analysisId}/stages/exception`]))
       .catch((error) => this.onSubmitError = error);
   }
 
   loadDirectionFeatures(direction: RunwayDirection) {
+
     this.selectedDirection = direction;
 
-    this.olmap.clearSurfaceLayers();
+    this.clearMapLayers();
 
-    this.olmap.setCenter(this.airportFeature.getGeometry().transform('EPSG:4326', 'EPSG:3857')['getCoordinates']());
-    this.olmap.setZoom(11);
-
-    this.surfacesService.get(this.analysisId, direction.id)
-      .then(data => data.forEach(f => this.olmap.addSurface(f)))
-      .catch(error => alert(JSON.stringify(error))); //TODO catch error
+    Promise.all([
+      this.includeSurfaceFeatures(direction),
+      this.includeDirectionFeatures(direction)
+    ]).then(()=> Promise.resolve(true));
   }
 
-  toggleExclusion(obstacle: AnalysisObstacle) {
-    //TODO update excluded -> open modal dialog to write justification.
+  private relocate(): any {
+    this.olMap.setCenter(this.centerCoordinates);
+    this.olMap.setZoom(11);
+
+    return this;
+  }
+
+  private includeAirportFeatures(): any {
+    this.olMap.addAirport(this.airportFeature);
+    return this;
+  }
+
+  private includeRunwayFeatures(): any {
+    this.runwayFeatures.forEach( f => this.olMap.addRunway(f));
+
+    return this;
+  }
+
+  private includeDirectionFeatures(direction: RunwayDirection): Promise<any> {
+    return this.directionService
+      .getFeature(this.analysis.airportId, direction.runwayId, direction.id)
+      .then(data => this.olMap.addDirection(data))
+      .catch(error => Promise.reject(error));
+  }
+
+  includeExceptionFeatures(): any{
+    this.exceptionFeatures.forEach(f => this.olMap.addException(f));
+
+    return this;
+  }
+
+  includeObjectFeatures(): any{
+    this.objectFeatures.forEach(f => this.olMap.addObject(f));
+
+    return this;
+  }
+
+  private includeSurfaceFeatures(direction: RunwayDirection): Promise<any>{
+
+    return this.surfacesService
+      .get(this.analysisId, direction.id)
+      .then(data => data.forEach(f => this.olMap.addSurface(f)))
+      .catch(error => Promise.reject(error));
+  }
+
+  private clearMapLayers() : any {
+    this.olMap
+      .clearSurfaceLayers()
+      .clearDirectionLayer();
+
+    return this;
+  }
+
+  editResult(obstacle: AnalysisObstacle) {
+
+    let modalRef : BsModalRef = this.modalService.show(AnalysisModalAnalysisComponent);
+
+    this.modalService.onHide.subscribe((reason: string) => {
+      this.obstacleService
+        .get(obstacle.caseId, obstacle.id)
+        .then(data => {
+          obstacle.resultSummary = data.resultSummary;
+          obstacle.resultId = data.resultId;
+        });
+    });
+
+    //TODO onShow load data
+    modalRef.content.obstacle = obstacle;
+
+    if(obstacle.resultId)
+      this.resultService
+        .get(obstacle.caseId, obstacle.id)
+        .then(data => modalRef.content.result = data)
+        .then(() => modalRef.content.updateFilteredReasons());
+    else
+      modalRef.content.result = new AnalysisResult().initialize(obstacle);
+  }
+
+  onFilter(){
+    this.filteredObstacles = this.obstacles.filter( o =>
+      (this.filterName == null || this.filterName.length == 0 || o.objectName.toLocaleUpperCase().includes(this.filterName.toLocaleUpperCase()))
+        && (this.filterRestriction == null || o.restrictionTypeId == this.filterRestriction)
+          && (this.filterDirection == null || o.directionId == this.filterDirection)
+            && (this.filterPenetration == null || (o.penetration > 0) == this.filterPenetration)
+              && ((this.filterPending == null) || (o.resultSummary == null) == this.filterPending)
+    );
+  }
+
+  onClear(){
+    this.filterName = null;
+    this.filterPenetration = null;
+    this.filterDirection = null;
+    this.filterRestriction = null;
+    this.filterPending = null;
+    this.filteredObstacles = this.obstacles;
   }
 }
