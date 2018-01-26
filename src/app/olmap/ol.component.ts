@@ -232,15 +232,15 @@ import Circle = ol.style.Circle;
 
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
-      style: new ol.style.Style({
-        image: new ol.style.RegularShape({
-          stroke: new ol.style.Stroke({color: 'black', width: 2}),
-          points: 4,
-          radius: 10,
-          radius2: 0,
-          angle: Math.PI / 4
+      style: (feature, resolution) => {
+        return new ol.style.Style({
+          image: new Circle({
+            radius: 40/resolution,
+            fill: new ol.style.Fill({color: 'red'}),
+            stroke: new ol.style.Stroke({ color: 'black', width:1})
+          })
         })
-      })
+      }
     });
 
     layer.setProperties({'title':'Individual object'});
@@ -263,8 +263,8 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'darkgray', width:1}),
-        fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.85)' })
+        stroke: new ol.style.Stroke({color: 'black', width:1}),
+        fill: new ol.style.Fill({color: 'red' })
       }),
     });
 
@@ -288,7 +288,7 @@ import Circle = ol.style.Circle;
     let layer = new VectorLayer({
       source: this.createDefaultVectorSource(),
       style: new Style({
-        stroke: new ol.style.Stroke({color: 'darkgray', width:1})
+        stroke: new ol.style.Stroke({color: 'red', width:2})
       }),
     });
 
