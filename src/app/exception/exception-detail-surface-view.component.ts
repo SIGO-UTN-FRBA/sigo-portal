@@ -112,4 +112,12 @@ export class ExceptionDetailSurfaceViewComponent implements OnInit {
         this.onInitStatus = STATUS_INDICATOR.ERROR;
       })
   }
+
+  onDelete(){
+    //TODO
+  }
+
+  allowEdition(){
+    //TODO
+  }
 }

@@ -1,157 +1,2222 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-<file source-language="en" datatype="plaintext" original="ng2.template">
-  <body>
-    <trans-unit id="home.title" datatype="html">
-      <source>
-        Home
-      </source>
-      <target>Inicio</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/main/home.component.ts</context>
-        <context context-type="linenumber">2</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="navbar.home" datatype="html">
-      <source>
-        Home
-      </source>
-      <target>Inicio</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/main/navbar.component.ts</context>
-        <context context-type="linenumber">18</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="navbar.airports" datatype="html">
-      <source>
-        Airports
-      </source>
-      <target>Aeródromos</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/main/navbar.component.ts</context>
-        <context context-type="linenumber">23</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="navbar.objects" datatype="html">
-      <source>
-        Objects
-      </source>
-      <target>Objetos</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/main/navbar.component.ts</context>
-        <context context-type="linenumber">28</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="navbar.regulations" datatype="html">
-      <source>
-        Regulations
-      </source>
-      <target>Regulaciones</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/main/navbar.component.ts</context>
-        <context context-type="linenumber">33</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="navbar.analysis" datatype="html">
-      <source>
-        Analysis
-      </source>
-      <target>Análisis</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/main/navbar.component.ts</context>
-        <context context-type="linenumber">38</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.search.title" datatype="html">
-      <source>
-        Airports
-      </source>
-      <target>Búsqueda de aeródromos</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airoport-search.component.ts</context>
-        <context context-type="linenumber">2</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.search.main_description" datatype="html">
-      <source>
-        This section allows users to manage airports.
-      </source>
-      <target>Esta sección te permite administar los aeródromos</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airoport-search.component.ts</context>
-        <context context-type="linenumber">5</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.detail.title" datatype="html">
-      <source>
-        Airport detail
-      </source>
-      <target>Detalle del aeródromo</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-        <context context-type="linenumber">2</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.detail.main_description" datatype="html">
-      <source>
-        This section allows users to inspect an airport.
-      </source>
-      <target>Esta sección te permite inspeccionar un aeródromo</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-        <context context-type="linenumber">5</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.detail.section.general.title" datatype="html">
-      <source>
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="home.title" datatype="html">
+        <source>
+      Home
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/home.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Inicio</target></trans-unit>
+      <trans-unit id="navbar.home" datatype="html">
+        <source>
+            Home
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      <target>Inicio</target></trans-unit>
+      <trans-unit id="navbar.airports" datatype="html">
+        <source>
+            Airports
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      <target>Aeródromos</target></trans-unit>
+      <trans-unit id="navbar.objects" datatype="html">
+        <source>
+            Objects
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      <target>Objetos</target></trans-unit>
+      <trans-unit id="navbar.regulations" datatype="html">
+        <source>
+            Regulations
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      <target>Regulaciones</target></trans-unit>
+      <trans-unit id="navbar.analysis" datatype="html">
+        <source>
+            Analysis
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      <target>Análisis</target></trans-unit>
+      <trans-unit id="commons.alert.error" datatype="html">
+        <source>Error!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/commons/error-indicator.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      <target>Error!</target></trans-unit>
+      <trans-unit id="airport.detail.section.runways.title" datatype="html">
+        <source>
+            Runways
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-children.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Pistas</target></trans-unit>
+      <trans-unit id="commons.button.new" datatype="html">
+        <source>
+              New
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-children.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-search.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-list.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-search.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-children.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      <target>Nuevo</target></trans-unit>
+      <trans-unit id="airport.detail.section.general.title" datatype="html">
+        <source>
+            General
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      <target>General</target></trans-unit>
+      <trans-unit id="airport.detail.section.general.inputNameFir" datatype="html">
+        <source>
+                  Name ICAO
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      <target>Nombre OACI</target></trans-unit>
+      <trans-unit id="airport.detail.section.general.inputCodeFir" datatype="html">
+        <source>
+                  Code ICAO
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      <target>Código OACI</target></trans-unit>
+      <trans-unit id="airport.detail.section.general.inputCodeIATA" datatype="html">
+        <source>
+                  Code IATA
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      <target>Código IATA</target></trans-unit>
+      <trans-unit id="airport.detail.section.general.inputCodeLocal" datatype="html">
+        <source>
+                  Code Local
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      <target>Código local</target></trans-unit>
+      <trans-unit id="commons.button.cancel" datatype="html">
+        <source>
+                  Cancel
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-edit.component.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-edit.component.ts</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-edit-component.ts</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-edit.component.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-edit.component.ts</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule-icao.component.ts</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-surface.component.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+      <target>Cancelar</target></trans-unit>
+      <trans-unit id="commons.button.save" datatype="html">
+        <source>
+                  Save
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-edit.component.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-edit.component.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-edit-component.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-edit.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-edit.component.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      <target>Guardar</target></trans-unit>
+      <trans-unit id="commons.button.delete" datatype="html">
+        <source>
+                  Delete
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-view.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao-view.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-surface-view.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-view.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      <target>Eliminar</target></trans-unit>
+      <trans-unit id="commons.button.edit" datatype="html">
+        <source>
+                  Edit
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-general-view.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-view.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-view.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-view.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-view.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-view.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao-view.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-surface-view.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-view.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      <target>Editar</target></trans-unit>
+      <trans-unit id="airport.detail.section.spatial.title" datatype="html">
+        <source>
+            Spatial
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Espacial</target></trans-unit>
+      <trans-unit id="airport.detail.section.spatial.inputCoordinates" datatype="html">
+        <source>
+                Point
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      <target>Punto</target></trans-unit>
+      <trans-unit id="airport.detail.title" datatype="html">
+        <source>
+      Airport detail
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      <target>Detalle del aeródromo</target></trans-unit>
+      <trans-unit id="airport.detail.main_description" datatype="html">
+        <source>
+      This section allows users to inspect an airport.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios examinar un aeródromo</target></trans-unit>
+      <trans-unit id="airport.new.title" datatype="html">
+        <source>
+      New Airport
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Nuevo Aeródromo</target></trans-unit>
+      <trans-unit id="airport.new.main_description" datatype="html">
+        <source>
+      This section allows users to create an airport.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios crear un aeródromo</target></trans-unit>
+      <trans-unit id="airport.detail.section.general.region" datatype="html">
+        <source>
+                    Region
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      <target>Región</target></trans-unit>
+      <trans-unit id="airport.detail.section.general.inputRegulation" datatype="html">
+        <source>
+                    Regulation
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+      <target>Regulación</target></trans-unit>
+      <trans-unit id="commons.button.create" datatype="html">
+        <source>
+                  Create
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-new-component.ts</context>
+          <context context-type="linenumber">150</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule-icao.component.ts</context>
+          <context context-type="linenumber">128</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-surface.component.ts</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">225</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">232</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+      <target>Crear</target></trans-unit>
+      <trans-unit id="airport.search.title" datatype="html">
+        <source>
+      Airports
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-search.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Aeródromo</target></trans-unit>
+      <trans-unit id="airport.search.main_description" datatype="html">
+        <source>
+      This section allows users to manage airports.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-search.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-search.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-list.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite al usuario gestionar un aeródromo</target></trans-unit>
+      <trans-unit id="commons.button.search" datatype="html">
+        <source>Search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-search.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-search.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-search.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      <target>Búsqueda</target></trans-unit>
+      <trans-unit id="commons.button.filter" datatype="html">
+        <source>Filter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/airport/airport-search.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-search.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-search.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      <target>Filtro</target></trans-unit>
+      <trans-unit id="analysis.modal.analysis.inputIsObstacle" datatype="html">
+        <source>
+                Is an obstacle?
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      <target>¿Es un obstáculo?</target></trans-unit>
+      <trans-unit id="commons.button.yes" datatype="html">
+        <source>Yes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      <target>Sí</target></trans-unit>
+      <trans-unit id="commons.button.no" datatype="html">
+        <source>No</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      <target>No</target></trans-unit>
+      <trans-unit id="analysis.modal.analysis.inputKeep" datatype="html">
+        <source>
+                Keep?
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      <target>¿Mantener?</target></trans-unit>
+      <trans-unit id="analysis.modal.analysis.inputReason" datatype="html">
+        <source>
+                Reason?
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      <target>¿Razón?</target></trans-unit>
+      <trans-unit id="analysis.modal.analysis.inputDetail" datatype="html">
+        <source>
+                Reason details
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-modal-analysis.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      <target>Detalle de la razón</target></trans-unit>
+      <trans-unit id="analysis.search.title" datatype="html">
+        <source>
+      Analysis cases
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-search.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Casos de Análisis</target></trans-unit>
+      <trans-unit id="analysis.search.main_description" datatype="html">
+        <source>
+      This section allows users to manage analysis cases.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-search.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios gestionar un caso de análisis</target></trans-unit>
+      <trans-unit id="analysis.wizard.object.title" datatype="html">
+        <source>Analysis: Define objects</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      <target>Análisis: Definir objetos</target></trans-unit>
+      <trans-unit id="wizard.commons.stage" datatype="html">
+        <source>Stage</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      <target>Etapa</target></trans-unit>
+      <trans-unit id="wizard.object.main_description" datatype="html">
+        <source>
+      This section allows users to define which objects are going to be analyzed.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios definir qué objetos van a ser analizados.</target></trans-unit>
+      <trans-unit id="analysis.wizard.object.section.objects.title" datatype="html">
+        <source>
+            Objects
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      <target>Objetos</target></trans-unit>
+      <trans-unit id="analysis.wizard.object.section.objects.searchRadius" datatype="html">
+        <source>
+                  Search Radius
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      <target>Radio de búsqueda</target></trans-unit>
+      <trans-unit id="23ffa281cd4401b3162fd4a950539c66cde37394" datatype="html">
+        <source>
+                Update
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <note priority="1" from="description">@commons.button.update</note>
+      <target>Actualizar</target></trans-unit>
+      <trans-unit id="analysis.wizard.object.section.objects.name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+      <trans-unit id="analysis.wizard.object.section.objects.type" datatype="html">
+        <source>Type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      <target>Tipo</target></trans-unit>
+      <trans-unit id="analysis.wizard.object.section.objects.included" datatype="html">
+        <source>
+                      Included (<x id="TAG_INPUT" ctype="x-input"/>)
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+      <target>Incluido ()</target></trans-unit>
+      <trans-unit id="commons.wizard.next" datatype="html">
+        <source>Next </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-object.component.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">203</context>
+        </context-group>
+      <target>Siguiente</target></trans-unit>
+      <trans-unit id="analysis.wizard.object.main_description" datatype="html">
+        <source>
+      This section allows users to define which exceptions are going to be applied into the case.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios definir qué excepciones van a ser aplicadas a este caso.</target></trans-unit>
+      <trans-unit id="analysis.wizard.exception.section.exceptions.title" datatype="html">
+        <source>
+              Exceptions
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      <target>Excepciones</target></trans-unit>
+      <trans-unit id="commons.wizard.previous" datatype="html">
+        <source> Previous</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-exception.component.ts</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">210</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">147</context>
+        </context-group>
+      <target>Anterior</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.obstacles.title" datatype="html">
+        <source>
+              Obstacles
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      <target>Obstáculos</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.filter.name" datatype="html">
+        <source>Object</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      <target>Objeto</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.filter.penetration" datatype="html">
+        <source>Penetration</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      <target>Penetración</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.filter.directions" datatype="html">
+        <source>Directions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      <target>Direcciones</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.filter.restriction" datatype="html">
+        <source>Restriction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      <target>Restricciones.</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.filter.pending" datatype="html">
+        <source>Pending</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      <target>Pendiente</target></trans-unit>
+      <trans-unit id="commons.button.clear" datatype="html">
+        <source>
+                  Clear
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      <target>Limpiar</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.obstacles.name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.obstacles.objectHeight" datatype="html">
+        <source>Object Height [m]</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+      <target>Altura del Objeto [m]</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.obstacles.restrictionHeight" datatype="html">
+        <source>Restriction Height [m]</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      <target>Restricción de Altura [m]</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.obstacles.penetration" datatype="html">
+        <source>Penetration [m]</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+      <target>Penetración [m]</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.obstacles.direction" datatype="html">
+        <source>Direction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+      <target>Dirección</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.obstacles.surface" datatype="html">
+        <source>Restriction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      <target>Restricción</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.obstacles.result" datatype="html">
+        <source>Result</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+      <target>Resultado</target></trans-unit>
+      <trans-unit id="analysis.wizard.analysis.section.spatial.title" datatype="html">
+        <source>
+              Spatial
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-analysis.component.ts</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+      <target>Espacial</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.title" datatype="html">
+        <source>Analysis: Inform</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      <target>Análisis: Informe</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.main_description" datatype="html">
+        <source>
+      This section allows users to study the final results of analysis.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios estudiar el resultado final del análisis.</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.section.obstacles.title" datatype="html">
+        <source>
+              Obstacles
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      <target>Obstáculos</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.section.obstacles.name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.section.obstacles.objectHeight" datatype="html">
+        <source>Object Height [m]</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+      <target>Altura del Objeto [m]</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.section.obstacles.restrictionHeight" datatype="html">
+        <source>Restriction Height [m]</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      <target>Restricción de Altura [m]</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.section.obstacles.penetration" datatype="html">
+        <source>Penetration [m]</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+      <target>Penetración [m]</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.section.obstacles.direction" datatype="html">
+        <source>Direction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      <target>Dirección</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.section.obstacles.surface" datatype="html">
+        <source>Restriction</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">106</context>
+        </context-group>
+      <target>Restricción</target></trans-unit>
+      <trans-unit id="analysis.wizard.inform.section.obstacles.result" datatype="html">
+        <source>Result</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      <target>Resultado</target></trans-unit>
+      <trans-unit id="commons.wizard.finalize" datatype="html">
+        <source>Finalize </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/analysis/analysis-wizard-inform.component.ts</context>
+          <context context-type="linenumber">140</context>
+        </context-group>
+      <target>Finalizar</target></trans-unit>
+      <trans-unit id="direction.detail.section.approach.title" datatype="html">
+        <source>
+            Approach Section
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-view.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      <target>Sección de Aproximación</target></trans-unit>
+      <trans-unit id="direction.detail.section.approach.enabled" datatype="html">
+        <source>
+                Enabled
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-edit.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-view.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      <target>Habilitado</target></trans-unit>
+      <trans-unit id="direction.detail.section.approach.thresholdLength" datatype="html">
+        <source>
+                Threshold length
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-edit.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-view.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      <target>Largo del umbral</target></trans-unit>
+      <trans-unit id="direction.detail.section.approach.thresholdElevation" datatype="html">
+        <source>
+                Threshold elevation
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-edit.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-approach-view.component.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      <target>Elevación del umbral</target></trans-unit>
+      <trans-unit id="direction.detail.section.classification.title" datatype="html">
+        <source>
+            Classification
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-view.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      <target>Clasificación</target></trans-unit>
+      <trans-unit id="direction.detail.section.classification.codeLetter" datatype="html">
+        <source>
+                      Code Letter
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-edit.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-view.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      <target>Código Letra</target></trans-unit>
+      <trans-unit id="direction.detail.section.classification.codeNumber" datatype="html">
+        <source>
+                      Code Number
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-edit.component.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-view.component.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      <target>Código Número</target></trans-unit>
+      <trans-unit id="direction.detail.section.classification.runwayClassification" datatype="html">
+        <source>
+                      Runway Classification
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-edit.component.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-view.component.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      <target>Clasificación de la Pista</target></trans-unit>
+      <trans-unit id="direction.detail.section.classification.runwayCategory" datatype="html">
+        <source>
+                      Runway Category
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-edit.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-classification-view.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      <target>Categoría de la Pista</target></trans-unit>
+      <trans-unit id="direction.detail.section.distances.title" datatype="html">
+        <source>
+            Declared distances
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-distances-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Distancias declaradas</target></trans-unit>
+      <trans-unit id="direction.detail.section.general.title" datatype="html">
+        <source>
         General
       </source>
-      <target>General</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-        <context context-type="linenumber">17</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.detail.section.general.inputNameFir" datatype="html">
-      <source>
-        Name ICAO
-      </source>
-      <target>Nombre ICAO</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-        <context context-type="linenumber">25</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.detail.section.general.inputCodeFir" datatype="html">
-      <source>
-        Code ICAO
-      </source>
-      <target>Código ICAO</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-        <context context-type="linenumber">38</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.detail.section.general.inputCodeIATA" datatype="html">
-      <source>
-        Code IATA
-      </source>
-      <target>Código IATA</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-        <context context-type="linenumber">50</context>
-      </context-group>
-    </trans-unit>
-    <trans-unit id="airport.detail.section.runways.title" datatype="html">
-      <source>
-        Runways
-      </source>
-      <target>Pistas</target>
-      <context-group purpose="location">
-        <context context-type="sourcefile">app/airport/airport-detail.component.ts</context>
-        <context context-type="linenumber">67</context>
-      </context-group>
-    </trans-unit>
-  </body>
-</file>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-edit-component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>General</target></trans-unit>
+      <trans-unit id="direction.detail.section.general.number" datatype="html">
+        <source>
+              Number
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-edit-component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-view.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      <target>Número</target></trans-unit>
+      <trans-unit id="direction.detail.section.general.position" datatype="html">
+        <source>
+              Position
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-edit-component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-view.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      <target>Posición</target></trans-unit>
+      <trans-unit id="direction.detail.section.general.azimuth" datatype="html">
+        <source>
+              Azimuth
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-edit-component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-view.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      <target>Azimuth</target></trans-unit>
+      <trans-unit id="direction.detail.section.general.height" datatype="html">
+        <source>
+              Height
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-edit-component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-general-view.component.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      <target>Altura</target></trans-unit>
+      <trans-unit id="direction.detail.section.spatial.title" datatype="html">
+        <source>
+            Spatial
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Espacial</target></trans-unit>
+      <trans-unit id="direction.detail.section.spatial.inputGeoJSON" datatype="html">
+        <source>
+                Point
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      <target>Punto</target></trans-unit>
+      <trans-unit id="runway.detail.section.strip.title" datatype="html">
+        <source>
+            Strip
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Franja</target></trans-unit>
+      <trans-unit id="runway.detail.section.strip.inputWidth" datatype="html">
+        <source>
+                Width
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-edit.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      <target>Ancho</target></trans-unit>
+      <trans-unit id="runway.detail.section.strip.inputLength" datatype="html">
+        <source>
+                Length
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-edit.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      <target>Largo</target></trans-unit>
+      <trans-unit id="ruwnay.detail.section.strip.inputWidth" datatype="html">
+        <source>
+                Width
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-view.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      <target>Ancho</target></trans-unit>
+      <trans-unit id="ruwnay.detail.section.strip.inputLength" datatype="html">
+        <source>
+                Length
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-strip-view.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      <target>Largo</target></trans-unit>
+      <trans-unit id="direction.detail.section.takeoff.title" datatype="html">
+        <source>
+            Take-off Section
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Sección de Despegue</target></trans-unit>
+      <trans-unit id="direction.detail.section.takeoff.enabled" datatype="html">
+        <source>
+                Enabled
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-edit.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-view.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      <target>Habilitado</target></trans-unit>
+      <trans-unit id="direction.detail.section.takeoff.clearwayLength" datatype="html">
+        <source>
+                Clearway length
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-edit.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-view.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      <target>Largo de Clearway</target></trans-unit>
+      <trans-unit id="direction.detail.section.takeoff.clearwayWidth" datatype="html">
+        <source>
+                Clearway width
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-edit.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-view.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      <target>Ancho de Clearway</target></trans-unit>
+      <trans-unit id="direction.detail.section.takeoff.stopwayLength" datatype="html">
+        <source>
+                Stopway length
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-edit.component.ts</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail-takeoff-view.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      <target>Largo Fin de Pista</target></trans-unit>
+      <trans-unit id="direction.detail.title" datatype="html">
+        <source>
+      Direction detail
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      <target>Detalle de la Dirección</target></trans-unit>
+      <trans-unit id="direction.detail.main_description" datatype="html">
+        <source>
+      This section allows users to inspect a runway direction.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-detail.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios inspeccionar una dirección de pista.</target></trans-unit>
+      <trans-unit id="runwayDirection.new.title" datatype="html">
+        <source>
+      New runway direction
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Nueva dirección de pista</target></trans-unit>
+      <trans-unit id="runwayDirection.new.main_description" datatype="html">
+        <source>
+      This section allows users to create a runway direction.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios crear una dirección de pista.</target></trans-unit>
+      <trans-unit id="runwayDirection.detail.section.general.title" datatype="html">
+        <source>
+            General
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      <target>General</target></trans-unit>
+      <trans-unit id="direction.detail.section.general.inputAzimuth" datatype="html">
+        <source>
+                    Azimuth
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      <target>Azimuth</target></trans-unit>
+      <trans-unit id="direction.detail.section.general.inputHeight" datatype="html">
+        <source>
+                    Height
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/direction/direction-new-component.ts</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+      <target>Altura</target></trans-unit>
+      <trans-unit id="exception.rule.detail.section.general.title" datatype="html">
+        <source>
+            General
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-surface-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>General</target></trans-unit>
+      <trans-unit id="exception.rule.detail.section.general.inputDirection" datatype="html">
+        <source>
+                Direction
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao-view.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule-icao.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      <target>Dirección</target></trans-unit>
+      <trans-unit id="exception.rule.detail.section.general.inputSurface" datatype="html">
+        <source>
+                Surface
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao-view.component.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule-icao.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      <target>Superficie</target></trans-unit>
+      <trans-unit id="exception.rule.detail.section.general.inputProperty" datatype="html">
+        <source>
+                Property
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao-view.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule-icao.component.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      <target>Propiedad</target></trans-unit>
+      <trans-unit id="exception.rule.detail.section.general.inputCurrentValue" datatype="html">
+        <source>
+                Value
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao-view.component.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      <target>Valor</target></trans-unit>
+      <trans-unit id="exception.rule.detail.section.general.inputOverrideValue" datatype="html">
+        <source>
+                Override Value
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao-view.component.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule-icao.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      <target>Nuevo valor</target></trans-unit>
+      <trans-unit id="exception.rule.detail.title" datatype="html">
+        <source>
+      Rule exception detail
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Detalle de la regla exceptuada</target></trans-unit>
+      <trans-unit id="exception.rule.detail.main_description" datatype="html">
+        <source>
+      This section allows users to inspect a rule exception.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-rule-icao.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios inspeccionar una excepción de regla.</target></trans-unit>
+      <trans-unit id="exception.surface.detail.section.general.inputName" datatype="html">
+        <source>
+                Name
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-surface-view.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-surface.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+      <trans-unit id="exception.surface.detail.section.general.inputHeightAmls" datatype="html">
+        <source>
+                Height AMLS
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-surface-view.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-surface.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      <target>Altura AMLS</target></trans-unit>
+      <trans-unit id="exception.surface.detail.section.general.inputPolygon" datatype="html">
+        <source>
+                Polygon
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-surface-view.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-surface.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      <target>Polígono</target></trans-unit>
+      <trans-unit id="exception.surface.detail.title" datatype="html">
+        <source>
+      Surface exception detail
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-surface.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Detalle excepción de superficie</target></trans-unit>
+      <trans-unit id="exception.surface.detail.main_description" datatype="html">
+        <source>
+      This section allows users to inspect a surface exception.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-detail-surface.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios realizar una inspección de la excepción de superfice.</target></trans-unit>
+      <trans-unit id="exception.rule.detail.section.general.inputDefaultValue" datatype="html">
+        <source>
+                Value
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule-icao.component.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      <target>Valor</target></trans-unit>
+      <trans-unit id="exception.rule.new.title" datatype="html">
+        <source>
+      New analysis exception for regulation rule
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Nueva excepción de regla</target></trans-unit>
+      <trans-unit id="exception.rule.new.main_description" datatype="html">
+        <source>
+      This section allows users to override a regulation rule.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios sobreescribir una regla de regulación</target></trans-unit>
+      <trans-unit id="exception.rule.detail.section.general.inputRegulation" datatype="html">
+        <source>
+                  Regulation
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-rule.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      <target>Regulación</target></trans-unit>
+      <trans-unit id="exception.surface.new.title" datatype="html">
+        <source>
+      New analysis exception for a terrain surface
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-surface.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Nuevo excepción de superficie de terreno</target></trans-unit>
+      <trans-unit id="exception.surface.new.main_description" datatype="html">
+        <source>
+      This section allows users to create an exception over an terrain area with a fixed height.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new-surface.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios crear una excepción sobre un área del terreno con una altura corregida.</target></trans-unit>
+      <trans-unit id="exception.new.title" datatype="html">
+        <source>
+      New analysis exception
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Nueva excepción</target></trans-unit>
+      <trans-unit id="exception.new.main_description" datatype="html">
+        <source>
+      This section allows users to select a kind of exception to be created.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/exception/exception-new.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios seleccionar un tipo de excepción a crear.</target></trans-unit>
+      <trans-unit id="object.detail.section.general.type" datatype="html">
+        <source>
+                      Type
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      <target>Tipo</target></trans-unit>
+      <trans-unit id="object.detail.section.general.subtype" datatype="html">
+        <source>
+                      Subtype
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      <target>Subtipo</target></trans-unit>
+      <trans-unit id="object.detail.general.name" datatype="html">
+        <source>
+                      Name
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+      <trans-unit id="object.detail.general.owner" datatype="html">
+        <source>
+                      Owner
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      <target>Dueño</target></trans-unit>
+      <trans-unit id="object.detail.general.location" datatype="html">
+        <source>
+                      Location
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      <target>Ubicación</target></trans-unit>
+      <trans-unit id="object.detail.general.heightAgl" datatype="html">
+        <source>
+                      Height AGL
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      <target>Altura AGL</target></trans-unit>
+      <trans-unit id="object.detail.general.heightAmls" datatype="html">
+        <source>
+                      Height AMLS
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      <target>Altura AMLS</target></trans-unit>
+      <trans-unit id="object.detail.general.lighting" datatype="html">
+        <source>
+                      Lighting Type
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">152</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">161</context>
+        </context-group>
+      <target>Tipo iluminación</target></trans-unit>
+      <trans-unit id="object.detail.general.markIndicator" datatype="html">
+        <source>
+                      Mark Indicator
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">176</context>
+        </context-group>
+      <target>Indicador Marca</target></trans-unit>
+      <trans-unit id="object.detail.general.verified" datatype="html">
+        <source>
+                      Verified
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">189</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+      <target>Verificado</target></trans-unit>
+      <trans-unit id="object.detail.general.temporary" datatype="html">
+        <source>
+                      Temporary
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">200</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">209</context>
+        </context-group>
+      <target>Temporal</target></trans-unit>
+      <trans-unit id="object.detail.section.general.title" datatype="html">
+        <source>
+            General
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>General</target></trans-unit>
+      <trans-unit id="object.detail.section.general.name" datatype="html">
+        <source>
+                    Name
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+      <trans-unit id="object.detail.section.general.ownerId" datatype="html">
+        <source>
+                    Owner
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      <target>Dueño</target></trans-unit>
+      <trans-unit id="object.detail.section.general.locationId" datatype="html">
+        <source>
+                    Location
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      <target>Ubicación</target></trans-unit>
+      <trans-unit id="object.detail.section.general.heightAgl" datatype="html">
+        <source>
+                    Height AGL
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      <target>Altura AGL</target></trans-unit>
+      <trans-unit id="object.detail.section.general.heightAmls" datatype="html">
+        <source>
+                    Height AMLS
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      <target>Altura AMLS</target></trans-unit>
+      <trans-unit id="object.detail.section.general.lighting" datatype="html">
+        <source>
+                    Lighting Type
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      <target>Tipo de iluminación</target></trans-unit>
+      <trans-unit id="object.detail.section.general.markIndicator" datatype="html">
+        <source>
+                    Mark Indicator
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      <target>Indicador de Marca</target></trans-unit>
+      <trans-unit id="object.detail.section.general.temporary" datatype="html">
+        <source>
+                    Verified
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-general-view.component.ts</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      <target>Verificado</target></trans-unit>
+      <trans-unit id="object.detail.section.spatial.title" datatype="html">
+        <source>
+            Spatial
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Espacial</target></trans-unit>
+      <trans-unit id="object.detail.section.spatial.inputGeoJSON" datatype="html">
+        <source>
+                <x id="INTERPOLATION"/>
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      <target></target></trans-unit>
+      <trans-unit id="object.detail.title" datatype="html">
+        <source>
+      Object details
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      <target>Detalle del objeto</target></trans-unit>
+      <trans-unit id="object.detail.main_description" datatype="html">
+        <source>
+      This section allows to inspect an object.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-detail.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      <target>Esta sección permite inspeccionar un objeto</target></trans-unit>
+      <trans-unit id="object.new.title" datatype="html">
+        <source>
+      New placed object
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Nuevo objeto emplazado</target></trans-unit>
+      <trans-unit id="object.new.main_description" datatype="html">
+        <source>
+      This section allows users to create a placed object.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-new.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios crear un nuevo objeto emplazado.</target></trans-unit>
+      <trans-unit id="object.search.title" datatype="html">
+        <source>
+      Placed Objects
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-search.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Objetos emplazados</target></trans-unit>
+      <trans-unit id="object.detail.section.general.inputName" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/object/object-search.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+      <trans-unit id="regulation.detail.title" datatype="html">
+        <source>
+      Regulation detail
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-detail-icao.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      <target>Detalle de regulación</target></trans-unit>
+      <trans-unit id="regulation.detail.main_description" datatype="html">
+        <source>
+      This section allows users to inspect the ICAO Annex 14 regulation's rules.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-detail-icao.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios inspeccionar las reglas de la OACI Anexo 14.</target></trans-unit>
+      <trans-unit id="regulation.detail.section.filter.title" datatype="html">
+        <source>
+              Filters
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-detail-icao.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      <target>Filtros</target></trans-unit>
+      <trans-unit id="regulation.detail.section.filter.inputClassification" datatype="html">
+        <source>
+                  Classification
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-detail-icao.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      <target>Clasificación</target></trans-unit>
+      <trans-unit id="regulation.detail.section.filter.inputCategory" datatype="html">
+        <source>
+                  Category
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-detail-icao.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      <target>Categoría</target></trans-unit>
+      <trans-unit id="regulation.detail.section.filter.inputNumberCode" datatype="html">
+        <source>
+                  Number Code
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-detail-icao.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      <target>Código Número</target></trans-unit>
+      <trans-unit id="commons.button.reset" datatype="html">
+        <source>
+                  Reset
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-detail-icao.component.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      <target>Reinicar</target></trans-unit>
+      <trans-unit id="commons.button.apply" datatype="html">
+        <source>
+                  Apply
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-detail-icao.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      <target>Aplicar</target></trans-unit>
+      <trans-unit id="regulation.search.title" datatype="html">
+        <source>
+      Regulations
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/regulation/regulation-list.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Regulaciones</target></trans-unit>
+      <trans-unit id="runway.detail.section.directions.title" datatype="html">
+        <source>
+            Directions
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-children.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Direcciones</target></trans-unit>
+      <trans-unit id="runway.detail.section.general.title" datatype="html">
+        <source>
+            General
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      <target>General</target></trans-unit>
+      <trans-unit id="ruwnay.detail.section.general.inputName" datatype="html">
+        <source>
+                  Name
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-view.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+      <trans-unit id="runway.detail.section.general.inputWidth" datatype="html">
+        <source>
+                  Width
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-view.component.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      <target>Ancho</target></trans-unit>
+      <trans-unit id="runway.detail.section.general.inputLength" datatype="html">
+        <source>
+                  Length
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-view.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      <target>Largo</target></trans-unit>
+      <trans-unit id="ruwnay.detail.section.general.inputSurface" datatype="html">
+        <source>
+                Surface
+                </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-edit.component.ts</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-general-view.component.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      <target>Superficie</target></trans-unit>
+      <trans-unit id="runway.detail.section.spatial.title" datatype="html">
+        <source>
+            Spatial
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Espacial</target></trans-unit>
+      <trans-unit id="runway.detail.section.spatial.inputGeoJSON" datatype="html">
+        <source>
+                Polygon
+              </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-geometry-edit.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail-geometry-view.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      <target>Polígono</target></trans-unit>
+      <trans-unit id="runway.detail.title" datatype="html">
+        <source>
+      Runway detail
+      <x id="START_SMALL_TEXT" ctype="x-small"/><x id="CLOSE_SMALL_TEXT" ctype="x-small"/>
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      <target>Detalle pista</target></trans-unit>
+      <trans-unit id="runway.detail.main_description" datatype="html">
+        <source>
+      This section allows users to inspect a runway.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-detail.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios inspeccionar una pista</target></trans-unit>
+      <trans-unit id="runway.new.title" datatype="html">
+        <source>
+      New runway
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      <target>Nueva pista</target></trans-unit>
+      <trans-unit id="runway.new.main_description" datatype="html">
+        <source>
+      This section allows users to create a runway.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      <target>Esta sección permite a los usuarios crear una pista</target></trans-unit>
+      <trans-unit id="runway.detail.section.general.inputName" datatype="html">
+        <source>
+                    Name
+                  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/runway/runway-new-component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      <target>Nombre</target></trans-unit>
+    </body>
+  </file>
 </xliff>
