@@ -113,7 +113,11 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                   </tr>
                   <tbody>
                   <tr *ngFor="let analysisObject of onlyPlacedObjects; index as i;">
-                    <td><strong>{{i + 1}}</strong></td>
+                    <td>
+                      <a (click)="locateObjectOnMap(analysisObject)" style="cursor: pointer">
+                        <strong>{{i + 1}}</strong>
+                      </a>
+                    </td>
                     <td>
                       <a [routerLink]="['/objects', analysisObject.object.typeId, analysisObject.object.id]">
                         {{analysisObject.object.name}}
@@ -295,10 +299,6 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
     this.olmap.addAirport(this.airportFeature,{center:true, zoom:13});
   }
 
-  locateObject(placedObject: PlacedObject) {
-
-  }
-
   onUpdateRadius(){
 
     this.updateStatus = STATUS_INDICATOR.LOADING;
@@ -397,5 +397,27 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
 
   isAllChecked(): boolean {
     return this.onlyPlacedObjects.every(p => p.included);
+  }
+
+  locateObjectOnMap(analysisObject: AnalysisObject){
+
+    let layer: string;
+
+    switch (analysisObject.objectTypeId){
+      case 0:
+        layer = 'BuildingObject';
+        break;
+      case 1:
+        layer = 'IndividualObject';
+        break;
+      case 2:
+        layer = 'WiringObject';
+        break;
+      case 3:
+        layer = 'Terrain';
+        break;
+    }
+
+    this.olmap.selectFeature(analysisObject.objectId, layer, {center:true, zoom: 15, info: true});
   }
 }

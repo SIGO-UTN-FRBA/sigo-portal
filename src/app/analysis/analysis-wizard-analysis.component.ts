@@ -27,6 +27,7 @@ import {UiError} from '../main/uiError';
 import {ElevatedObjectService} from '../object/object.service';
 import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
 import {AnalysisObjectService} from './analysis-object.service';
+import {AnalysisObject} from './analysisObject';
 
 @Component({
   template:`
@@ -152,7 +153,11 @@ import {AnalysisObjectService} from './analysis-object.service';
                 </tr>
                 <tbody>
                 <tr *ngFor="let obstacle of filteredObstacles; index as i;">
-                  <td><strong>{{i + 1}}</strong></td>
+                  <td>
+                    <a (click)="locateObjectOnMap(obstacle)" style="cursor: pointer">
+                      <strong>{{i + 1}}</strong>
+                    </a>
+                  </td>
                   <td>
                     <a [routerLink]="['/objects', obstacle.objectType, obstacle.objectId]">
                       {{obstacle.objectName}}
@@ -577,5 +582,27 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     this.filterRestriction = null;
     this.filterPending = null;
     this.filteredObstacles = this.obstacles;
+  }
+
+  locateObjectOnMap(analysisObstacle: AnalysisObstacle){
+
+    let layer: string;
+
+    switch (analysisObstacle.objectType){
+      case 0:
+        layer = 'BuildingObject';
+        break;
+      case 1:
+        layer = 'IndividualObject';
+        break;
+      case 2:
+        layer = 'WiringObject';
+        break;
+      case 3:
+        layer = 'Terrain';
+        break;
+    }
+
+    this.olMap.selectFeature(analysisObstacle.objectId, layer, {center:true, zoom: 15, info: true});
   }
 }

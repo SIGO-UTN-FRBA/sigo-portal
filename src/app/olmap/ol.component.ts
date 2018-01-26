@@ -31,6 +31,8 @@ import Circle = ol.style.Circle;
   olLayers : OlLayers;
   scaleLineControl;
   fullScreenControl;
+  private overlay: ol.Overlay;
+  private selection: ol.interaction.Select;
 
   constructor() {
     this.olLayers = {} as OlLayers;
@@ -576,44 +578,22 @@ import Circle = ol.style.Circle;
       })
     });
 
-    let select_interaction = new ol.interaction.Select();
+    this.initializeSelection();
 
-    this.map.addInteraction(select_interaction);
+    this.initializeOverlay();
 
-    /**
-     * Elements that make up the popup.
-     */
-    let container = document.getElementById('ol-popup');
-    let content = document.getElementById('popup-content');
+    this.initializeSingleClickHandler();
+  };
+
+  private initializeSingleClickHandler(){
     let closer = document.getElementById('popup-closer');
+    let overlay = this.overlay;
 
-
-    /**
-     * Create an overlay to anchor the popup to the map.
-     */
-    let overlay = new ol.Overlay({
-      element: container,
-      autoPan: true,
-      positioning: 'bottom-center',
-      stopEvent: true,
-      offset: [0, -5]
-    });
-
-    this.map.addOverlay(overlay);
-
-    /**
-     * Add a click handler to hide the popup.
-     * @return {boolean} Don't follow the href.
-     */
     closer.onclick = function(): boolean {
       overlay.setPosition(undefined);
       closer.blur();
       return false;
     };
-
-    /**
-     * Add a click handler to the map to render the popup.
-     */
 
     this.map.on('singleclick', (evt) => {
 
@@ -621,20 +601,48 @@ import Circle = ol.style.Circle;
         return feat;
       });
 
-      if (feature) {
-
-        let properties = '';
-
-        Object.keys(feature.getProperties()).filter(k => { return !(k == 'geometry' || k == 'class'); }).forEach( p => {
-          properties += `<p>${p}: <i>${feature.get(p)}</i></p>`;
-        });
-
-        content.innerHTML = `<p><strong>${feature.get('class')}</strong></p> ${properties}`;
-
-        overlay.setPosition(evt.coordinate);
-      }
+      if (feature) this.showFeatureInfo(feature, evt.coordinate);
     });
-  };
+  }
+
+  private initializeSelection(){
+    this.selection = new ol.interaction.Select({});
+
+    this.map.addInteraction(this.selection);
+  }
+
+  private initializeOverlay(){
+
+    let container = document.getElementById('ol-popup');
+    /**
+     * Create an overlay to anchor the popup to the map.
+     */
+    this.overlay = new ol.Overlay({
+      element: container,
+      autoPan: true,
+      positioning: 'bottom-center',
+      stopEvent: true,
+      offset: [0, -5]
+    });
+
+    this.map.addOverlay(this.overlay);
+  }
+
+  private showFeatureInfo(feature: ol.Feature | ol.render.Feature, position?) {
+    let properties = '';
+
+    Object.keys(feature.getProperties()).filter(k => {
+      return !(k == 'geometry' || k == 'class');
+    }).forEach(p => {
+      properties += `<p>${p}: <i>${feature.get(p)}</i></p>`;
+    });
+
+    let content = document.getElementById('popup-content');
+
+    content.innerHTML = `<p><strong>${feature.get('class')}</strong></p> ${properties}`;
+
+    this.overlay.setPosition(position ? position : ol.extent.getCenter(feature.getGeometry().getExtent()));
+  }
 
   public addRunway (feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
@@ -956,6 +964,25 @@ import Circle = ol.style.Circle;
     }*/
 
     return ol.control.defaults().extend(controls);
+  }
+
+  selectFeature(id: number, layerName: string, options? : {center?: boolean, zoom?: number, info?: boolean}){
+    let layer : VectorLayer = this[`get${layerName}Layer`]();
+
+
+    let selectedFeatures = this.selection.getFeatures();
+    selectedFeatures.clear();
+    let feature = layer.getSource().getFeatureById(id);
+    selectedFeatures.push(feature);
+
+    if(options != null && options.center)
+      this.setCenter(ol.extent.getCenter(feature.getGeometry().getExtent()));
+
+    if(options != null && options.zoom)
+      this.setZoom(options.zoom);
+
+    if(options.info != null && options.info)
+      this.showFeatureInfo(feature);
   }
 }
 
