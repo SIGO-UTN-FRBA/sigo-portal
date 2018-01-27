@@ -32,15 +32,15 @@ import {ObjectOwnerService} from "./owner.service";
             <div class="row">
               <div class="col-md-12 col-sm-12 form-group">
                 <label 
-                  for="inputNameFir" 
+                  for="inputName" 
                   class="control-label" 
-                  i18n="@@objectOwner.detail.section.general.inputNameFir">
+                  i18n="@@objectOwner.detail.section.general.inputName">
                   Name
                 </label>
                 <input
                   type="text"
                   class="form-control"
-                  name="inputNameFir"
+                  name="inputName"
                   [(ngModel)]="objectOwner.name"
                   required>
               </div>
@@ -48,30 +48,30 @@ import {ObjectOwnerService} from "./owner.service";
             <div class="row">
               <div class="col-md-6 col-sm-12 form-group">
                 <label 
-                  for="inputCodeFir" 
+                  for="inputAddress" 
                   class="control-label" 
-                  i18n="@@objectOwner.detail.section.general.inputCodeFir">
+                  i18n="@@objectOwner.detail.section.general.inputAddress">
                   Address
                 </label>
                 <input
                   type="text"
                   class="form-control"
-                  name="inputCodeFir"
+                  name="inputAddress"
                   [ngModel]="objectOwner.address"
                   disabled
                   required>
               </div>
               <div class="col-md-6 col-sm-12">
                 <label 
-                  for="inputCodeIATA" 
+                  for="inputEmail" 
                   class="control-label" 
-                  i18n="@@objectOwner.detail.section.general.inputCodeIATA">
-                  eMail
+                  i18n="@@objectOwner.detail.section.general.inputEmail">
+                  E-mail
                 </label>
                 <input
                   type="text"
                   class="form-control"
-                  name="inputCodeIATA"
+                  name="inputEmail"
                   [(ngModel)]="objectOwner.email"
                   required>
               </div>
@@ -79,30 +79,30 @@ import {ObjectOwnerService} from "./owner.service";
             <div class="row">
               <div class="col-md-6 col-sm-12 form-group">
                 <label
-                  for="inputCodeFir"
+                  for="inputPhone1"
                   class="control-label"
-                  i18n="@@objectOwner.detail.section.general.inputCodeFir">
+                  i18n="@@objectOwner.detail.section.general.inputPhone1">
                   Phone1
                 </label>
                 <input
                   type="text"
                   class="form-control"
-                  name="inputCodeFir"
+                  name="inputPhone1"
                   [ngModel]="objectOwner.phone1"
                   disabled
                   required>
               </div>
               <div class="col-md-6 col-sm-12">
                 <label
-                  for="inputCodeIATA"
+                  for="inputPhone2"
                   class="control-label"
-                  i18n="@@objectOwner.detail.section.general.inputCodeIATA">
+                  i18n="@@objectOwner.detail.section.general.inputPhone2">
                   Phone2
                 </label>
                 <input
                   type="text"
                   class="form-control"
-                  name="inputCodeIATA"
+                  name="inputPhone2"
                   [(ngModel)]="objectOwner.phone2"
                   required>
               </div>
