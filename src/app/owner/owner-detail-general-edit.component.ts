@@ -58,7 +58,6 @@ import {ObjectOwnerService} from "./owner.service";
                   class="form-control"
                   name="inputAddress"
                   [ngModel]="objectOwner.address"
-                  disabled
                   required>
               </div>
               <div class="col-md-6 col-sm-12">
@@ -89,7 +88,6 @@ import {ObjectOwnerService} from "./owner.service";
                   class="form-control"
                   name="inputPhone1"
                   [ngModel]="objectOwner.phone1"
-                  disabled
                   required>
               </div>
               <div class="col-md-6 col-sm-12">
