@@ -565,7 +565,7 @@ import Circle = ol.style.Circle;
     return OSM;
   }
 
-  createMap = () => {
+  private createMap(): ol.Map {
 
     this.map = new Map({
       target: 'map',
@@ -583,6 +583,8 @@ import Circle = ol.style.Circle;
     this.initializeOverlay();
 
     this.initializeSingleClickHandler();
+
+    return this.map;
   };
 
   private initializeSingleClickHandler(){
@@ -958,10 +960,11 @@ import Circle = ol.style.Circle;
       controls.push(new ol.control.Rotate());
     }
 
-    /*
+
     if(this.layerSwitcher){
-      controls.push(new ol.control['LayerSwitcher']());
-    }*/
+
+      controls.push(new ol.control.LayerSwitcher({tipLabel: 'Legend'}));
+    }
 
     return ol.control.defaults().extend(controls);
   }

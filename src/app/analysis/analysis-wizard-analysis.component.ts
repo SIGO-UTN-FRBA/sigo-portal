@@ -223,6 +223,7 @@ import {AnalysisObject} from './analysisObject';
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
+                     [layerSwitcher]="true"
                      [layers]="['icaoannex14surfaces','terrain', 'airport', 'runway', 'objects', 'exception', 'direction']"
             >
             </app-map>

@@ -145,6 +145,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
+                     [layerSwitcher]="true"
                      [layers]="['airport', 'runway', 'individual', 'building', 'wire', 'terrain']"
             >
             </app-map>

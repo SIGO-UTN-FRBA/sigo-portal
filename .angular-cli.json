@@ -24,12 +24,14 @@
         "./app/olmap/olmap.css",
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "../node_modules/font-awesome/css/font-awesome.min.css",
-        "../node_modules/openlayers/dist/ol.css"
+        "../node_modules/openlayers/dist/ol.css",
+        "./assets/ol3-layerswitcher/ol3-layerswitcher.css"
       ],
       "scripts": [
 		      "../node_modules/jquery/dist/jquery.slim.min.js",
 		      "../node_modules/bootstrap/dist/js/bootstrap.min.js",
-          "../node_modules/openlayers/dist/ol.js"
+          "../node_modules/openlayers/dist/ol.js",
+          "./assets/ol3-layerswitcher/ol3-layerswitcher.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
