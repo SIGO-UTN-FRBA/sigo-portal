@@ -16,7 +16,7 @@ import Circle = ol.style.Circle;
     <div id="map" class="map"></div>
     <div id="ol-popup" class="ol-popup">
       <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-      <div id="popup-content"></div>
+      <div id="popup-content" style="max-height: 10em;overflow: auto;"></div>
     </div>
   `
 
