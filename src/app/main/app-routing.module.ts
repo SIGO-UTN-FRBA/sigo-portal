@@ -2,6 +2,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './not-found.component';
 import {NgModule} from '@angular/core';
 import {HomeComponent} from './home.component';
+import {CallbackComponent} from './callback.component';
+import {ProfileComponent} from './profile.component';
 
 const appRoutes: Routes = [
   {
@@ -9,9 +11,16 @@ const appRoutes: Routes = [
     redirectTo: '/home',
     pathMatch: 'full'
   },
+  { path: 'callback',
+    component: CallbackComponent
+  },
   {
     path: 'home',
     component: HomeComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
   },
   {
     path: 'airports',

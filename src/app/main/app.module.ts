@@ -6,8 +6,10 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './not-found.component';
 import {AppRoutingModule} from './app-routing.module';
 import {HomeComponent} from './home.component';
-import {NavbarComponent} from './navbar.component';
 import {CommonsModule} from '../commons/commons.module';
+import {AuthService} from '../auth/auth.service';
+import {CallbackComponent} from './callback.component';
+import {ProfileComponent} from './profile.component';
 
 
 @NgModule({
@@ -15,7 +17,8 @@ import {CommonsModule} from '../commons/commons.module';
     AppComponent,
     HomeComponent,
     PageNotFoundComponent,
-    NavbarComponent
+    CallbackComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,9 @@ import {CommonsModule} from '../commons/commons.module';
     CommonsModule
   ],
   exports: [],
-  providers: [],
+  providers: [
+    AuthService
+  ],
   bootstrap: [
     AppComponent
   ]

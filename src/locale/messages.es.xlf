@@ -16,7 +16,7 @@
             Home
           </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="sourcefile">app/main/app.component.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       <target>Inicio</target></trans-unit>
@@ -25,7 +25,7 @@
             Airports
           </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="sourcefile">app/main/app.component.ts</context>
           <context context-type="linenumber">23</context>
         </context-group>
       <target>Aeródromos</target></trans-unit>
@@ -34,7 +34,7 @@
             Objects
           </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="sourcefile">app/main/app.component.ts</context>
           <context context-type="linenumber">28</context>
         </context-group>
       <target>Objetos</target></trans-unit>
@@ -43,7 +43,7 @@
             Regulations
           </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="sourcefile">app/main/app.component.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
       <target>Regulaciones</target></trans-unit>
@@ -52,7 +52,7 @@
             Analysis
           </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/main/navbar.component.ts</context>
+          <context context-type="sourcefile">app/main/app.component.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       <target>Análisis</target></trans-unit>

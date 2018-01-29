@@ -24,6 +24,7 @@
     "@angular/platform-server": "^4.4.1",
     "@angular/router": "^4.2.4",
     "@types/openlayers": "^4.3.6",
+    "auth0-js": "^9.1.2",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
