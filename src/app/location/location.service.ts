@@ -1,16 +1,16 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
 import {ListItem} from "../commons/listItem";
-import {Http} from "@angular/http";
 import {AppSettings} from "../main/app-settings";
 import "rxjs/add/operator/toPromise";
 import {PoliticalLocation} from "./location";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class LocationService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   list(locationType: string) : Promise<ListItem[]>{
     return this.http

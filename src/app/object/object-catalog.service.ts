@@ -4,13 +4,13 @@ import {ApiService} from "../main/api.service";
 import {ObjectMarkIndicator} from "./objectMarkIndicator";
 import {ObjectLighting} from "./objectLighting";
 import {PlacedObjectType} from "./objectType";
-import {Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 export class PlacedObjectCatalogService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   listTypeObject() : Promise<PlacedObjectType[]> {
     return this.http

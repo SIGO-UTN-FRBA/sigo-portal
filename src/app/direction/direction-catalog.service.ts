@@ -3,13 +3,13 @@ import {AppSettings} from "../main/app-settings";
 import {RunwayDirectionPosition} from "./runwayDirectionPosition";
 import "rxjs/add/operator/toPromise";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class DirectionCatalogService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   listPositions() : Promise<RunwayDirectionPosition[]> {
     return this.http

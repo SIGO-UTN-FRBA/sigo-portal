@@ -1,14 +1,14 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
 import {AppSettings} from "../main/app-settings";
 import {Analysis} from "./analysis";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 export class AnalysisWizardService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   stages(){
     return [

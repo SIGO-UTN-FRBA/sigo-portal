@@ -1,16 +1,16 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import {ParamMap} from "@angular/router";
 import {AppSettings} from "../main/app-settings";
 import {Analysis} from "./analysis";
 import "rxjs/add/operator/toPromise";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class AnalysisService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   search(paramMap : ParamMap) : Promise<Analysis[]> {
 

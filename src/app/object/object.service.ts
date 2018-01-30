@@ -1,22 +1,18 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import {PlacedObject} from "./placedObject";
 import {AppSettings} from "../main/app-settings";
 import {ParamMap} from "@angular/router";
 import Geometry = ol.geom.Geometry;
 import "rxjs/add/operator/toPromise";
-import Point = ol.geom.Point;
-import Polygon = ol.geom.Polygon;
-import LineString = ol.geom.LineString;
-import Object = ol.Object;
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 export class ElevatedObjectService extends ApiService {
 
-  constructor(http: Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   search(paramMap : ParamMap) : Promise<PlacedObject[]> {
 

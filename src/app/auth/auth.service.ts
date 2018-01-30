@@ -9,8 +9,9 @@ export class AuthService {
   auth0 = new auth0.WebAuth({
     clientID: 'P5zqY0quWRi1U_Truva9-JI-4Ee2BKeG',
     domain: 'sigo-utn.auth0.com',
+    issuer: "https://sigo-utn.auth0.com/",
     responseType: 'token id_token',
-    audience: 'https://sigo-utn.auth0.com/userinfo',
+    audience: 'http://localhost:8080/sigo/api',
     redirectUri: 'http://localhost:4200/callback',
     scope: 'openid profile'
   });
@@ -40,7 +41,7 @@ export class AuthService {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
   }
 

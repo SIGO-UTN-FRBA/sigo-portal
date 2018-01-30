@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
 import {RunwayDirection} from "./runwayDirection";
 import {AppSettings} from "../main/app-settings";
 import Point = ol.geom.Point;
@@ -7,17 +6,17 @@ import {RunwayApproachSection} from "./runwayApproachSection";
 import {RunwayTakeoffSection} from "./runwayTakeoffSection";
 import {RunwayDistance} from "./runwayDistance";
 import {ApiService} from "../main/api.service";
-import Polygon = ol.geom.Polygon;
 import "rxjs/add/operator/toPromise";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
 import {RunwayStrip} from "./runwayStrip";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class DirectionService extends ApiService {
 
-  constructor(http : Http){super(http)}
+  constructor(http : AuthHttp){super(http)}
 
   list(airportId : number, runwayId: number) : Promise<RunwayDirection[]>{
     return this.http

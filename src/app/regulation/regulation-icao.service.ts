@@ -1,18 +1,17 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import {EnumItem} from "../commons/enumItem";
 import {AppSettings} from "../main/app-settings";
 import {RuleICAOAnnex14} from "./ruleICAO";
 import {ListItem} from "../commons/listItem";
 import "rxjs/add/operator/toPromise";
-import {RegulationIcaoSurface} from "./regulationSurface";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class RegulationIcaoService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   allRules() : Promise<RuleICAOAnnex14[]> {
     return this.http

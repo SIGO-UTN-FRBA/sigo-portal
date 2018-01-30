@@ -1,14 +1,14 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import {EnumItem} from "../commons/enumItem";
 import {AppSettings} from "../main/app-settings";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class RegulationFaaService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   listFAAAircraftApproachCategories() : Promise<EnumItem[]> {
     return this.http

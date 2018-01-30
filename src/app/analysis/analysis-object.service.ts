@@ -1,13 +1,13 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import {AnalysisObject} from "./analysisObject";
 import {AppSettings} from "../main/app-settings";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 export class AnalysisObjectService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   list(analysisId: number):Promise<AnalysisObject[]> {
     return this.http

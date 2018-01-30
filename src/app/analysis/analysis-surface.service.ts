@@ -1,16 +1,16 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import {Feature} from "openlayers";
 import {AppSettings} from "../main/app-settings";
 import "rxjs/add/operator/toPromise";
 import GeoJSON = ol.format.GeoJSON;
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class AnalysisSurfaceService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   get(analysisId : number, directionId: number) : Promise<Feature[]> {
     return this.http

@@ -1,16 +1,16 @@
 import {Injectable} from "@angular/core";
 import {ListItem} from "../commons/listItem";
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import {AppSettings} from "../main/app-settings";
 import {ObjectOwner} from "./objectOwner";
 import "rxjs/add/operator/toPromise";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class ObjectOwnerService extends ApiService {
 
-  constructor(http: Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   list() : Promise<ListItem[]> {
     return this.http

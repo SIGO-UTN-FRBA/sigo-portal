@@ -3,19 +3,16 @@ import {Runway} from "./runway";
 import {AppSettings} from "../main/app-settings";
 import Polygon = ol.geom.Polygon;
 import {ApiService} from "../main/api.service";
-import {Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
-import {RunwayStrip} from "../direction/runwayStrip";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class RunwayService extends ApiService {
 
-  constructor (protected http : Http){
-    super(http);
-  }
+  constructor (http : AuthHttp){super(http);}
 
   list(airportId : number) : Promise<Runway[]>{
     return this.http

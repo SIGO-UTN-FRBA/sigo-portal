@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from '../main/api.service';
 import {AppSettings} from '../main/app-settings';
-import {Http} from '@angular/http';
 import {AnalysisExceptionSurface} from './analysisExceptionSurface';
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 export class AnalysisExceptionSurfaceService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   list(analysisId:number): Promise<AnalysisExceptionSurface[]> {
     return this.http

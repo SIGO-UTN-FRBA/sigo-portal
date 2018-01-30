@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
-  selector: 'app-profile',
   template: `
     <h1 i18n="@@profile.detail.title">
       User Profile

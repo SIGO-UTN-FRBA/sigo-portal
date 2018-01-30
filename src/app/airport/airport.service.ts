@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
 import {Airport} from "./airport";
 import "rxjs/add/operator/toPromise";
 import {AppSettings} from "../main/app-settings";
@@ -8,12 +7,13 @@ import {ApiService} from "../main/api.service";
 import {ParamMap} from "@angular/router";
 import {Feature} from "openlayers";
 import GeoJSON = ol.format.GeoJSON;
+import {AuthHttp} from 'angular2-jwt';
 
 
 @Injectable()
 export class AirportService extends ApiService {
 
-  constructor (http : Http){super(http);}
+  constructor (http : AuthHttp){super(http);}
 
   search(paramMap : ParamMap) : Promise<Airport[]>{
 

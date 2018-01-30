@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from '../main/api.service';
 import {AppSettings} from '../main/app-settings';
-import {Http} from '@angular/http';
 import {AnalysisExceptionRule} from './analysisExceptionRule';
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 export class AnalysisExceptionRuleService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   get(analysisId:number, exceptionId:number):Promise<AnalysisExceptionRule>{
     return this.http

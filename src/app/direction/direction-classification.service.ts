@@ -3,13 +3,13 @@ import {ApiService} from "../main/api.service";
 import {RunwayClassification} from "./runwayClassification";
 import "rxjs/add/operator/toPromise";
 import {AppSettings} from "../main/app-settings";
-import {Http} from "@angular/http";
+import {AuthHttp} from 'angular2-jwt';
 
 @Injectable()
 
 export class DirectionClassificationService extends ApiService {
 
-  constructor(http:Http){super(http)}
+  constructor(http: AuthHttp){super(http)}
 
   get(airportId:number, runwayId:number, directionId:number) : Promise<RunwayClassification> {
     return this.http
