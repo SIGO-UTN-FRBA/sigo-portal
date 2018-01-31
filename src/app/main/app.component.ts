@@ -54,7 +54,7 @@ import {AuthService} from '../auth/auth.service';
                   <li>
                     <a routerLink="/profile">
                       <span class="glyphicon glyphicon-user"></span>
-                      <ng-container *ngIf="profile">{{profile.nickname}}</ng-container>
+                      <ng-container *ngIf="profile">{{profile.email}}</ng-container>
                     </a>
                   </li>
                   <li>
@@ -104,11 +104,8 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
 
-    if(this.auth.isAuthenticated()) {
-      if (this.auth.userProfile)
-        this.profile = this.auth.userProfile;
-      else
-        return this.auth.getProfile((err, profile) => this.profile = profile);
-    }
+    let self = this;
+    setTimeout(() => this.auth.getProfile((error, data) => self.profile = data), 500);
+
   }
 }

@@ -11,6 +11,10 @@ import {AuthService} from '../auth/auth.service';
 import {CallbackComponent} from './callback.component';
 import {ProfileComponent} from './profile.component';
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
+import {AuthGuardService} from '../auth/auth-guard.service';
+import {UnauthorizedComponent} from './unauthorized.component';
+import {UnauthenticatedComponent} from './unauthenticated.component';
+import {WelcomeComponent} from './welcome.component';
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -26,7 +30,10 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HomeComponent,
     PageNotFoundComponent,
     CallbackComponent,
-    ProfileComponent
+    ProfileComponent,
+    UnauthorizedComponent,
+    UnauthenticatedComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +48,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       provide: AuthHttp,
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions]
-    }
+    },
+    AuthGuardService
   ],
   bootstrap: [
     AppComponent

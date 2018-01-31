@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import * as auth0 from 'auth0-js';
+import "rxjs/add/operator/toPromise";
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
     responseType: 'token id_token',
     audience: 'http://localhost:8080/sigo/api',
     redirectUri: 'http://localhost:4200/callback',
-    scope: 'openid profile'
+    scope: 'openid profile email'
   });
 
   userProfile: any;
@@ -24,15 +25,14 @@ export class AuthService {
     this.auth0.authorize();
   }
 
-  public handleAuthentication(): void {
+  public handleAuthentication(){
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        window.location.hash = '';
         this.setSession(authResult);
         this.router.navigate(['/home']);
       } else if (err) {
-        this.router.navigate(['/home']);
         console.log(err);
+        this.router.navigate(['/unauthorized']);
       }
     });
   }
@@ -62,7 +62,9 @@ export class AuthService {
   }
 
   public getProfile(cb): void {
+
     const accessToken = localStorage.getItem('access_token');
+
     if (!accessToken) {
       throw new Error('Access token must exist to fetch profile');
     }
@@ -74,5 +76,6 @@ export class AuthService {
       }
       cb(err, profile);
     });
+
   }
 }
