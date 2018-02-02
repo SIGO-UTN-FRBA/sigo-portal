@@ -14,7 +14,7 @@ export class AuthService {
     responseType: 'token id_token',
     audience: 'http://localhost:8080/sigo/api',
     redirectUri: 'http://localhost:4200/callback',
-    scope: 'openid profile email'
+    scope: 'openid profile email app_metadata'
   });
 
   userProfile: any;
@@ -49,6 +49,7 @@ export class AuthService {
     // Remove tokens and expiry time from localStorage
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
+    localStorage.removeItem('token');
     localStorage.removeItem('expires_at');
     // Go back to the home route
     this.router.navigate(['/']);

@@ -5,7 +5,7 @@ import {Component} from '@angular/core';
     <div class="page-header">
       <h1 i18n="@@welcome.title">Welcome to S.I.G.O. <small></small></h1>
     </div>
-    <p></p>
+    <p>Please, try to sign in to access the functionality.</p>
   `
 })
 

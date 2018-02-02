@@ -105,7 +105,7 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
 
     let self = this;
-    setTimeout(() => this.auth.getProfile((error, data) => self.profile = data), 500);
+    setTimeout(() => this.auth.getProfile((error, data) => self.profile = data), 1000);
 
   }
 }
