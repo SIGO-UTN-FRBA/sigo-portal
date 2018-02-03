@@ -1,5 +1,4 @@
 import {Component, OnInit} from "@angular/core";
-import {AnalysisCase} from "./analysisCase";
 import {ApiError} from "../main/apiError";
 import {AnalysisService} from "./analysis.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
@@ -35,7 +34,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
             <p>{{analysis.airport.nameFIR}}</p>
             <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
             <p>Edition: <i>{{analysis.editionDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
-            <p>User: <i>Mark Otto</i></p>
+            <p>User: <i>{{analysis.userNickname}}</i></p>
           </div>
           <div class="media-right">
             <button type="button" 

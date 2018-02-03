@@ -9,5 +9,7 @@ export class Analysis {
   statusId: number;
   airportId: number;
   airport: Airport;
-  regulationId:number;
+  regulationId: number;
+  userId: string;
+  userNickname: string;
 }
