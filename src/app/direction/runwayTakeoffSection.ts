@@ -1,3 +1,5 @@
+import Feature = ol.Feature;
+
 export class RunwayTakeoffSection {
   id : number;
   clearwayLength : number;
@@ -5,4 +7,6 @@ export class RunwayTakeoffSection {
   stopwayLength : number;
   enabled : number;
   directionId : number;
+  clearwayFeature: Feature;
+  stopwayFeature: Feature;
 }

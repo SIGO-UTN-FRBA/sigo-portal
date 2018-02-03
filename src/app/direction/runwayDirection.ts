@@ -1,4 +1,7 @@
 import {Runway} from "../runway/runway";
+import Feature = ol.Feature;
+import {RunwayTakeoffSection} from './runwayTakeoffSection';
+import {RunwayApproachSection} from './runwayApproachSection';
 
 export class RunwayDirection {
   id: number;
@@ -8,5 +11,8 @@ export class RunwayDirection {
   position: number;
   name : string;
   azimuth : number;
-  height:number;
+  height: number;
+  feature: Feature;
+  takeoffSection: RunwayTakeoffSection;
+  approachSection: RunwayApproachSection;
 }

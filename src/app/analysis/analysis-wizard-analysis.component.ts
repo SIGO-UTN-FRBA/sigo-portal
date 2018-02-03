@@ -26,6 +26,8 @@ import {UiError} from '../main/uiError';
 import {ElevatedObjectService} from '../object/object.service';
 import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
 import {AnalysisObjectService} from './analysis-object.service';
+import {RunwayApproachSection} from '../direction/runwayApproachSection';
+import {RunwayTakeoffSection} from '../direction/runwayTakeoffSection';
 
 @Component({
   template:`
@@ -221,7 +223,7 @@ import {AnalysisObjectService} from './analysis-object.service';
                      [fullScreen]="true"
                      [scale]="true"
                      [layerSwitcher]="true"
-                     [layers]="['icaoannex14surfaces','terrain', 'airport', 'runway', 'objects', 'exception', 'direction']"
+                     [layers]="['icaoannex14surfaces','terrain', 'airport', 'runway', 'objects', 'exception', 'direction', 'threshold', 'stopway', 'clearway']"
             >
             </app-map>
           </ng-container>
@@ -387,7 +389,11 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
         this.directionService.list(r.airportId,r.id)
           .then( data => {
             r.directions = data;
-            r.directions.forEach((d => d.runway = r));
+            r.directions.forEach(d => {
+              d.runway = r;
+              d.approachSection = new RunwayApproachSection();
+              d.takeoffSection = new RunwayTakeoffSection();
+            });
           })
           .catch(error => Promise.reject(error))
       )
@@ -430,11 +436,11 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
       if(!(this.olMap = item.first))
         return;
 
-      this.relocate()
-        .includeAirportFeatures()
-        .includeObjectFeatures()
-        .includeExceptionFeatures()
-        .includeRunwayFeatures()
+      this.recenter()
+        .locateAirportFeatures()
+        .locateObjectFeatures()
+        .locateExceptionFeatures()
+        .locateRunwayFeatures()
     });
   }
 
@@ -481,49 +487,104 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
     this.clearMapLayers();
 
     Promise.all([
-      this.includeSurfaceFeatures(direction),
-      this.includeDirectionFeatures(direction)
+      this.locateSurfaceFeatures(direction),
+      this.locateDirectionFeature(direction),
+      this.locateClearwayFeature(direction),
+      this.locateStopwayFeature(direction),
+      this.locateThresholdFeature(direction)
     ]).then(()=> Promise.resolve(true));
   }
 
-  private relocate(): any {
+  private recenter(): any {
     this.olMap.setCenter(this.centerCoordinates);
     this.olMap.setZoom(11);
 
     return this;
   }
 
-  private includeAirportFeatures(): any {
+  private locateAirportFeatures(): any {
     this.olMap.addAirport(this.airportFeature);
     return this;
   }
 
-  private includeRunwayFeatures(): any {
+  private locateRunwayFeatures(): any {
     this.runwayFeatures.forEach( f => this.olMap.addRunway(f));
-
     return this;
   }
 
-  private includeDirectionFeatures(direction: RunwayDirection): Promise<any> {
+  private locateDirectionFeature(direction: RunwayDirection): Promise<any> {
+/*
+    if(direction.feature) {
+      return Promise.resolve(this.olMap.addDirection(direction.feature));
+    }
+*/
     return this.directionService
-      .getFeature(this.analysis.airportId, direction.runwayId, direction.id)
-      .then(data => this.olMap.addDirection(data))
+        .getFeature(this.analysis.airportId, direction.runwayId, direction.id)
+        .then(data => {
+          direction.feature = data;
+          this.olMap.addDirection(data);
+        })
+        .catch(error => Promise.reject(error));
+  }
+
+  private locateClearwayFeature(direction: RunwayDirection) {
+/*
+    if(direction.takeoffSection.clearwayFeature){
+      return Promise.resolve(this.olMap.addClearway(direction.takeoffSection.clearwayFeature));
+    }
+*/
+    return this.directionService
+      .getClearwayFeature(this.analysis.airportId, direction.runwayId, direction.id)
+      .then(data => {
+        direction.takeoffSection.clearwayFeature = data;
+        this.olMap.addClearway(data);
+      })
+      .catch(error => Promise.reject(error))
+
+  }
+
+  private locateStopwayFeature(direction: RunwayDirection) {
+/*
+    if(direction.takeoffSection.stopwayFeature){
+      return Promise.resolve(this.olMap.addStopway(direction.takeoffSection.stopwayFeature));
+    }
+*/
+    return this.directionService
+      .getStopwayFeature(this.analysis.airportId, direction.runwayId, direction.id)
+      .then(data => {
+        direction.takeoffSection.stopwayFeature = data;
+        this.olMap.addStopway(data);
+      })
       .catch(error => Promise.reject(error));
   }
 
-  includeExceptionFeatures(): any{
+  private locateThresholdFeature(direction: RunwayDirection) {
+/*
+    if(direction.approachSection.thresholdFeature){
+      return Promise.resolve(this.olMap.addThreshold(direction.approachSection.thresholdFeature));
+    }
+*/
+    return this.directionService
+      .getDisplacedThresholdFeature(this.analysis.airportId, direction.runwayId, direction.id)
+      .then(data => {
+        direction.approachSection.thresholdFeature = data;
+        this.olMap.addThreshold(data);
+      })
+      .catch(error => Promise.reject(error))
+
+  }
+
+  locateExceptionFeatures(): any{
     this.exceptionFeatures.forEach(f => this.olMap.addException(f));
-
     return this;
   }
 
-  includeObjectFeatures(): any{
+  locateObjectFeatures(): any{
     this.objectFeatures.forEach(f => this.olMap.addObject(f));
-
     return this;
   }
 
-  private includeSurfaceFeatures(direction: RunwayDirection): Promise<any>{
+  private locateSurfaceFeatures(direction: RunwayDirection): Promise<any>{
 
     return this.surfacesService
       .get(this.analysisId, direction.id)
@@ -534,7 +595,10 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   private clearMapLayers() : any {
     this.olMap
       .clearSurfaceLayers()
-      .clearDirectionLayer();
+      .clearDirectionLayer()
+      .clearDisplacedThresholdLayer()
+      .clearStopwayLayer()
+      .clearClearwayLayer();
 
     return this;
   }
