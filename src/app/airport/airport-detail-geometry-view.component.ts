@@ -1,8 +1,8 @@
 import {
-  AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
+  AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren
+} from '@angular/core';
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {AirportService} from "./airport.service";
-import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {ApiError} from "../main/apiError";
 import Feature = ol.Feature;
@@ -53,8 +53,7 @@ import GeoJSON = ol.format.GeoJSON;
             </div>
           </div>
           <br>
-          <app-map #mapAirport 
-                   (map)="map" 
+          <app-map #mapAirport
                    [rotate]="true"
                    [fullScreen]="true"
                    [scale]="true"
@@ -71,13 +70,9 @@ import GeoJSON = ol.format.GeoJSON;
 export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit{
 
   @Input() airportId : number;
-  map: Map;
   private olmap: OlComponent;
   onInitError :ApiError;
-
-  @ViewChild('mapAirport') set content(content: OlComponent) {
-    this.olmap = content;
-  }
+  @ViewChildren('mapAirport') mapAirport: QueryList<ElementRef>;
   indicator;
   status : number;
   @Input() edit : boolean;
@@ -115,7 +110,12 @@ export class AirportDetailGeometryViewComponent implements OnInit, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-      setTimeout(()=> {if (this.feature.getGeometry()) this.locateFeature(); },1500);
+    this.mapAirport.changes.subscribe(item => {
+      if(!(this.olmap = item.first))
+        return;
+
+      this.locateFeature();
+    });
   }
 
   allowEdition() {

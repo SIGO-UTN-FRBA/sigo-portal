@@ -1,7 +1,7 @@
 import {
-  AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
+  AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren
+} from '@angular/core';
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {ApiError} from "../main/apiError";
 import {ElevatedObjectService} from "./object.service";
@@ -54,7 +54,6 @@ import GeoJSON = ol.format.GeoJSON;
           </div>
           <br>
           <app-map #mapPlacedObject
-                   (map)="map"
                    [rotate]="true"
                    [fullScreen]="true"
                    [scale]="true"
@@ -72,11 +71,10 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
 
   @Input() placedObjectId: number;
   @Input() placedObjectType: number;
-  map: Map;
   private olmap: OlComponent;
   onInitError :ApiError;
   geometryType: string;
-  @ViewChild('mapPlacedObject') set content(content: OlComponent) {this.olmap = content}
+  @ViewChildren('mapPlacedObject') mapPlacedObject: QueryList<ElementRef>;
   indicator;
   status : number;
   @Input() edit : boolean;
@@ -116,7 +114,12 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {if (this.feature != null) this.locateFeature(); },1500);
+    this.mapPlacedObject.changes.subscribe(item => {
+      if(!(this.olmap = item.first))
+        return;
+
+      this.locateFeature();
+    });
   }
 
   allowEdition() {

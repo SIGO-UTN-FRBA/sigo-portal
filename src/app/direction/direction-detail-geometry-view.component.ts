@@ -1,6 +1,6 @@
 import {
-  AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild
-} from "@angular/core";
+  AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren
+} from '@angular/core';
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
@@ -53,8 +53,7 @@ import GeoJSON = ol.format.GeoJSON;
             </div>
           </div>
           <br>
-          <app-map #mapDirection 
-                   (map)="map"
+          <app-map #mapDirection
                    [rotate]="true"
                    [fullScreen]="true"
                    [scale]="true"
@@ -77,12 +76,9 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   @Input() airportId : number;
   @Input() runwayId : number;
   @Input() directionId : number;
-  map: Map;
   private olmap: OlComponent;
   onInitError: ApiError;
-  @ViewChild('mapDirection') set content(content: OlComponent) {
-    this.olmap = content;
-  }
+  @ViewChildren('mapDirection') mapDirection: QueryList<ElementRef>;
   indicator;
   status : number;
   @Input() edit : boolean;
@@ -108,7 +104,7 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
         .then(()=> this.olmap.clearDisplacedThresholdLayer())
         .then(()=> this.olmap.clearStopwayLayer())
         .then(()=> this.olmap.clearClearwayLayer())
-        .then(()=> this.locateGeometries())
+        .then(()=> this.locateFeatures())
     );
   }
 
@@ -182,14 +178,19 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {if(this.feature.getGeometry()) this.locateGeometries()},1500);
+    this.mapDirection.changes.subscribe(item => {
+      if(!(this.olmap = item.first))
+        return;
+
+      this.locateFeatures();
+    });
   }
 
   allowEdition() {
     this.editChange.emit(true);
   }
 
-  private locateGeometries(){
+  private locateFeatures(){
       this.olmap
         .addRunway(this.runwayFeature, {center: true, zoom: 14})
         .addThreshold(this.thresholdFeature)

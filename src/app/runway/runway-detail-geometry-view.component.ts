@@ -1,9 +1,7 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {OlComponent} from '../olmap/ol.component';
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {RunwayService} from "./runway.service";
-import Map = ol.Map;
-import Polygon = ol.geom.Polygon;
 import {ApiError} from "../main/apiError";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
@@ -52,8 +50,7 @@ import GeoJSON = ol.format.GeoJSON;
             </div>
           </div>
           <br>
-          <app-map #mapRunway 
-                   (map)="map"
+          <app-map #mapRunway
                    [rotate]="true"
                    [fullScreen]="true"
                    [scale]="true"
@@ -67,14 +64,11 @@ import GeoJSON = ol.format.GeoJSON;
 })
 
 export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit {
-  map: Map;
   @Input() airportId : number;
   @Input() runwayId: number;
   private olmap: OlComponent;
   onInitError : ApiError;
-  @ViewChild('mapRunway') set content(content: OlComponent) {
-    this.olmap = content;
-  }
+  @ViewChildren('mapRunway') mapRunway: QueryList<ElementRef>;
   indicator;
   status : number;
   @Input() edit : boolean;
@@ -113,8 +107,12 @@ export class RunwayDetailGeometryViewComponent implements OnInit, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
+    this.mapRunway.changes.subscribe(item => {
+      if(!(this.olmap = item.first))
+        return;
 
-    setTimeout(()=> {if (this.feature.getGeometry()) this.locateFeature()},500);
+      this.locateFeature();
+    });
   }
 
   allowEdition() {

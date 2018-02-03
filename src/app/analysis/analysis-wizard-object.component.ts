@@ -1,9 +1,8 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from "@angular/core";
+import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {AnalysisCaseService} from "./analysis-case.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AnalysisObject} from "./analysisObject";
 import {ElevatedObjectService} from "../object/object.service";
-import {PlacedObject} from "../object/placedObject";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
 import {PlacedObjectType} from "../object/objectType";
@@ -12,7 +11,6 @@ import {AnalysisService} from "./analysis.service";
 import {Analysis} from "./analysis";
 import {AirportService} from "../airport/airport.service";
 import {OlComponent} from "../olmap/ol.component";
-import Map = ol.Map;
 import Feature = ol.Feature;
 import {AnalysisCase} from "./analysisCase";
 import {UiError} from "../main/uiError";
@@ -141,7 +139,6 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
             <br>
             
             <app-map #mapObjects
-                     (map)="map"
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
@@ -188,10 +185,7 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   airportFeature: Feature;
   private olmap: OlComponent;
   onlyPlacedObjects: AnalysisObject[];
-  @ViewChild('mapObjects') set content(content: OlComponent) {
-    this.olmap = content;
-  }
-  map:Map;
+  @ViewChildren('mapObjects') mapObjects: QueryList<ElementRef>;
   searchRadius:number;
   allChecked: boolean;
 
@@ -288,7 +282,12 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=> {this.locateFeatures()},3500);
+    this.mapObjects.changes.subscribe(item => {
+      if(!(this.olmap = item.first))
+        return;
+
+      this.locateFeatures();
+    });
   }
 
   private locateFeatures() {

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from "@angular/core";
+import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {BlockTemplateComponent} from "../commons/block-template.component";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {AppError} from "../main/ierror";
@@ -7,7 +7,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AnalysisWizardService} from "./analysis-wizard.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {OlComponent} from "../olmap/ol.component";
-import Map = ol.Map;
 import {DirectionService} from "../direction/direction.service";
 import {RunwayService} from "../runway/runway.service";
 import {AnalysisService} from "./analysis.service";
@@ -27,7 +26,6 @@ import {UiError} from '../main/uiError';
 import {ElevatedObjectService} from '../object/object.service';
 import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
 import {AnalysisObjectService} from './analysis-object.service';
-import {AnalysisObject} from './analysisObject';
 
 @Component({
   template:`
@@ -218,8 +216,7 @@ import {AnalysisObject} from './analysisObject';
               </li>
             </ul>
             <br/>
-            <app-map #mapObjects
-                     (map)="map"
+            <app-map #mapAnalysis
                      [rotate]="true"
                      [fullScreen]="true"
                      [scale]="true"
@@ -269,10 +266,7 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   private runwayFeatures: Feature[];
   private exceptionFeatures: Feature[];
   private objectFeatures: Feature[];
-  @ViewChild('mapObjects') set content(content: OlComponent) {
-    this.olMap = content;
-  }
-  map:Map;
+  @ViewChildren('mapAnalysis') mapAnalysis: QueryList<ElementRef>;
   airportFeature:Feature;
   runways:Runway[];
   analysis:Analysis;
@@ -431,13 +425,17 @@ export class AnalysisWizardAnalysisComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(()=>
+    this.mapAnalysis.changes.subscribe(item => {
+
+      if(!(this.olMap = item.first))
+        return;
+
       this.relocate()
         .includeAirportFeatures()
         .includeObjectFeatures()
         .includeExceptionFeatures()
-        .includeRunwayFeatures(),
-      2000);
+        .includeRunwayFeatures()
+    });
   }
 
   onNext(){
