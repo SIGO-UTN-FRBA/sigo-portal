@@ -89,7 +89,7 @@ import {EnumItem} from "../commons/enumItem";
                 i18n="@@ruwnay.detail.section.general.inputSurface">
                 Surface
               </label>
-              <p class="form-control-static">{{surfaces[runway.surfaceId - 1].name + ' - ' + surfaces[runway.surfaceId -1].description}}</p>
+              <p class="form-control-static">{{surfaces[runway.surfaceId].name + ' - ' + surfaces[runway.surfaceId].description}}</p>
             </div>
           </div>
         </div>
