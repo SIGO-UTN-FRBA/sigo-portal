@@ -28,7 +28,7 @@ import {ApiError} from "../main/apiError";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/airports/{{airport.id}}/detail">{{airport.codeFIR}}</a>
+              <a routerLink="/airports/{{airport.id}}/detail">{{(airport.codeFIR)? airport.codeFIR : airport.codeLocal}}</a>
             </h4>
             <p>{{airport.nameFIR}}</p>
           </div>
