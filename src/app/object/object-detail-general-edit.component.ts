@@ -173,7 +173,7 @@ import {LocationService} from "../location/location.service";
                         class="form-control"
                         required>
                   <option *ngFor="let lighting of lightnings;" [value]="lighting.id">
-                    {{lighting.code}} - {{lighting.description}}
+                    {{lighting.description}}
                   </option>
                 </select>
               </div>
@@ -188,7 +188,7 @@ import {LocationService} from "../location/location.service";
                         class="form-control"
                         required>
                   <option *ngFor="let mark of marks;" [value]="mark.id">
-                    {{mark.code}} - {{mark.description}}
+                    {{mark.description}}
                   </option>
                 </select>
               </div>
