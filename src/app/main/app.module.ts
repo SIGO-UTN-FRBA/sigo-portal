@@ -15,6 +15,7 @@ import {AuthGuardService} from '../auth/auth-guard.service';
 import {UnauthorizedComponent} from './unauthorized.component';
 import {UnauthenticatedComponent} from './unauthenticated.component';
 import {WelcomeComponent} from './welcome.component';
+import {RoleGuardService} from '../auth/role-guard.service';
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -49,7 +50,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions]
     },
-    AuthGuardService
+    AuthGuardService,
+    RoleGuardService
   ],
   bootstrap: [
     AppComponent

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import * as auth0 from 'auth0-js';
 import "rxjs/add/operator/toPromise";
+import {JwtHelper} from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
@@ -77,6 +78,29 @@ export class AuthService {
       }
       cb(err, profile);
     });
+
+  }
+
+  public getLocalProfile(): any{
+    const idToken = localStorage.getItem('token');
+
+    if (!idToken) {
+      throw new Error('Id token must exist to fetch profile');
+    }
+
+    let decodedJwt = new JwtHelper().decodeToken(idToken);
+
+    debugger;
+
+    return decodedJwt;
+  }
+
+  public userHasRole(): boolean {
+
+    let decodedToken = this.getLocalProfile();
+
+    return decodedToken.hasOwnProperty("http://localhost:8080/sigo/api/app_metadata")
+      && decodedToken["http://localhost:8080/sigo/api/app_metadata"].hasOwnProperty("role");
 
   }
 }

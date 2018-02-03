@@ -8,6 +8,7 @@ import {AuthGuardService} from '../auth/auth-guard.service';
 import {UnauthorizedComponent} from './unauthorized.component';
 import {UnauthenticatedComponent} from './unauthenticated.component';
 import {WelcomeComponent} from './welcome.component';
+import {RoleGuardService} from '../auth/role-guard.service';
 
 const appRoutes: Routes = [
   {
@@ -21,7 +22,7 @@ const appRoutes: Routes = [
   },
   { path: 'callback',
     component: CallbackComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, RoleGuardService]
   },
   {
     path: 'unauthenticated',
@@ -34,37 +35,37 @@ const appRoutes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, RoleGuardService]
   },
   {
     path: 'profile',
     component: ProfileComponent,
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, RoleGuardService]
   },
   {
     path: 'airports',
     loadChildren: 'app/airport/airport.module#AirportModule',
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, RoleGuardService]
   },
   {
     path: 'objects',
     loadChildren: 'app/object/object.module#PlacedObjectModule',
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, RoleGuardService]
   },
   {
     path: 'regulations',
     loadChildren: 'app/regulation/regulation.module#RegulationModule',
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, RoleGuardService]
   },
   {
     path: 'analysis',
     loadChildren: 'app/analysis/analysis.module#AnalysisModule',
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, RoleGuardService]
   },
   {
     path: 'owners',
     loadChildren: 'app/owner/owner.module#ObjectOwnerModule',
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, RoleGuardService]
   },
   {
     path: '**',
