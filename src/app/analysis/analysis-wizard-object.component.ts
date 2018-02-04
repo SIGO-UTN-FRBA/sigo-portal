@@ -8,17 +8,17 @@ import {ApiError} from "../main/apiError";
 import {PlacedObjectType} from "../object/objectType";
 import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 import {AnalysisService} from "./analysis.service";
-import {Analysis} from "./analysis";
 import {AirportService} from "../airport/airport.service";
 import {OlComponent} from "../olmap/ol.component";
 import Feature = ol.Feature;
 import {AnalysisCase} from "./analysisCase";
 import {UiError} from "../main/uiError";
-import {AppError} from "../main/ierror";
 import {BlockTemplateComponent} from "../commons/block-template.component";
 import {BlockUI, NgBlockUI} from "ng-block-ui";
 import {AnalysisObjectService} from "./analysis-object.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";
+import {AuthService} from '../auth/auth.service';
+import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.component';
 
 @Component({
   providers: [ OlComponent ],
@@ -33,23 +33,27 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
 
     <hr/>
 
+    <div *ngIf="onInitError">
+      <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
+    </div>
+    
     <div *ngIf="onSubmitError">
       <app-error-indicator [errors]="[onSubmitError]"></app-error-indicator>
     </div>
 
     <block-ui [template]="blockTemplate" [delayStop]="500">
-      <div class="panel panel-default">
+      <div class="panel panel-default" *ngIf="initObjectsStatus != null">
         <div class="panel-heading">
           <h3 class="panel-title" i18n="@@analysis.wizard.object.section.objects.title">
             Objects
           </h3>
         </div>
-        <div [ngSwitch]="initStatus" class="panel-body">
+        <div [ngSwitch]="initObjectsStatus" class="panel-body">
           <div *ngSwitchCase="indicator.LOADING">
             <app-loading-indicator></app-loading-indicator>
           </div>
           <div *ngSwitchCase="indicator.ERROR">
-            <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
+            <app-error-indicator [errors]="[onInitObjectsError]"></app-error-indicator>
           </div>
           <ng-container *ngSwitchCase="indicator.ACTIVE">
 
@@ -75,6 +79,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
               </div>
               <button type="submit"
                       [disabled]="caseForm.invalid"
+                      *ngIf="allowEdit"
                       class="btn btn-default"
                       i18n="@commons.button.update"
               >
@@ -106,7 +111,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                     <th i18n="@@analysis.wizard.object.section.objects.name">Name</th>
                     <th i18n="@@analysis.wizard.object.section.objects.type">Type</th>
                     <th i18n="@@analysis.wizard.object.section.objects.included">
-                      Included (<input type="checkbox" [checked]="allChecked"  (click)="checkAll($event)"/>)
+                      Included (<input type="checkbox" *ngIf="allowEdit" [checked]="allChecked" (click)="checkAll($event)"/>)
                     </th>
                   </tr>
                   <tbody>
@@ -125,9 +130,11 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                       {{types[analysisObject.object.typeId].description}}
                     </td>
                     <td>
-                      <input type="checkbox" 
+                      <input type="checkbox"
+                             *ngIf="allowEdit"
                              [(ngModel)]="analysisObject.included"
                              (ngModelChange)="includeObject(analysisObject.id, $event)">
+                      <p *ngIf="!allowEdit">{{analysisObject.included}}</p>
                     </td>
                   </tr>
                   </tbody>
@@ -152,7 +159,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
 
       <br>
 
-      <nav>
+      <nav *ngIf="allowEdit">
         <ul class="pager">
           <li class="next">
             <a (click)="onNext()" style="cursor: pointer">
@@ -166,20 +173,16 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
   `
 })
 
-export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
+export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardComponent implements OnInit, AfterViewInit {
 
   @BlockUI() blockUI: NgBlockUI;
   blockTemplate = BlockTemplateComponent;
-  initStatus:number;
+  initObjectsStatus: number;
   updateStatus:number;
-  indicator;
-  analysis:Analysis;
-  analysisId:number;
   analysisCase:AnalysisCase;
   analysisObjects:AnalysisObject[];
-  onInitError:ApiError;
+  onInitObjectsError: ApiError;
   onUpdateError:ApiError;
-  onSubmitError:AppError;
   onIncludeError:ApiError;
   types:PlacedObjectType[];
   airportFeature: Feature;
@@ -190,55 +193,58 @@ export class AnalysisWizardObjectComponent implements OnInit, AfterViewInit {
   allChecked: boolean;
 
   constructor(
-    private analysisService: AnalysisService,
+    analysisService: AnalysisService,
     private caseService: AnalysisCaseService,
     private objectService: ElevatedObjectService,
     private objectCatalogService: PlacedObjectCatalogService,
     private airportService: AirportService,
     private analysisObjectService: AnalysisObjectService,
-    private wizardService: AnalysisWizardService,
-    private route: ActivatedRoute,
-    private router: Router
+    wizardService: AnalysisWizardService,
+    authService: AuthService,
+    route: ActivatedRoute,
+    router: Router
   ){
+    super(analysisService, wizardService, authService, route, router);
+
     this.analysisObjects = [];
-    this.indicator = STATUS_INDICATOR;
     this.types = [];
+  }
+
+  stageId(): number {
+    return 0;
   }
 
   ngOnInit(): void {
 
     this.blockUI.stop();
     this.analysisId = this.route.snapshot.params['analysisId'];
-    this.initStatus = STATUS_INDICATOR.LOADING;
+    this.initObjectsStatus = null;
     this.onInitError = null;
+    this.onInitObjectsError = null;
     this.updateStatus = null;
     this.onIncludeError = null;
+    this.allowEdit = null;
 
-    let p1 = this.objectCatalogService
-      .listTypeObject()
+    this.resolveAnalysis()
+      .then(() => this.validateCurrentStage())
+      .then(() => this.resolveEdition())
+      .catch(error => Promise.reject(this.onInitError = error))
+      .then(()=> this.initObjectsStatus = STATUS_INDICATOR.LOADING)
+      .then(() => this.objectCatalogService.listTypeObject())
       .then(data => this.types = data)
-      .catch(error => Promise.reject(error));
-
-    let p2 = this.resolveAnalysis()
-      .then(() => this.resolveAnalysisCase())
+      .then(()=> this.resolveAnalysisCase())
       .then(() => this.resolveObjects())
-      .catch(error => Promise.reject(error));
-
-    Promise.all([p1, p2])
       .then(() => {
-        this.initStatus = STATUS_INDICATOR.ACTIVE;
+        this.initObjectsStatus = STATUS_INDICATOR.ACTIVE;
         this.updateStatus = STATUS_INDICATOR.ACTIVE;
       })
       .catch(error => {
-        this.onInitError = error;
-        this.initStatus = STATUS_INDICATOR.ERROR;
+        if(!this.onInitError){
+          this.onInitObjectsError = error;
+          this.initObjectsStatus = STATUS_INDICATOR.ERROR;
+        }
       });
-  }
 
-  private resolveAnalysis() : Promise<any> {
-      return this.analysisService
-        .get(this.analysisId)
-        .then(data => this.analysis = data)
   }
 
   private resolveAnalysisCase() : Promise<any> {

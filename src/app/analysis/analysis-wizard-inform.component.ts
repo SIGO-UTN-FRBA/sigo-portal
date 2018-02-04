@@ -1,15 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {BlockUI, NgBlockUI} from 'ng-block-ui';
-import {BlockTemplateComponent} from '../commons/block-template.component';
-import {ApiError} from '../main/apiError';
-import {AppError} from '../main/ierror';
-import {OlComponent} from '../olmap/ol.component';
-import Map = ol.Map;
+import {Component} from '@angular/core';
 import {AnalysisWizardService} from './analysis-wizard.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {STATUS_INDICATOR} from '../commons/status-indicator';
-import {RunwayDirection} from '../direction/runwayDirection';
-import {AnalysisObstacle} from './analysisObstacle';
 import {RunwayService} from '../runway/runway.service';
 import {DirectionService} from '../direction/direction.service';
 import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
@@ -20,22 +11,21 @@ import {AnalysisResultService} from './analysis-result.service';
 import {AirportService} from '../airport/airport.service';
 import {ElevatedObjectService} from '../object/object.service';
 import {AnalysisService} from './analysis.service';
-import {Runway} from '../runway/runway';
-import {Analysis} from './analysis';
-import Feature = ol.Feature;
+import {AuthService} from '../auth/auth.service';
+import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstract-analysis.component';
 
 @Component({
   template:`
     <h1>
       <ng-container i18n="@@analysis.wizard.inform.title">Analysis: Inform</ng-container>
-      <small *ngIf="analysis.statusId <= 1" class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 4/4</small>
+      <small *ngIf="analysis && analysis.statusId <= 1" class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 4/4</small>
     </h1>
     <p i18n="@@analysis.wizard.inform.main_description">
       This section allows users to study the final results of analysis.
     </p>
 
     <hr/>
-
+    
     <div *ngIf="onSubmitError">
       <app-error-indicator [errors]="[onSubmitError]"></app-error-indicator>
     </div>
@@ -78,9 +68,9 @@ import Feature = ol.Feature;
                   <select name="inputPenetration"
                           [(ngModel)]="filterPenetration"
                           class="form-control">
-                    <option [ngValue]="null">All</option>
-                    <option [ngValue]="true">Yes</option>
-                    <option [ngValue]="false">No</option>
+                    <option [ngValue]="null" i18n="@@commons.text.all">All</option>
+                    <option [ngValue]="true" i18n="@@commons.text.yes">Yes</option>
+                    <option [ngValue]="false" i18n="@@commons.text.no">No</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -88,7 +78,7 @@ import Feature = ol.Feature;
                   <select name="inputDirection"
                           [(ngModel)]="filterDirection"
                           class="form-control">
-                    <option [ngValue]="null">All</option>
+                    <option [ngValue]="null" i18n="@@commons.text.all">All</option>
                     <option *ngFor="let direction of directions" [ngValue]="direction.id">{{direction.name}}</option>
                   </select>
                 </div>
@@ -97,8 +87,8 @@ import Feature = ol.Feature;
                   <select name="inputRestriction"
                           [(ngModel)]="filterRestriction"
                           class="form-control">
-                    <option [ngValue]="null">All</option>
-                    <option [ngValue]="1">Exception</option>
+                    <option [ngValue]="null" i18n="@@commons.text.all">All</option>
+                    <option [ngValue]="1" i18n="@@commons.text.exception">Exception</option>
                     <option [ngValue]="0">OLS</option>
                   </select>
                 </div>
@@ -158,9 +148,54 @@ import Feature = ol.Feature;
           </div>
         </div>
       </div>
+
+      <div class="panel panel-default" *ngIf="initSpatialStatus != null">
+        <div class="panel-heading">
+          <div class="row">
+            <h3 class="panel-title panel-title-with-buttons col-md-6"
+                i18n="@@analysis.wizard.analysis.section.spatial.title">
+              Spatial
+            </h3>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div [ngSwitch]="initSpatialStatus" class="panel-body">
+          <div *ngSwitchCase="indicator.LOADING">
+            <app-loading-indicator></app-loading-indicator>
+          </div>
+          <div *ngSwitchCase="indicator.ERROR">
+            <app-error-indicator [errors]="[onInitSpatialError]"></app-error-indicator>
+          </div>
+          <ng-container *ngSwitchCase="indicator.ACTIVE">
+
+            <ul class="nav nav-pills">
+              <li *ngFor="let direction of directions"
+                  [ngClass]="{'active': (selectedDirection != null && direction.id == selectedDirection.id)}"
+                  role="presentation"
+              >
+                <a (click)="loadDirectionFeatures(direction)"
+                   style="cursor: pointer"
+                >
+                  {{direction.name}}
+                </a>
+              </li>
+            </ul>
+            <br/>
+            <app-map #mapAnalysis
+                     [rotate]="true"
+                     [fullScreen]="true"
+                     [scale]="true"
+                     [layerSwitcher]="true"
+                     [layers]="['icaoannex14surfaces','terrain', 'airport', 'runway', 'objects', 'exception', 'direction', 'threshold', 'stopway', 'clearway']"
+            >
+            </app-map>
+          </ng-container>
+        </div>
+      </div>
+      
       <br>
 
-      <nav *ngIf="analysis.statusId <= 1">
+      <nav *ngIf="analysis != null && analysis.statusId <= 1 && allowEdit">
         <ul class="pager">
           <li class="next">
             <a (click)="onFinish()" style="cursor: pointer">
@@ -180,174 +215,29 @@ import Feature = ol.Feature;
   `
 })
 
-export class AnalysisWizardInformComponent implements OnInit {
-
-  @BlockUI() blockUI: NgBlockUI;
-  blockTemplate = BlockTemplateComponent;
-  initObstaclesStatus:number;
-  initSpatialStatus:number;
-  indicator;
-  onInitObstaclesError:ApiError;
-  onInitSpatialError:ApiError;
-  onSubmitError:AppError;
-  analysisId:number;
-  private olMap: OlComponent;
-  private runwayFeatures: Feature[];
-  private exceptionFeatures: Feature[];
-  private objectFeatures: Feature[];
-  @ViewChild('mapObjects') set content(content: OlComponent) {this.olMap = content;}
-  map:Map;
-  airportFeature:Feature;
-  runways:Runway[];
-  analysis:Analysis;
-  directions: RunwayDirection[];
-  selectedDirection: RunwayDirection;
-  obstacles:AnalysisObstacle[];
-  filteredObstacles:AnalysisObstacle[];
-  passiveReason: string = "Obstacle: 'false'. Keep: 'true'";
-
-  filterName: string;
-  filterPenetration: boolean;
-  filterDirection: number;
-  filterRestriction: number;
+export class AnalysisWizardInformComponent extends AbstractAnalysisWizardAnalysisComponent {
 
   constructor(
-    private wizardService: AnalysisWizardService,
-    private analysisService: AnalysisService,
-    private runwayService: RunwayService,
-    private directionService: DirectionService,
-    private surfacesService: AnalysisSurfaceService,
-    private airportService: AirportService,
-    private obstacleService: AnalysisObstacleService,
-    private resultService: AnalysisResultService,
-    private objectService: ElevatedObjectService,
-    private analysisObjectService: AnalysisObjectService,
-    private exceptionService: AnalysisExceptionSurfaceService,
-    private route: ActivatedRoute,
-    private router: Router
+    wizardService: AnalysisWizardService,
+    analysisService: AnalysisService,
+    runwayService: RunwayService,
+    directionService: DirectionService,
+    surfacesService: AnalysisSurfaceService,
+    airportService: AirportService,
+    obstacleService: AnalysisObstacleService,
+    resultService: AnalysisResultService,
+    objectService: ElevatedObjectService,
+    analysisObjectService: AnalysisObjectService,
+    exceptionService: AnalysisExceptionSurfaceService,
+    authService: AuthService,
+    route: ActivatedRoute,
+    router: Router
   ){
-    this.indicator = STATUS_INDICATOR;
+    super(wizardService, analysisService, runwayService, directionService, surfacesService, airportService, obstacleService, resultService, objectService, analysisObjectService, exceptionService, authService, route, router);
   }
 
-  ngOnInit(): void {
-    this.blockUI.stop();
-    this.analysisId = this.route.snapshot.params['analysisId'];
-
-    this.onInitObstaclesError = null;
-    this.onInitSpatialError = null;
-    this.onSubmitError = null;
-
-    this.initObstaclesStatus = STATUS_INDICATOR.LOADING;
-    this.initSpatialStatus = STATUS_INDICATOR.LOADING;
-
-    this.runwayFeatures = [];
-    this.airportFeature = null;
-    this.directions = [];
-    this.objectFeatures = [];
-    this.exceptionFeatures = [];
-
-    Promise.all([
-      this.resolveObstacles(),
-      this.resolveObstacleContext()
-    ])
-      .then(()=> this.onClear());
-  }
-
-  private resolveObstacles() {
-    return this.obstacleService.list(this.analysisId, false)
-      .then(data => {
-        this.obstacles = data.sort((a, b) =>
-          (a.directionId && b.directionName) ? a.directionName.localeCompare(b.directionName) : -1
-        );
-        this.initObstaclesStatus = (data.length > 0) ? STATUS_INDICATOR.ACTIVE : STATUS_INDICATOR.EMPTY;
-
-      })
-      .catch(error => {
-        this.onInitObstaclesError = error;
-        this.initObstaclesStatus = STATUS_INDICATOR.ERROR;
-      });
-  }
-
-  private resolveObstacleContext() {
-    return this.analysisService.get(this.analysisId)
-      .then(data => {
-        this.analysis = data;
-        return this.runwayService.list(data.airportId)
-      })
-      .then(data => {
-        this.runways = data;
-      })
-      .then(() => this.resolveRunways())
-      .then(() => this.resolveAirportFeature())
-      .then(() => this.resolveRunwayFeatures())
-      .then(() => this.resolveExceptionFeatures())
-      .then(() => this.resolveObjectFeatures())
-      .then(() => this.directions = this.runways.map(r => r.directions).reduce((a, b) => a.concat(b), []))
-      .then(() => this.initSpatialStatus = STATUS_INDICATOR.ACTIVE)
-      .catch(error => {
-        this.onInitSpatialError = error;
-        this.initSpatialStatus = STATUS_INDICATOR.ERROR;
-      });
-  }
-
-  private resolveAirportFeature(): Promise<any>{
-    return this.airportService
-      .getFeature(this.analysis.airportId)
-      .then(data => this.airportFeature = data)
-      .catch(error => Promise.reject(error));
-  }
-
-  private resolveRunwayFeatures(): Promise<any>{
-    return Promise.all(
-      this.runways.map(r =>
-        this.runwayService.getFeature(r.airportId, r.id)
-          .then(data => this.runwayFeatures.push(data))
-          .catch(error => Promise.reject(error))
-      )
-    );
-  }
-
-  private resolveRunways(): Promise<any>{
-    return Promise.all(
-      this.runways.map( r =>
-        this.directionService.list(r.airportId,r.id)
-          .then( data => {
-            r.directions = data;
-            r.directions.forEach((d => d.runway = r));
-          })
-          .catch(error => Promise.reject(error))
-      )
-    )
-  }
-
-  private resolveObjectFeatures(): Promise<any> {
-
-    return this.analysisObjectService
-      .list(this.analysisId)
-      .then( data =>
-        Promise.all(
-          data.map(o => this.objectService
-            .getFeature(o.objectId, o.objectTypeId)
-            .then(data => this.objectFeatures.push(data))
-            .catch(error => Promise.reject(error))
-          )
-        )
-      );
-  }
-
-  private resolveExceptionFeatures(): Promise<any> {
-
-    return this.exceptionService
-      .list(this.analysisId)
-      .then(data =>
-        data.map( e =>
-          this.exceptionService
-            .getFeature(this.analysisId, e.id)
-            .then( data => this.exceptionFeatures.push(data))
-            .catch(error => Promise.reject(error))
-        )
-      )
-      .catch(error => Promise.reject(error))
+  stageId(): number {
+    return 3;
   }
 
   onFinish(){
@@ -355,7 +245,6 @@ export class AnalysisWizardInformComponent implements OnInit {
     this.onSubmitError = null;
 
     this.blockUI.start("Processing...");
-
 
     this.wizardService
       .finish(this.analysisId)
@@ -376,22 +265,5 @@ export class AnalysisWizardInformComponent implements OnInit {
       .previous(this.analysisId)
       .then( () => this.router.navigate([`/analysis/${this.analysisId}/stages/analysis`]))
       .catch((error) => this.onSubmitError = error);
-  }
-
-  onFilter(){
-    this.filteredObstacles = this.obstacles.filter( o =>
-      (this.filterName == null || this.filterName.length == 0 || o.objectName.toLocaleUpperCase().includes(this.filterName.toLocaleUpperCase()))
-        && (this.filterRestriction == null || o.restrictionTypeId == this.filterRestriction)
-          && (this.filterDirection == null || o.directionId == this.filterDirection)
-            && (this.filterPenetration == null || (o.penetration > 0) == this.filterPenetration)
-    );
-  }
-
-  onClear(){
-    this.filterName = null;
-    this.filterPenetration = null;
-    this.filterDirection = null;
-    this.filterRestriction = null;
-    this.filteredObstacles = this.obstacles;
   }
 }

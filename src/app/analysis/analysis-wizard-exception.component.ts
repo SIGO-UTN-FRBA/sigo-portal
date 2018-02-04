@@ -10,6 +10,11 @@ import {AnalysisExceptionService, ExceptionType} from "../exception/exception.se
 import {AnalysisException} from "../exception/analysisException";
 import {RegulationService, RegulationType} from "../regulation/regulation.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";
+import {ROLE_READONLY, ROLE_WORKER} from '../auth/role';
+import {AuthService} from '../auth/auth.service';
+import {Analysis} from './analysis';
+import {UiError} from '../main/uiError';
+import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.component';
 
 @Component({
   template:`
@@ -23,18 +28,22 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
 
     <hr/>
 
+    <div *ngIf="onInitError">
+      <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
+    </div>
+    
     <div *ngIf="onSubmitError">
       <app-error-indicator [errors]="[onSubmitError]"></app-error-indicator>
     </div>
 
     <block-ui [template]="blockTemplate" [delayStop]="500">
-      <div class="panel panel-default">
+      <div class="panel panel-default" *ngIf="initExceptionsStatus">
         <div class="panel-heading">
           <div class="row">
             <h3 class="panel-title panel-title-with-buttons col-md-6" i18n="@@analysis.wizard.exception.section.exceptions.title">
               Exceptions
             </h3>
-            <div class="col-md-6 btn-group">
+            <div class="col-md-6 btn-group" *ngIf="allowEdit">
               <button
                 (click)="onCreate()"
                 class="btn btn-default pull-right"
@@ -46,7 +55,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
           </div>
         </div>
         
-        <div [ngSwitch]="initStatus" class="panel-body">
+        <div [ngSwitch]="initExceptionsStatus" class="panel-body">
           <div *ngSwitchCase="indicator.LOADING" >
             <app-loading-indicator></app-loading-indicator>
           </div>
@@ -54,7 +63,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
             <app-empty-indicator type="relation" entity="exceptions"></app-empty-indicator>
           </div>
           <div *ngSwitchCase="indicator.ERROR">
-            <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
+            <app-error-indicator [errors]="[onInitExceptionsError]"></app-error-indicator>
           </div>
           <div *ngSwitchCase="indicator.ACTIVE" class="table-responsive">
             <table class="table table-hover">
@@ -77,7 +86,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                 </td>
                 <td>{{exceptionTypes[exception.typeId].name}}</td>
                 <td>
-                  <button type="button" (click)="onDelete(exception.id)" class="btn btn-default btn-xs">
+                  <button type="button" *ngIf="allowEdit" (click)="onDelete(exception.id)" class="btn btn-default btn-xs">
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                   </button>
                 </td>
@@ -90,7 +99,7 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
 
       <br>
 
-      <nav>
+      <nav *ngIf="allowEdit">
         <ul class="pager">
           <li class="next">
             <a (click)="onNext()" style="cursor: pointer">
@@ -111,46 +120,56 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
   `
 })
 
-export class AnalysisWizardExceptionComponent implements OnInit {
+export class AnalysisWizardExceptionComponent extends AbstractAnalysisWizardComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
   blockTemplate = BlockTemplateComponent;
-  initStatus:number;
-  indicator;
-  onInitError:ApiError;
-  onSubmitError:AppError;
-  analysisId:number;
   exceptions:AnalysisException[];
   exceptionTypes:ExceptionType[];
   regulation:RegulationType;
+  initExceptionsStatus: number;
+  onInitExceptionsError: ApiError;
 
   constructor(
-    private analysisService: AnalysisService,
+    analysisService: AnalysisService,
     private exceptionService: AnalysisExceptionService,
     private regulationService: RegulationService,
-    private wizardService: AnalysisWizardService,
-    private route: ActivatedRoute,
-    private router: Router
+    wizardService: AnalysisWizardService,
+    authService: AuthService,
+    route: ActivatedRoute,
+    router: Router
   ){
-    this.indicator = STATUS_INDICATOR;
+    super(analysisService, wizardService, authService, route, router);
+
     this.exceptionTypes = this.exceptionService.types();
+  }
+
+  stageId(): number {
+    return 1;
   }
 
   ngOnInit(): void {
     this.blockUI.stop();
+    this.initExceptionsStatus = null;
+    this.onInitExceptionsError = null;
     this.analysisId = this.route.snapshot.params['analysisId'];
 
-    this.analysisService
-      .get(this.analysisId)
-      .then(data => this.regulation = this.regulationService.types()[data.regulationId])
+    this.resolveAnalysis()
+      .then(() => this.validateCurrentStage())
+      .then(()=> this.resolveEdition())
+      .catch(error => Promise.reject(this.onInitError = error))
+      .then(()=> this.initExceptionsStatus = STATUS_INDICATOR.LOADING)
+      .then(() => this.regulation = this.regulationService.types()[this.analysis.regulationId])
       .then(() => this.exceptionService.list(this.analysisId))
       .then(data => {
         this.exceptions=data;
-        (this.exceptions.length > 0) ? this.initStatus = STATUS_INDICATOR.ACTIVE : this.initStatus = STATUS_INDICATOR.EMPTY;
+        (this.exceptions.length > 0) ? this.initExceptionsStatus = STATUS_INDICATOR.ACTIVE : this.initExceptionsStatus = STATUS_INDICATOR.EMPTY;
       })
-      .catch(error =>{
-        this.onInitError = error;
-        this.initStatus = STATUS_INDICATOR.ERROR;
+      .catch(error => {
+        if(!this.onInitError){
+          this.onInitExceptionsError = error;
+          this.initExceptionsStatus = STATUS_INDICATOR.ERROR;
+        }
       });
   }
 
@@ -193,7 +212,7 @@ export class AnalysisWizardExceptionComponent implements OnInit {
       .then(() => this.exceptionService.list(this.analysisId))
       .then(data => {
         this.exceptions=data;
-        (this.exceptions.length > 0) ? this.initStatus = STATUS_INDICATOR.ACTIVE : this.initStatus = STATUS_INDICATOR.EMPTY;
+        (this.exceptions.length > 0) ? this.initExceptionsStatus = STATUS_INDICATOR.ACTIVE : this.initExceptionsStatus = STATUS_INDICATOR.EMPTY;
       })
       .catch((error) => this.onSubmitError = error)
 

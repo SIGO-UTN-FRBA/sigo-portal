@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import * as auth0 from 'auth0-js';
-import "rxjs/add/operator/toPromise";
+import 'rxjs/add/operator/toPromise';
 import {JwtHelper} from 'angular2-jwt';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class AuthService {
   auth0 = new auth0.WebAuth({
     clientID: 'P5zqY0quWRi1U_Truva9-JI-4Ee2BKeG',
     domain: 'sigo-utn.auth0.com',
-    issuer: "https://sigo-utn.auth0.com/",
+    issuer: 'https://sigo-utn.auth0.com/',
     responseType: 'token id_token',
     audience: 'http://localhost:8080/sigo/api',
     redirectUri: 'http://localhost:4200/callback',
@@ -19,6 +19,7 @@ export class AuthService {
   });
 
   userProfile: any;
+  app_metadata = 'http://localhost:8080/sigo/api/app_metadata';
 
   constructor(public router: Router) {}
 
@@ -99,8 +100,15 @@ export class AuthService {
 
     let decodedToken = this.getLocalProfile();
 
-    return decodedToken.hasOwnProperty("http://localhost:8080/sigo/api/app_metadata")
-      && decodedToken["http://localhost:8080/sigo/api/app_metadata"].hasOwnProperty("role");
+    return decodedToken.hasOwnProperty(this.app_metadata)
+      && decodedToken[this.app_metadata].hasOwnProperty('role');
+  }
 
+  public getUserRole(): string {
+    return (this.userHasRole()) ? this.getLocalProfile()[this.app_metadata].role : null;
+  }
+
+  public getUserId(): string {
+    return this.getLocalProfile().sub;
   }
 }
