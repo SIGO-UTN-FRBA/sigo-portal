@@ -1,7 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './not-found.component';
 import {NgModule} from '@angular/core';
-import {HomeComponent} from './home.component';
 import {CallbackComponent} from './callback.component';
 import {ProfileComponent} from './profile.component';
 import {AuthGuardService} from '../auth/auth-guard.service';
@@ -9,6 +8,7 @@ import {UnauthorizedComponent} from './unauthorized.component';
 import {UnauthenticatedComponent} from './unauthenticated.component';
 import {WelcomeComponent} from './welcome.component';
 import {RoleGuardService} from '../auth/role-guard.service';
+import {HomeComponent} from '../home/home.component';
 
 const appRoutes: Routes = [
   {

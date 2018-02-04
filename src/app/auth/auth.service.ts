@@ -82,18 +82,14 @@ export class AuthService {
 
   }
 
-  public getLocalProfile(): any{
+  public getLocalProfile(): any {
     const idToken = localStorage.getItem('token');
 
     if (!idToken) {
       throw new Error('Id token must exist to fetch profile');
     }
 
-    let decodedJwt = new JwtHelper().decodeToken(idToken);
-
-    debugger;
-
-    return decodedJwt;
+    return new JwtHelper().decodeToken(idToken);
   }
 
   public userHasRole(): boolean {

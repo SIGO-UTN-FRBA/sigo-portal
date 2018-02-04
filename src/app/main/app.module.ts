@@ -5,7 +5,7 @@ import {Http, HttpModule, RequestOptions} from '@angular/http';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './not-found.component';
 import {AppRoutingModule} from './app-routing.module';
-import {HomeComponent} from './home.component';
+import {HomeComponent} from '../home/home.component';
 import {CommonsModule} from '../commons/commons.module';
 import {AuthService} from '../auth/auth.service';
 import {CallbackComponent} from './callback.component';
@@ -16,6 +16,9 @@ import {UnauthorizedComponent} from './unauthorized.component';
 import {UnauthenticatedComponent} from './unauthenticated.component';
 import {WelcomeComponent} from './welcome.component';
 import {RoleGuardService} from '../auth/role-guard.service';
+import {AnalysisService} from '../analysis/analysis.service';
+import {AnalysisWizardService} from '../analysis/analysis-wizard.service';
+import {HomeModule} from '../home/home.module';
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -28,7 +31,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     PageNotFoundComponent,
     CallbackComponent,
     ProfileComponent,
@@ -40,7 +42,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     BrowserModule,
     HttpModule,
     AppRoutingModule,
-    CommonsModule
+    CommonsModule,
+    HomeModule
   ],
   exports: [],
   providers: [
