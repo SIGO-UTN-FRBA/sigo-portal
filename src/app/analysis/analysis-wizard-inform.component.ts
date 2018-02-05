@@ -237,7 +237,7 @@ export class AnalysisWizardInformComponent extends AbstractAnalysisWizardAnalysi
   }
 
   stageId(): number {
-    return 3;
+    return 4;
   }
 
   onFinish(){

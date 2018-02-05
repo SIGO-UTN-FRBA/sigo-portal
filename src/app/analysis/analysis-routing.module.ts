@@ -7,6 +7,7 @@ import {AnalysisWizardObjectComponent} from "./analysis-wizard-object.component"
 import {AnalysisWizardExceptionComponent} from "./analysis-wizard-exception.component";
 import {AnalysisWizardAnalysisComponent} from "./analysis-wizard-analysis.component";
 import {AnalysisWizardInformComponent} from "./analysis-wizard-inform.component";
+import {AnalysisWizardNewComponent} from './analysis-wizard-new.component';
 
 const analysisRoutes : Routes = [
   {
@@ -22,6 +23,10 @@ const analysisRoutes : Routes = [
             component: AnalysisCaseListComponent
           }
         ]
+      },
+      {
+        path: 'new',
+        component: AnalysisWizardNewComponent
       },
       {
         path:':analysisId/stages/object',

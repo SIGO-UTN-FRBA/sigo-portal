@@ -59,6 +59,16 @@ import {AirportSearchFilter, default as AirportSearchFilters} from "../airport/a
                 </span>
               </div>
             </div>
+            <div class="col-md-2">
+              <a
+                type="button"
+                routerLink="/analysis/new"
+                class="btn btn-primary btn-lg"
+                i18n-title="@@commons.button.new"
+                title="New">
+                <span class="glyphicon glyphicon-plus"></span>
+              </a>
+            </div>
           </div>
         </form>
       </div>

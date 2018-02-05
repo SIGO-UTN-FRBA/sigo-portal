@@ -6,9 +6,15 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AirportService} from "../airport/airport.service";
 import {Analysis} from "./analysis";
 import {AnalysisWizardService} from "./analysis-wizard.service";
+import {AppError} from '../main/ierror';
 
 @Component({
   template:`
+
+    <div *ngIf="onSubmitError">
+      <app-error-indicator [errors]="[onSubmitError]"></app-error-indicator>
+    </div>
+    
     <div [ngSwitch]="status" class="container-fluid">
 
       <div *ngSwitchCase="indicator.LOADING">
@@ -28,8 +34,15 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
           </div>
           <div class="media-body">
             <h4 class="media-heading">
-              <a routerLink="/analysis/{{analysis.id}}/stages/{{stages[analysis.stageId]}}">{{(analysis.airport.codeFIR)?analysis.airport.codeFIR:analysis.airport.codeLocal}}</a>
-              <span class="label" [ngClass]="{'label-info': analysis.statusId <= 1, 'label-default': analysis.statusId == 2, 'label-danger': analysis.statusId == 3}">{{stages[analysis.stageId]}}</span>
+              <ng-container *ngIf="analysis.statusId > 0">
+                <a routerLink="/analysis/{{analysis.id}}/stages/{{stages[analysis.stageId]}}">
+                  {{(analysis.airport.codeFIR)?analysis.airport.codeFIR:analysis.airport.codeLocal}}
+                </a>
+                <span class="label" [ngClass]="{'label-info': analysis.statusId <= 1, 'label-default': analysis.statusId == 2, 'label-danger': analysis.statusId == 3}">{{stages[analysis.stageId]}}</span>
+              </ng-container>
+              <ng-container *ngIf="analysis.statusId == 0">
+                {{(analysis.airport.codeFIR)?analysis.airport.codeFIR:analysis.airport.codeLocal}}
+              </ng-container>
             </h4>
             <p>{{analysis.airport.nameFIR}}</p>
             <p>Creation: <i>{{analysis.creationDate | date:'yyyy-MM-dd HH:mm'}}</i></p>
@@ -41,8 +54,17 @@ import {AnalysisWizardService} from "./analysis-wizard.service";
                     (click)="cloneCase(analysis.id)"
                     *ngIf="analysis.statusId == 2"
                     class="btn btn-primary btn-sm" 
-                    i18n="@@commons.button.new">
+                    i18n="@@commons.button.new"
+            >
               New
+            </button>
+            <button type="button"
+                    (click)="startCase(analysis.id)"
+                    *ngIf="analysis.statusId == 0"
+                    class="btn btn-primary btn-sm"
+                    i18n="@@commons.button.start"
+            >
+              Start
             </button>
           </div>
         </li>
@@ -57,6 +79,7 @@ export class AnalysisCaseListComponent implements OnInit {
   status : number;
   indicator;
   onInitError : ApiError;
+  onSubmitError: AppError;
   stages: Array<string>;
 
   constructor(
@@ -91,9 +114,20 @@ export class AnalysisCaseListComponent implements OnInit {
   }
 
   cloneCase(caseId: number) {
+    this.onSubmitError = null;
+
     this.analysisService
-      .create(caseId)
+      .create({parentId: caseId})
       .then(data => this.router.navigate([`/analysis/${data.id}/stages/object`]))
-    //TODO catch and show error
+      .catch(error => this.onSubmitError = error);
+  }
+
+  startCase(caseId: number) {
+    this.onSubmitError = null;
+
+    this.wizardService
+      .start(caseId)
+      .then(data => this.router.navigate([`/analysis/${data.id}/stages/object`]))
+      .catch(error => this.onSubmitError = error);
   }
 }

@@ -12,11 +12,20 @@ export class AnalysisWizardService extends ApiService {
 
   stages(){
     return [
+      "undefined",
       "object",
       "exception",
       "analysis",
       "inform"
     ];
+  }
+
+  start(analysisId:number):Promise<Analysis>{
+    return this.http
+      .post(`${AppSettings.API_ENDPOINT}/wizard/${analysisId}?action=start`,{})
+      .toPromise()
+      .then(response => response.json() as Analysis)
+      .catch(this.handleError)
   }
 
   next(analysisId:number):Promise<Analysis>{

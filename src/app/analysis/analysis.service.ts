@@ -24,9 +24,9 @@ export class AnalysisService extends ApiService {
 
   }
 
-  create(parentId:number) : Promise<Analysis> {
+  create(payload: {parentId:number} | {airportId: number}) : Promise<Analysis> {
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/analysis`, {parentId: parentId})
+      .post(`${AppSettings.API_ENDPOINT}/analysis`, payload)
       .toPromise()
       .then(response => response.json() as Analysis)
       .catch(this.handleError)
@@ -35,6 +35,14 @@ export class AnalysisService extends ApiService {
   get(analysisId: number) : Promise<Analysis> {
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}`)
+      .toPromise()
+      .then(response => response.json() as Analysis)
+      .catch(this.handleError);
+  }
+
+  update(analysisId: number, statusId: number): Promise<Analysis> {
+    return this.http
+      .put(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}`, {"statusId": statusId})
       .toPromise()
       .then(response => response.json() as Analysis)
       .catch(this.handleError);

@@ -31,6 +31,7 @@ import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.componen
 import {AnalysisResultService} from './analysis-result.service';
 import {AnalysisExceptionSurfaceService} from '../exception/exception-surface.service';
 import {AnalysisExceptionRuleService} from '../exception/exception-rule.service';
+import {AnalysisWizardNewComponent} from './analysis-wizard-new.component';
 
 @NgModule({
   imports:[
@@ -50,7 +51,8 @@ import {AnalysisExceptionRuleService} from '../exception/exception-rule.service'
     AnalysisWizardExceptionComponent,
     AnalysisWizardAnalysisComponent,
     AnalysisWizardInformComponent,
-    AnalysisModalAnalysisComponent
+    AnalysisModalAnalysisComponent,
+    AnalysisWizardNewComponent
   ],
   providers: [
     AnalysisCaseService,

@@ -7,7 +7,6 @@ import {RegionService} from "../region/region.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
 import {RegulationService, RegulationType} from "../regulation/regulation.service";
-import {EnumItem} from "../commons/enumItem";
 
 @Component({
   template: `

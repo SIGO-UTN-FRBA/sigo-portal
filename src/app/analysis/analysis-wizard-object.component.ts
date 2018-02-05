@@ -211,7 +211,7 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
   }
 
   stageId(): number {
-    return 0;
+    return 1;
   }
 
   ngOnInit(): void {
