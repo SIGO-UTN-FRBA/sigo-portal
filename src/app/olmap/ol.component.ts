@@ -308,6 +308,7 @@ import Circle = ol.style.Circle;
     this.getICAOAnnex14SurfaceApproachSecondSectionLayer().getSource().clear(false);
     this.getICAOAnnex14SurfaceApproachHorizontalSectionLayer().getSource().clear(false);
     this.getICAOAnnex14SurfaceTakeoffClimbLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceBalkedLandingLayer().getSource().clear(false);
 
     return this;
   }
@@ -468,6 +469,26 @@ import Circle = ol.style.Circle;
     layer.setProperties({'title':'Takeoff Climb'});
 
     this.olLayers['surfaceTakeoffClimb'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceBalkedLandingLayer():VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceBalkedLanding'))
+      return this.olLayers['surfaceBalkedLanding'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(255,165,0)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(255,165,0, 0.5)' })
+      })
+    });
+
+    layer.setProperties({'title':'Balked Landing'});
+
+    this.olLayers['surfaceBalkedLanding'] = layer;
 
     return layer;
   }
@@ -803,6 +824,10 @@ import Circle = ol.style.Circle;
     this.addFeature(feature, this.getICAOAnnex14SurfaceTakeoffClimbLayer());
   }
 
+  private addICAOAnnex14SurfaceBalkedLanding(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceBalkedLandingLayer());
+  }
+
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
 
     feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
@@ -937,6 +962,7 @@ import Circle = ol.style.Circle;
       layers.push(this.getICAOAnnex14SurfaceApproachHorizontalSectionLayer());
       layers.push(this.getICAOAnnex14SurfaceTransitionalLayer());
       layers.push(this.getICAOAnnex14SurfaceTakeoffClimbLayer());
+      layers.push(this.getICAOAnnex14SurfaceBalkedLandingLayer());
 
       let group = new ol.layer.Group();
       group.setLayers(layers);
