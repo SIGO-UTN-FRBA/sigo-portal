@@ -309,6 +309,7 @@ import Circle = ol.style.Circle;
     this.getICAOAnnex14SurfaceApproachHorizontalSectionLayer().getSource().clear(false);
     this.getICAOAnnex14SurfaceTakeoffClimbLayer().getSource().clear(false);
     this.getICAOAnnex14SurfaceBalkedLandingLayer().getSource().clear(false);
+    this.getICAOAnnex14SurfaceOuterHorizontalLayer().getSource().clear(false);
 
     return this;
   }
@@ -489,6 +490,26 @@ import Circle = ol.style.Circle;
     layer.setProperties({'title':'Balked Landing'});
 
     this.olLayers['surfaceBalkedLanding'] = layer;
+
+    return layer;
+  }
+
+  getICAOAnnex14SurfaceOuterHorizontalLayer():VectorLayer {
+
+    if(this.olLayers.hasOwnProperty('surfaceOuterHorizontal'))
+      return this.olLayers['surfaceOuterHorizontal'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new Style({
+        stroke: new ol.style.Stroke({color: 'rgb(0, 36, 109)', width:2}),
+        fill: new ol.style.Fill({color: 'rgba(0, 36, 109, 0.5)' })
+      })
+    });
+
+    layer.setProperties({'title':'Outer Horizontal'});
+
+    this.olLayers['surfaceOuterHorizontal'] = layer;
 
     return layer;
   }
@@ -828,6 +849,11 @@ import Circle = ol.style.Circle;
     this.addFeature(feature, this.getICAOAnnex14SurfaceBalkedLandingLayer());
   }
 
+  private addICAOAnnex14SurfaceOuterHorizontal(feature:Feature) {
+    this.addFeature(feature, this.getICAOAnnex14SurfaceOuterHorizontalLayer());
+  }
+
+
   private addFeature(feature : Feature, layer : VectorLayer,  options? :{center?: boolean, zoom?: number}){
 
     feature.setGeometry(feature.getGeometry().transform('EPSG:4326', 'EPSG:3857'));
@@ -957,6 +983,7 @@ import Circle = ol.style.Circle;
       layers.push(this.getICAOAnnex14SurfaceInnerHorizontalLayer());
       layers.push(this.getICAOAnnex14SurfaceStripLayer());
       layers.push(this.getICAOAnnex14SurfaceConicalLayer());
+      layers.push(this.getICAOAnnex14SurfaceOuterHorizontalLayer());
       layers.push(this.getICAOAnnex14SurfaceApproachFirstSectionLayer());
       layers.push(this.getICAOAnnex14SurfaceApproachSecondSectionLayer());
       layers.push(this.getICAOAnnex14SurfaceApproachHorizontalSectionLayer());
