@@ -13,6 +13,10 @@ import {ElevatedObjectService} from '../object/object.service';
 import {AnalysisService} from './analysis.service';
 import {AuthService} from '../auth/auth.service';
 import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstract-analysis.component';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
+import {AnalysisResult} from './analysisResult';
+import {AnalysisObstacle} from './analysisObstacle';
 
 @Component({
   template:`
@@ -139,7 +143,7 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                   <td>{{obstacle.directionId ? obstacle.directionName : "-" }}</td>
                   <td>[{{obstacle.restrictionTypeId == 1 ? "Exception" : "OLS"}}] {{obstacle.restrictionName}}</td>
                   <td [ngClass]="{'warning': obstacle.allowed != undefined && !obstacle.allowed}">
-                    {{(obstacle.allowed != undefined)? obstacle.allowed : '[undefined]'}}
+                    <a (click)="showResult(obstacle)" style="cursor: pointer;">{{obstacle.allowed}}</a>
                   </td>
                 </tr>
                 </tbody>
@@ -231,7 +235,8 @@ export class AnalysisWizardInformComponent extends AbstractAnalysisWizardAnalysi
     exceptionService: AnalysisExceptionSurfaceService,
     authService: AuthService,
     route: ActivatedRoute,
-    router: Router
+    router: Router,
+    private modalService: BsModalService
   ){
     super(wizardService, analysisService, runwayService, directionService, surfacesService, airportService, obstacleService, resultService, objectService, analysisObjectService, exceptionService, authService, route, router);
   }
@@ -265,5 +270,22 @@ export class AnalysisWizardInformComponent extends AbstractAnalysisWizardAnalysi
       .previous(this.analysisId)
       .then( () => this.router.navigate([`/analysis/${this.analysisId}/stages/analysis`]))
       .catch((error) => this.onSubmitError = error);
+  }
+
+  showResult(obstacle: AnalysisObstacle) {
+
+    let modalRef : BsModalRef = this.modalService.show(AnalysisModalAnalysisComponent);
+
+    modalRef.content.readonly = true;
+
+    //TODO onShow load data
+    modalRef.content.obstacle = obstacle;
+
+    if(obstacle.resultId)
+      this.resultService
+        .get(obstacle.caseId, obstacle.id)
+        .then(data => modalRef.content.result = data);
+    else
+      modalRef.content.result = new AnalysisResult().initialize(obstacle);
   }
 }

@@ -39,10 +39,13 @@ import {AnalysisMitigation} from './analysisMitigation';
                 name="inputHasAdverseEffect"
                 [(ngModel)]="result.hasAdverseEffect"
                 (ngModelChange)="updateAdverseEffect()"
-                required>
+                *ngIf="!readonly"
+                required
+              >
                 <option [ngValue]="true" i18n="@@commons.button.yes">Yes</option>
                 <option [ngValue]="false" i18n="@@commons.button.no">No</option>
               </select>
+              <p class="form-control-static" *ngIf="readonly">{{(result.hasAdverseEffect)? "Yes": "No"}}</p>
             </div>
           </div>
           <div class="row" *ngIf="result.hasAdverseEffect">
@@ -58,10 +61,12 @@ import {AnalysisMitigation} from './analysisMitigation';
                 name="inputAspect"
                 [(ngModel)]="result.aspectId"
                 (ngModelChange)="updateAspect()"
-                [required]="result.hasAdverseEffect"
+                required
+                *ngIf="!readonly"
               >
                 <option *ngFor="let aspect of aspects" [ngValue]="aspect.id">{{aspect.name}}</option>
               </select>
+              <p class="form-control-static" *ngIf="readonly">{{result.aspect.name}}</p>
             </div>
           </div>
           <div class="row" *ngIf="result.hasAdverseEffect">
@@ -75,7 +80,12 @@ import {AnalysisMitigation} from './analysisMitigation';
             </div>
             <div class="col-md-12 col-sm-12">
               <p *ngFor="let mitigation of mitigationMeasures">
-                <input type="checkbox" [checked]="result.mitigationMeasuresIds.indexOf(mitigation.id) != -1" [value]="mitigation.id" (change)="toggleMitigationCheck($event)"/> {{mitigation.name}}. <i>{{(mitigation.operationDamage)? "Unacceptable": "Acceptable"}}</i>
+                <input type="checkbox" 
+                       [checked]="result.mitigationMeasuresIds.indexOf(mitigation.id) != -1" 
+                       [value]="mitigation.id" 
+                       [disabled]="readonly"
+                       (change)="toggleMitigationCheck($event)"/>
+                {{mitigation.name}}. <i>{{(mitigation.operationDamage)? "Unacceptable": "Acceptable"}}</i>
               </p>
             </div>
           </div>
@@ -91,11 +101,13 @@ import {AnalysisMitigation} from './analysisMitigation';
                 class="form-control"
                 name="inputAllowed"
                 [(ngModel)]="result.allowed"
+                *ngIf="!readonly"
                 required
               >
                 <option [ngValue]="true" i18n="@@commons.button.yes">Yes</option>
                 <option [ngValue]="false" i18n="@@commons.button.no">No</option>
               </select>
+              <p class="form-control-static" *ngIf="readonly">{{result.allowed}}</p>
             </div>
           </div>
           <div class="row">
@@ -109,14 +121,16 @@ import {AnalysisMitigation} from './analysisMitigation';
               <textarea name="inputDetail"
                         class="form-control"
                         [(ngModel)]="result.extraDetail"
+                        *ngIf="!readonly"
                         required
               >
               </textarea>
+              <p class="form-control-static" *ngIf="readonly">{{result.extraDetail}}</p>
             </div>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" *ngIf="!readonly">
         <button type="button"
                 class="btn btn-primary"
                 (click)="resultForm.ngSubmit.emit()"
@@ -142,6 +156,7 @@ export class AnalysisModalAnalysisComponent implements OnInit {
   result:AnalysisResult;
   aspects: AnalysisAspect[];
   mitigationMeasures: AnalysisMitigation[];
+  readonly: boolean;
 
   constructor(
     private resultService : AnalysisResultService,

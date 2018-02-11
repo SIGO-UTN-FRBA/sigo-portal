@@ -23,7 +23,10 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
   template:`
     <h1>
       <ng-container i18n="@@analysis.wizard.object.title">Analysis: Analyze obstacles</ng-container>
-      <small class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 3/4</small>
+      <small class="pull-right">
+        <ng-container i18n="@@wizard.commons.stage">Stage</ng-container>
+        3/4
+      </small>
     </h1>
     <p i18n="@@wizard.object.main_description">
       This section allows users to analyze the obstacles detected as a result of the application of the regulation.
@@ -72,7 +75,7 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                   <input type="text"
                          name="inputName"
                          [(ngModel)]="filterName"
-                         class="form-control" 
+                         class="form-control"
                          placeholder="Type a name..">
                 </div>
                 <div class="form-group">
@@ -114,14 +117,14 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                     <option [ngValue]="false">No</option>
                   </select>
                 </div>
-                <button type="button" 
-                        class="btn btn-primary" 
+                <button type="button"
+                        class="btn btn-primary"
                         (click)="onFilter()"
                         i18n="@@commons.button.filter"
                 >
                   Filter
                 </button>
-                <button type="button" 
+                <button type="button"
                         class="btn btn-default"
                         (click)="onClear()"
                         i18n="@@commons.button.clear"
@@ -130,7 +133,7 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                 </button>
               </form>
             </div>
-            
+
             <br>
             <div style="max-height: 45em; overflow: auto;">
               <table class="table table-hover">
@@ -165,7 +168,7 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                   <td>{{obstacle.directionId ? obstacle.directionName : "-" }}</td>
                   <td>[{{obstacle.restrictionTypeId == 1 ? "Exception" : "OLS"}}] {{obstacle.restrictionName}}</td>
                   <td [ngClass]="{'warning': obstacle.allowed != undefined && !obstacle.allowed}">
-                    {{(obstacle.allowed != undefined)? obstacle.allowed : '[undefined]'}}
+                    {{(obstacle.allowed != undefined) ? obstacle.allowed : '[undefined]'}}
                   </td>
                   <td>
                     <button type="button" *ngIf="allowEdit" class="btn btn-default btn-sm" (click)="editResult(obstacle)">
@@ -315,6 +318,8 @@ export class AnalysisWizardAnalysisComponent extends AbstractAnalysisWizardAnaly
 
     let modalRef : BsModalRef = this.modalService.show(AnalysisModalAnalysisComponent);
 
+    modalRef.content.readonly = false;
+
     this.modalService.onHide.subscribe((reason: string) => {
       this.obstacleService
         .get(obstacle.caseId, obstacle.id)
@@ -331,7 +336,6 @@ export class AnalysisWizardAnalysisComponent extends AbstractAnalysisWizardAnaly
       this.resultService
         .get(obstacle.caseId, obstacle.id)
         .then(data => modalRef.content.result = data);
-        //.then(() => modalRef.content.restoreSelections());
     else
       modalRef.content.result = new AnalysisResult().initialize(obstacle);
   }
