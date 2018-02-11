@@ -18,7 +18,9 @@ import {ApiError} from "../main/apiError";
             <a
               routerLink="/airports/{{airportId}}/runways/{{runwayId}}/directions/new"
               class="btn btn-default pull-right"
-              i18n="@@commons.button.new">
+              *ngIf="directions.length < 2"
+              i18n="@@commons.button.new"
+            >
               New
             </a>
           </div>
