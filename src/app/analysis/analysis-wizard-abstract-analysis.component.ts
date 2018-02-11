@@ -120,14 +120,17 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
   ngAfterViewInit(): void {
     this.mapAnalysis.changes.subscribe(item => {
 
-      if(!(this.olMap = item.first))
+      if(!(this.olMap = item.first) || this.olMap.started)
         return;
 
       this.recenter()
         .locateAirportFeatures()
         .locateObjectFeatures()
         .locateExceptionFeatures()
-        .locateRunwayFeatures()
+        .locateRunwayFeatures();
+
+      this.olMap.started = true; //TODO poque vuelve a entrar vairas veces, ej despues de apretar boton filter
+
     });
   }
 
@@ -346,7 +349,7 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
   }
 
   onFilter(){
-    this.filteredObstacles = this.obstacles.filter( o =>
+    this.filteredObstacles = Array.from(this.obstacles).filter( o =>
       (this.filterName == null || this.filterName.length == 0 || o.objectName.toLocaleUpperCase().includes(this.filterName.toLocaleUpperCase()))
       && (this.filterRestriction == null || o.restrictionTypeId == this.filterRestriction)
       && (this.filterDirection == null || o.directionId == this.filterDirection)
@@ -383,6 +386,6 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
     this.filterDirection = null;
     this.filterRestriction = null;
     this.filterPending = null;
-    this.filteredObstacles = this.obstacles;
+    this.filteredObstacles = Array.from(this.obstacles);
   }
 }

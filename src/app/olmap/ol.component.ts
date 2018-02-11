@@ -31,6 +31,7 @@ import Circle = ol.style.Circle;
   olLayers : OlLayers;
   scaleLineControl;
   fullScreenControl;
+  started: boolean;
   private overlay: ol.Overlay;
   private selection: ol.interaction.Select;
 
@@ -40,6 +41,7 @@ import Circle = ol.style.Circle;
     this.scale=false;
     this.layers=[];
     this.rotate=false;
+    this.started = false;
   }
 
   private createDefaultVectorSource() {
