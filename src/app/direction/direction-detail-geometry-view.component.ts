@@ -2,7 +2,6 @@ import {
   AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren
 } from '@angular/core';
 import {STATUS_INDICATOR} from "../commons/status-indicator";
-import Map = ol.Map;
 import {OlComponent} from "../olmap/ol.component";
 import {DirectionService} from "./direction.service";
 import {ApiError} from "../main/apiError";
@@ -98,13 +97,17 @@ export class DirectionDetailGeometryViewComponent implements OnInit, AfterViewIn
   ){
     this.indicator = STATUS_INDICATOR;
 
-    this.subscription = this.distancesService.lengthUpdated$.subscribe(
-      () => this.loadGeometries()
-        .then(()=> this.olmap.clearDirectionLayer())
-        .then(()=> this.olmap.clearDisplacedThresholdLayer())
-        .then(()=> this.olmap.clearStopwayLayer())
-        .then(()=> this.olmap.clearClearwayLayer())
-        .then(()=> this.locateFeatures())
+    this.subscription = this.distancesService.lengthUpdated$.subscribe(() => {
+
+        if(this.olmap){
+          this.loadGeometries()
+            .then(()=> this.olmap.clearDirectionLayer())
+            .then(()=> this.olmap.clearDisplacedThresholdLayer())
+            .then(()=> this.olmap.clearStopwayLayer())
+            .then(()=> this.olmap.clearClearwayLayer())
+            .then(()=> this.locateFeatures())
+        }
+      }
     );
   }
 

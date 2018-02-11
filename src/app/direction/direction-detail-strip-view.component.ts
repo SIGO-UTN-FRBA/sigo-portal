@@ -45,7 +45,7 @@ import {DirectionService} from "./direction.service";
                 i18n="@@ruwnay.detail.section.strip.inputWidth">
                 Width
               </label>
-              <p class="form-control-static">{{strip.width}} [m]</p>
+              <p class="form-control-static">{{strip?.width}} [m]</p>
             </div>
             <div class="col-md-6 col-sm-12 form-group">
               <label
@@ -54,7 +54,7 @@ import {DirectionService} from "./direction.service";
                 i18n="@@ruwnay.detail.section.strip.inputLength">
                 Length
               </label>
-              <p class="form-control-static">{{strip.length}} [m]</p>
+              <p class="form-control-static">{{strip?.length}} [m]</p>
             </div>
           </div>
         </div>
