@@ -5,6 +5,8 @@ import {AnalysisResultService} from './analysis-result.service';
 import {AnalysisObstacle} from './analysisObstacle';
 import {AnalysisAspect} from './analysisAspect';
 import {AnalysisMitigation} from './analysisMitigation';
+import {STATUS_INDICATOR} from '../commons/status-indicator';
+import {AppError} from '../main/ierror';
 
 @Component({
   selector: 'modal-content',
@@ -19,8 +21,14 @@ import {AnalysisMitigation} from './analysisMitigation';
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <ng-container *ngIf="result">
-      <div class="modal-body">
+    <ng-container [ngSwitch]="onInitStatus">
+      <div *ngSwitchCase="indicator.LOADING">
+        <app-loading-indicator></app-loading-indicator>
+      </div>
+      <div *ngSwitchCase="indicator.ERROR">
+        <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
+      </div>
+      <div *ngSwitchCase="indicator.ACTIVE" class="modal-body">
         <form #resultForm="ngForm"
               role="form" 
               class="form"
@@ -129,23 +137,23 @@ import {AnalysisMitigation} from './analysisMitigation';
             </div>
           </div>
         </form>
-      </div>
-      <div class="modal-footer" *ngIf="!readonly">
-        <button type="button"
-                class="btn btn-primary"
-                (click)="resultForm.ngSubmit.emit()"
-                [disabled]="!resultForm.form.valid"
-                i18n="@@commons.button.save"
-        >
-          Save
-        </button>
-        <button type="button"
-                class="btn btn-default"
-                (click)="onCancel()"
-                i18n="@@commons.button.cancel"
-        >
-          Cancel
-        </button>
+        <div class="modal-footer" *ngIf="!readonly">
+          <button type="button"
+                  class="btn btn-primary"
+                  (click)="resultForm.ngSubmit.emit()"
+                  [disabled]="!resultForm.form.valid"
+                  i18n="@@commons.button.save"
+          >
+            Save
+          </button>
+          <button type="button"
+                  class="btn btn-default"
+                  (click)="onCancel()"
+                  i18n="@@commons.button.cancel"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </ng-container>
   `
@@ -157,6 +165,9 @@ export class AnalysisModalAnalysisComponent implements OnInit {
   aspects: AnalysisAspect[];
   mitigationMeasures: AnalysisMitigation[];
   readonly: boolean;
+  indicator;
+  onInitStatus: number;
+  onInitError: AppError;
 
   constructor(
     private resultService : AnalysisResultService,
@@ -164,15 +175,25 @@ export class AnalysisModalAnalysisComponent implements OnInit {
   ) {
     this.result = null;
     this.aspects = [];
+    this.indicator = STATUS_INDICATOR;
   }
 
   ngOnInit(): void {
+
+    this.onInitError = null;
+    this.onInitStatus = STATUS_INDICATOR.LOADING;
+
     this.resultService
       .getAspects()
       .then(data => this.aspects = data)
       .then(() => Promise.all(this.aspects.map(a => this.resultService.getMitigationMeasuresByAspect(a.id).then(data => a.mitigationMeasures = data))))
       .then(() => this.result.aspect = this.aspects.find(a => this.result.aspectId == a.id))
-      .then(() => this.mitigationMeasures = (this.result.aspectId) ? this.result.aspect.mitigationMeasures : []);
+      .then(() => this.mitigationMeasures = (this.result.aspectId) ? this.result.aspect.mitigationMeasures : [])
+      .then( () => this.onInitStatus = STATUS_INDICATOR.ACTIVE)
+      .catch( error => {
+        this.onInitError = error;
+        this.onInitStatus = STATUS_INDICATOR.ERROR;
+      })
   }
 
   onCancel(){
