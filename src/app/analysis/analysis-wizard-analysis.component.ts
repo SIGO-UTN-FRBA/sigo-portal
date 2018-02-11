@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AnalysisWizardService} from "./analysis-wizard.service";
 import {DirectionService} from "../direction/direction.service";
