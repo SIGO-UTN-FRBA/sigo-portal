@@ -1,9 +1,10 @@
 import {BsModalRef} from 'ngx-bootstrap';
 import {Component, OnInit} from '@angular/core';
 import {AnalysisResult} from './analysisResult';
-import {AnalysisResultReason} from './analysisResultReason';
 import {AnalysisResultService} from './analysis-result.service';
 import {AnalysisObstacle} from './analysisObstacle';
+import {AnalysisAspect} from './analysisAspect';
+import {AnalysisMitigation} from './analysisMitigation';
 
 @Component({
   selector: 'modal-content',
@@ -28,58 +29,72 @@ import {AnalysisObstacle} from './analysisObstacle';
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
               <label
-                for="inputIsObstacle"
+                for="inputHasAdverseEffect"
                 class="control-label"
-                i18n="@@analysis.modal.analysis.inputIsObstacle">
-                Is an obstacle?
+                i18n="@@analysis.modal.analysis.inputHasAdverseEffect">
+                Has adverse effect?
               </label>
               <select
                 class="form-control"
-                name="inputIsObstacle"
-                [(ngModel)]="result.obstacle"
-                (ngModelChange)="updateObstacle()"
+                name="inputHasAdverseEffect"
+                [(ngModel)]="result.hasAdverseEffect"
+                (ngModelChange)="updateAdverseEffect()"
                 required>
                 <option [ngValue]="true" i18n="@@commons.button.yes">Yes</option>
                 <option [ngValue]="false" i18n="@@commons.button.no">No</option>
               </select>
             </div>
           </div>
-          <div class="row">
+          <div class="row" *ngIf="result.hasAdverseEffect">
             <div class="col-md-12 col-sm-12 form-group">
               <label
-                for="inputKeep"
+                for="inputAspect"
                 class="control-label"
-                i18n="@@analysis.modal.analysis.inputKeep">
-                Keep?
+                i18n="@@analysis.modal.analysis.inputAspect">
+                Which aspect?
               </label>
               <select
                 class="form-control"
-                name="inputKeep"
-                [(ngModel)]="result.keep"
-                (ngModelChange)="updateKeep()"
-                required>
-                <option [ngValue]="true" i18n="@@commons.button.yes">Yes</option>
-                <option [ngValue]="false" i18n="@@commons.button.no">No</option>
+                name="inputAspect"
+                [(ngModel)]="result.aspectId"
+                (ngModelChange)="updateAspect()"
+                [required]="result.hasAdverseEffect"
+              >
+                <option *ngFor="let aspect of aspects" [ngValue]="aspect.id">{{aspect.name}}</option>
               </select>
+            </div>
+          </div>
+          <div class="row" *ngIf="result.hasAdverseEffect">
+            <div class="col-md-12 col-sm-12 form-group">
+              <label
+                for=""
+                class="control-label"
+                i18n="@@analysis.modal.analysis.inputMitigation">
+                Apply any mitigation measures?
+              </label>
+            </div>
+            <div class="col-md-12 col-sm-12">
+              <p *ngFor="let mitigation of mitigationMeasures">
+                <input type="checkbox" [checked]="result.mitigationMeasuresIds.indexOf(mitigation.id) != -1" [value]="mitigation.id" (change)="toggleMitigationCheck($event)"/> {{mitigation.name}}. <i>{{(mitigation.operationDamage)? "Unacceptable": "Acceptable"}}</i>
+              </p>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12 col-sm-12 form-group">
               <label
-                for="inputReason"
+                for="inputAllowed"
                 class="control-label"
-                i18n="@@analysis.modal.analysis.inputReason">
-                Reason?
+                i18n="@@analysis.modal.analysis.inputAllowed">
+                Is allowed?
               </label>
               <select
                 class="form-control"
-                name="inputReason"
-                [(ngModel)]="result.reasonId"
+                name="inputAllowed"
+                [(ngModel)]="result.allowed"
                 required
               >
-                <option *ngFor="let reason of filteredReasons" [ngValue]="reason.id" >
-                  {{reason.description}}
-                </option>
+                <option [ngValue]="true" i18n="@@commons.button.yes">Yes</option>
+                <option [ngValue]="false" i18n="@@commons.button.no">No</option>
               </select>
             </div>
           </div>
@@ -89,11 +104,11 @@ import {AnalysisObstacle} from './analysisObstacle';
                 for="inputDetail"
                 class="control-label"
                 i18n="@@analysis.modal.analysis.inputDetail">
-                Reason details
+                More details
               </label>
               <textarea name="inputDetail"
                         class="form-control"
-                        [(ngModel)]="result.reasonDetail"
+                        [(ngModel)]="result.extraDetail"
                         required
               >
               </textarea>
@@ -125,23 +140,24 @@ export class AnalysisModalAnalysisComponent implements OnInit {
 
   obstacle: AnalysisObstacle;
   result:AnalysisResult;
-  filteredReasons: AnalysisResultReason[];
-  reasons: AnalysisResultReason[];
+  aspects: AnalysisAspect[];
+  mitigationMeasures: AnalysisMitigation[];
 
   constructor(
     private resultService : AnalysisResultService,
     private bsModalRef: BsModalRef
   ) {
     this.result = null;
-    this.reasons = [];
+    this.aspects = [];
   }
 
   ngOnInit(): void {
     this.resultService
-      .getReasons()
-      .then(data => this.reasons = data)
-      .then(()=> this.updateFilteredReasons());
-      //TODO catch error
+      .getAspects()
+      .then(data => this.aspects = data)
+      .then(() => Promise.all(this.aspects.map(a => this.resultService.getMitigationMeasuresByAspect(a.id).then(data => a.mitigationMeasures = data))))
+      .then(() => this.result.aspect = this.aspects.find(a => this.result.aspectId == a.id))
+      .then(() => this.mitigationMeasures = (this.result.aspectId) ? this.result.aspect.mitigationMeasures : []);
   }
 
   onCancel(){
@@ -155,20 +171,50 @@ export class AnalysisModalAnalysisComponent implements OnInit {
       //TODO catch error .catch()
   }
 
-  updateObstacle() {
-    this.result.keep = !this.result.obstacle;
-    this.updateKeep();
+  updateAdverseEffect() {
+    this.result.aspectId = null;
+    if(!this.result.hasAdverseEffect){
+      this.result.allowed = true;
+    } else {
+      this.result.allowed = null;
+    }
+    this.updateAspect();
   }
 
-  updateKeep() {
-    this.result.reason = null;
-    this.result.reasonDetail = "";
-    this.updateFilteredReasons();
+  updateAspect() {
+    if(this.result.hasAdverseEffect){
+      this.result.aspect = (this.result.aspectId) ? this.aspects.find( a => a.id == this.result.aspectId) : null;
+      this.result.mitigationMeasuresIds = [];
+      this.mitigationMeasures = (this.result.aspectId) ? this.result.aspect.mitigationMeasures : [];
+
+      this.updateMitigationMeasures();
+    }
+    else {
+      this.result.aspectId = null;
+      this.result.aspect = null;
+      this.result.mitigationMeasuresIds = null;
+    }
   }
 
-  updateFilteredReasons() {
-    this.filteredReasons = this.reasons.filter(reason =>
-      reason.obstacle == this.result.obstacle && reason.keep == this.result.keep
-    );
+  toggleMitigationCheck(event){
+
+    if(event.target.checked){
+      this.result.mitigationMeasuresIds.push(event.target.value);
+    } else {
+      this.result.mitigationMeasuresIds.splice(this.result.mitigationMeasuresIds.indexOf(event.target.value),1);
+    }
+
+    this.updateMitigationMeasures();
+  }
+
+  updateMitigationMeasures(){
+
+    if(this.result.mitigationMeasuresIds.length == 0){
+      this.result.allowed = null;
+    }
+    else {
+      this.result.mitigationMeasures = this.result.mitigationMeasuresIds.map( id => this.result.aspect.mitigationMeasures.find( m => m.id == id));
+      this.result.allowed = this.result.mitigationMeasures.every( m => !m.operationDamage);
+    }
   }
 }

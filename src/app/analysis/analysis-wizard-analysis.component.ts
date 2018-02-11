@@ -142,7 +142,7 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                   <th i18n="@@analysis.wizard.analysis.section.obstacles.penetration">Penetration [m]</th>
                   <th i18n="@@analysis.wizard.analysis.section.obstacles.direction">Direction</th>
                   <th i18n="@@analysis.wizard.analysis.section.obstacles.surface">Restriction</th>
-                  <th i18n="@@analysis.wizard.analysis.section.obstacles.result">Result</th>
+                  <th i18n="@@analysis.wizard.analysis.section.obstacles.allowed">Allowed</th>
                   <th></th>
                 </tr>
                 <tbody>
@@ -164,8 +164,8 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                   </td>
                   <td>{{obstacle.directionId ? obstacle.directionName : "-" }}</td>
                   <td>[{{obstacle.restrictionTypeId == 1 ? "Exception" : "OLS"}}] {{obstacle.restrictionName}}</td>
-                  <td [ngClass]="{'warning': obstacle.resultSummary != undefined && !obstacle.resultSummary.startsWith(passiveReason)}">
-                    {{obstacle.resultSummary}}
+                  <td [ngClass]="{'warning': obstacle.allowed != undefined && !obstacle.allowed}">
+                    {{(obstacle.allowed != undefined)? obstacle.allowed : '[undefined]'}}
                   </td>
                   <td>
                     <button type="button" *ngIf="allowEdit" class="btn btn-default btn-sm" (click)="editResult(obstacle)">
@@ -249,7 +249,7 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
 
 export class AnalysisWizardAnalysisComponent extends AbstractAnalysisWizardAnalysisComponent {
 
-  flag: boolean;
+
 
   constructor(
     wizardService: AnalysisWizardService,
@@ -269,8 +269,6 @@ export class AnalysisWizardAnalysisComponent extends AbstractAnalysisWizardAnaly
     private modalService: BsModalService
   ){
     super(wizardService, analysisService, runwayService, directionService, surfacesService, airportService, obstacleService, resultService, objectService, analysisObjectService, exceptionService, authService, route, router);
-
-    this.flag= false;
   }
 
   stageId(): number {
@@ -321,7 +319,7 @@ export class AnalysisWizardAnalysisComponent extends AbstractAnalysisWizardAnaly
       this.obstacleService
         .get(obstacle.caseId, obstacle.id)
         .then(data => {
-          obstacle.resultSummary = data.resultSummary;
+          obstacle.allowed = data.allowed;
           obstacle.resultId = data.resultId;
         });
     });
@@ -332,8 +330,8 @@ export class AnalysisWizardAnalysisComponent extends AbstractAnalysisWizardAnaly
     if(obstacle.resultId)
       this.resultService
         .get(obstacle.caseId, obstacle.id)
-        .then(data => modalRef.content.result = data)
-        .then(() => modalRef.content.updateFilteredReasons());
+        .then(data => modalRef.content.result = data);
+        //.then(() => modalRef.content.restoreSelections());
     else
       modalRef.content.result = new AnalysisResult().initialize(obstacle);
   }

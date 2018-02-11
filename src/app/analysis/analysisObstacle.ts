@@ -15,5 +15,5 @@ export class AnalysisObstacle {
   directionId: number;
   directionName: string;
   resultId: number;
-  resultSummary: string;
+  allowed: boolean;
 }

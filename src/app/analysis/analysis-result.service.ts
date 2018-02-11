@@ -3,8 +3,9 @@ import {ApiService} from '../main/api.service';
 import {AnalysisResult} from './analysisResult';
 import "rxjs/add/operator/toPromise";
 import {AppSettings} from '../main/app-settings';
-import {AnalysisResultReason} from './analysisResultReason';
 import {AuthHttp} from 'angular2-jwt';
+import {AnalysisMitigation} from './analysisMitigation';
+import {AnalysisAspect} from './analysisAspect';
 
 @Injectable()
 export class AnalysisResultService extends ApiService {
@@ -27,11 +28,19 @@ export class AnalysisResultService extends ApiService {
       //.catch(this.handleError)
   }
 
-  getReasons(): Promise<AnalysisResultReason[]> {
+  getAspects(): Promise<AnalysisAspect[]> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/catalogs/analysis/resultReasons`)
+      .get(`${AppSettings.API_ENDPOINT}/catalogs/analysis/aspects`)
       .toPromise()
-      .then(response => response.json() as AnalysisResultReason[])
+      .then(response => response.json() as AnalysisAspect[])
+      .catch(this.handleError)
+  }
+
+  getMitigationMeasuresByAspect(aspectId: number): Promise<AnalysisMitigation[]> {
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/catalogs/analysis/aspects/${aspectId}/mitigations`)
+      .toPromise()
+      .then(response => response.json() as AnalysisMitigation[])
       .catch(this.handleError)
   }
 }

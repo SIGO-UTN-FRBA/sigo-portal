@@ -1,18 +1,21 @@
 import {AnalysisObstacle} from './analysisObstacle';
+import {AnalysisMitigation} from './analysisMitigation';
+import {AnalysisAspect} from './analysisAspect';
 
 export class AnalysisResult {
   id: number;
   obstacleId: number;
-  obstacle: boolean;
-  keep: boolean;
-  reason: string;
-  reasonDetail: string;
-  reasonId: number;
+  hasAdverseEffect: boolean;
+  allowed: boolean;
+  aspectId: number;
+  aspect: AnalysisAspect;
+  mitigationMeasuresIds: number[];
+  mitigationMeasures: AnalysisMitigation[];
+  extraDetail: string;
 
   initialize(obstacle: AnalysisObstacle): AnalysisResult {
     this.obstacleId = obstacle.id;
-    this.obstacle = obstacle.penetration > 0;
-    this.keep = !this.obstacle;
+    this.hasAdverseEffect = obstacle.penetration > 0;
     return this;
   }
 }

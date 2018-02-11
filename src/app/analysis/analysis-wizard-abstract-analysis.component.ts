@@ -48,7 +48,6 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
   selectedDirection: RunwayDirection;
   obstacles:AnalysisObstacle[];
   filteredObstacles:AnalysisObstacle[];
-  passiveReason: string = "Obstacle: 'false'. Keep: 'true'";
   centerCoordinates: ol.Coordinate;
 
   filterName: string;
@@ -352,7 +351,7 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
       && (this.filterRestriction == null || o.restrictionTypeId == this.filterRestriction)
       && (this.filterDirection == null || o.directionId == this.filterDirection)
       && (this.filterPenetration == null || (o.penetration > 0) == this.filterPenetration)
-      && ((this.filterPending == null) || (o.resultSummary == null) == this.filterPending)
+      && ((this.filterPending == null) || (o.allowed == null) == this.filterPending)
     );
   }
 

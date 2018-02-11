@@ -121,7 +121,7 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                   <th i18n="@@analysis.wizard.inform.section.obstacles.penetration">Penetration [m]</th>
                   <th i18n="@@analysis.wizard.inform.section.obstacles.direction">Direction</th>
                   <th i18n="@@analysis.wizard.inform.section.obstacles.surface">Restriction</th>
-                  <th i18n="@@analysis.wizard.inform.section.obstacles.result">Result</th>
+                  <th i18n="@@analysis.wizard.inform.section.obstacles.allowed">Allowed</th>
                 </tr>
                 <tbody>
                 <tr *ngFor="let obstacle of filteredObstacles; index as i;">
@@ -138,8 +138,8 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                   </td>
                   <td>{{obstacle.directionId ? obstacle.directionName : "-" }}</td>
                   <td>[{{obstacle.restrictionTypeId == 1 ? "Exception" : "OLS"}}] {{obstacle.restrictionName}}</td>
-                  <td [ngClass]="{'warning': obstacle.resultSummary != undefined && !obstacle.resultSummary.startsWith(passiveReason)}">
-                    {{obstacle.resultSummary}}
+                  <td [ngClass]="{'warning': obstacle.allowed != undefined && !obstacle.allowed}">
+                    {{(obstacle.allowed != undefined)? obstacle.allowed : '[undefined]'}}
                   </td>
                 </tr>
                 </tbody>
