@@ -129,9 +129,16 @@ import {AnalysisObstacle} from './analysisObstacle';
                 </tr>
                 <tbody>
                 <tr *ngFor="let obstacle of filteredObstacles; index as i;">
-                  <td><strong>{{i + 1}}</strong></td>
                   <td>
-                    <a [routerLink]="['/objects', obstacle.objectType, obstacle.objectId]">
+                    <a (click)="locateObjectOnMap(obstacle)" style="cursor: pointer">
+                      <strong>{{i + 1}}</strong>
+                    </a>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="obstacle.objectType == 3">
+                      {{obstacle.objectName}}
+                    </ng-container>
+                    <a *ngIf="obstacle.objectType != 3" [routerLink]="['/objects', obstacle.objectType, obstacle.objectId]">
                       {{obstacle.objectName}}
                     </a>
                   </td>
