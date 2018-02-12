@@ -37,7 +37,7 @@ export class AnalysisExceptionSurfaceService extends ApiService {
 
   update(analysisId:number, exception:AnalysisExceptionSurface):Promise<AnalysisExceptionSurface> {
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions/surface/${exception.id}`, exception)
+      .put(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions/surface/${exception.id}`, exception)
       .toPromise()
       .then(response => response.json() as AnalysisExceptionSurface)
       .catch(this.handleError)

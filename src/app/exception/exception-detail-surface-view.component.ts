@@ -17,14 +17,6 @@ import {AnalysisExceptionSurfaceService} from './exception-surface.service';
             <div class="pull-right">
               <div class="btn-group">
                 <button
-                  (click)="onDelete();"
-                  class="btn btn-default"
-                  i18n="@@commons.button.delete">
-                  Delete
-                </button>
-              </div>
-              <div class="btn-group">
-                <button
                   (click)="allowEdition();"
                   class="btn btn-default"
                   i18n="@@commons.button.edit">
@@ -113,11 +105,7 @@ export class ExceptionDetailSurfaceViewComponent implements OnInit {
       })
   }
 
-  onDelete(){
-    //TODO
-  }
-
   allowEdition(){
-    //TODO
+    this.editChange.emit(true);
   }
 }

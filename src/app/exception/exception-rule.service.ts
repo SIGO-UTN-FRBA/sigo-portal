@@ -27,7 +27,7 @@ export class AnalysisExceptionRuleService extends ApiService {
 
   update(analysisId:number, exception:AnalysisExceptionRule):Promise<AnalysisExceptionRule> {
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions/rule/${exception.id}`, exception)
+      .put(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/exceptions/rule/${exception.id}`, exception)
       .toPromise()
       .then(response => response.json() as AnalysisExceptionRule)
       .catch(this.handleError)

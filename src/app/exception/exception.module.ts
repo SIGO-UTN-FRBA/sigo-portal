@@ -26,6 +26,7 @@ import {ExceptionDetailSurfaceComponent} from './exception-detail-surface.compon
 import {ExceptionDetailSurfaceViewComponent} from './exception-detail-surface-view.component';
 import {AnalysisExceptionSurfaceService} from './exception-surface.service';
 import {AnalysisExceptionRuleService} from './exception-rule.service';
+import {ExceptionDetailSurfaceEditComponent} from './exception-detail-surface-edit.component';
 
 @NgModule({
   imports:[
@@ -46,7 +47,8 @@ import {AnalysisExceptionRuleService} from './exception-rule.service';
     ExceptionDetailRuleIcaoViewComponent,
     ExceptionDetailRuleIcaoEditComponent,
     ExceptionDetailSurfaceComponent,
-    ExceptionDetailSurfaceViewComponent
+    ExceptionDetailSurfaceViewComponent,
+    ExceptionDetailSurfaceEditComponent
   ],
   providers: [
     RegulationService,

@@ -42,6 +42,7 @@ import {AnalysisExceptionSurfaceService} from './exception-surface.service';
                        class="form-control"
                        [(ngModel)]="name"
                        required
+                       maxlength="100"
                 />
               </div>
             </div>

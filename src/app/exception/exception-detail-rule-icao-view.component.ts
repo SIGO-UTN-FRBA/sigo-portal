@@ -21,14 +21,6 @@ import {AnalysisExceptionRuleService} from './exception-rule.service';
             <div class="pull-right">
               <div class="btn-group">
                 <button
-                  (click)="onDelete();"
-                  class="btn btn-default"
-                  i18n="@@commons.button.delete">
-                  Delete
-                </button>
-              </div>
-              <div class="btn-group">
-                <button
                   (click)="allowEdition();"
                   class="btn btn-default"
                   i18n="@@commons.button.edit">
@@ -141,10 +133,6 @@ export class ExceptionDetailRuleIcaoViewComponent implements OnInit {
           this.onInitError = error;
           this.onInitStatus = STATUS_INDICATOR.ERROR;
         })
-  }
-
-  onDelete(){
-      //TODO
   }
 
   allowEdition(){
