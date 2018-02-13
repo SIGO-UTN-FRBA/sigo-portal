@@ -135,7 +135,7 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
   }
 
   protected resolveObstacles() {
-    return this.obstacleService.list(this.analysisId, false)
+    return this.obstacleService.list(this.analysisId, {excepting: false, validity: true})
       .then(data => {
         this.obstacles = data.sort((a, b) =>
           (a.directionId && b.directionName) ? a.directionName.localeCompare(b.directionName) : -1

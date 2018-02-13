@@ -4,18 +4,21 @@ import {AnalysisObstacle} from "./analysisObstacle";
 import "rxjs/add/operator/toPromise";
 import {AppSettings} from "../main/app-settings";
 import {AuthHttp} from 'angular2-jwt';
+import {convertToParamMap} from '@angular/router';
 
 @Injectable()
 export class AnalysisObstacleService extends ApiService {
 
   constructor(http: AuthHttp){super(http)}
 
-  list(analysisId: number, excepting?: boolean):Promise<AnalysisObstacle[]>{
+  list(analysisId: number, options: {excepting?: boolean, validity?: boolean}):Promise<AnalysisObstacle[]>{
 
-    let queryParams = (excepting !== null) ? `excepting=${excepting}` : "";
+    let paramMap = convertToParamMap(options);
+
+    let queryString = paramMap.keys.reduce((total, key) => {return `${total}&${key}=${paramMap.get(key)}` }, '');
 
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/obstacles?${queryParams}`)
+      .get(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case/obstacles?${queryString}`)
       .toPromise()
       .then(response => response.json() as AnalysisObstacle[])
       .catch(this.handleError)
