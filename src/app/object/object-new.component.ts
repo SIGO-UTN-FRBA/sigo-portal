@@ -4,10 +4,10 @@ import {Router} from '@angular/router';
 
 @Component({
   template:`
-    <h1 i18n="@@exception.new.title">
+    <h1 i18n="@@object.new.title">
       New elevated object
     </h1>
-    <p i18n="@@exception.new.main_description">
+    <p i18n="@@object.new.main_description">
       This section allows users to select a kind of elevated object to be created.
     </p>
     <hr/>

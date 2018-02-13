@@ -9,17 +9,17 @@ import {Router} from '@angular/router';
 
 @Component({
   template:`
-    <h1 i18n="@@object.new.placed.title">
+    <h1 i18n="@@object.new.track.title">
       New track section
     </h1>
-    <p i18n="@@object.new.placed.main_description">
+    <p i18n="@@object.new.track.main_description">
       This section allows users to create a track section.
     </p>
     <hr/>
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title" i18n="@@object.new.track.detail.section.general.title">
+          <h3 class="panel-title" i18n="@@object.new.detail.section.general.title">
             General
           </h3>
         </div>
