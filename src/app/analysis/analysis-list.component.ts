@@ -118,7 +118,7 @@ export class AnalysisCaseListComponent implements OnInit {
 
     this.analysisService
       .create({parentId: caseId})
-      .then(data => this.router.navigate([`/analysis/${data.id}/stages/object`]))
+      .then(data => this.startCase(data.caseId))
       .catch(error => this.onSubmitError = error);
   }
 
@@ -127,7 +127,7 @@ export class AnalysisCaseListComponent implements OnInit {
 
     this.wizardService
       .start(caseId)
-      .then(data => this.router.navigate([`/analysis/${data.id}/stages/object`]))
+      .then(data => this.router.navigateByUrl(`/analysis/${data.id}/stages/object`))
       .catch(error => this.onSubmitError = error);
   }
 }
