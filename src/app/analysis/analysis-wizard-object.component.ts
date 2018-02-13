@@ -150,7 +150,7 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
                      [fullScreen]="true"
                      [scale]="true"
                      [layerSwitcher]="true"
-                     [layers]="['airport', 'runway', 'objects']"
+                     [layers]="['airport', 'runway', 'objects', 'terrain']"
             >
             </app-map>
           </ng-container>
