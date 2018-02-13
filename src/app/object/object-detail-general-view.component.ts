@@ -4,7 +4,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {Router} from "@angular/router";
 import {ElevatedObjectService} from "./object.service";
 import {ApiError} from "../main/apiError";
-import {PlacedObjectType} from "./objectType";
+import {ElevatedObjectType, ElevatedObjectTypeFactory} from './objectType';
 import {PlacedObjectCatalogService} from "./object-catalog.service";
 import {ObjectMarkIndicator} from "./objectMarkIndicator";
 import {ObjectLighting} from "./objectLighting";
@@ -49,11 +49,11 @@ import {PoliticalLocation} from "../location/location";
           
       <div [ngSwitch]="status" class="panel-body">
         <div *ngSwitchCase="indicator.LOADING">
-              <app-loading-indicator></app-loading-indicator>
-            </div>
+          <app-loading-indicator></app-loading-indicator>
+        </div>
         <div *ngSwitchCase="indicator.ERROR" class="container-fluid">
-              <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
-            </div>
+          <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
+        </div>
         <div *ngSwitchCase="indicator.ACTIVE" class="form container-fluid">
               
               <div class="row">
@@ -61,7 +61,7 @@ import {PoliticalLocation} from "../location/location";
                   <label for="type" class="control-label" i18n="@@object.detail.section.general.type">
                     Type
                   </label>
-                  <p class="form-control-static">{{types[placedObject.typeId].description}}</p>
+                  <p class="form-control-static">{{type.description}}</p>
                 </div>
                 <div class="col-md-6 col-sm-12 form-group">
                   <label for="subtype" class="control-label" i18n="@@object.detail.section.general.subtype">
@@ -161,11 +161,11 @@ export class PlacedObjectDetailGeneralViewComponent implements OnInit {
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
   onInitError : ApiError;
-  types: PlacedObjectType[];
   owner: ObjectOwner;
   politicalLocation: PoliticalLocation;
   lightings: ObjectLighting[];
   marks: ObjectMarkIndicator[];
+  type: ElevatedObjectType;
 
   constructor(
     private router: Router,
@@ -174,46 +174,51 @@ export class PlacedObjectDetailGeneralViewComponent implements OnInit {
     private locationService: LocationService,
     private ownerService: ObjectOwnerService
   ){
-    this.placedObject = new PlacedObject();
     this.indicator = STATUS_INDICATOR;
   }
 
   ngOnInit(): void {
 
     this.status = STATUS_INDICATOR.LOADING;
-
     this.onInitError = null;
 
-    let p1 = this.catalogService
-      .listTypeObject()
-      .then(data => this.types = data)
-      .catch(error => Promise.reject(error));
+    this.type = ElevatedObjectTypeFactory.getTypeById(this.objectTypeId);
 
-    let p2 = this.catalogService
-      .listMarkIndicator()
-      .then(data => this.marks = data)
-      .catch(error => Promise.reject(error));
-
-    let p3 = this.catalogService
-      .listLighting()
-      .then(data => this.lightings = data)
-      .catch(error => Promise.reject(error));
-
-    let p4 = this.objectService
-      .get(this.placedObjectId, this.objectTypeId)
-      .then( data => this.placedObject = data)
-      .then(()=> this.locationService.get(this.placedObject.locationId))
-      .then(data => this.politicalLocation = data )
-      .then(()=> this.ownerService.get(this.placedObject.ownerId))
-      .then(data => this.owner = data)
-      .catch(error => Promise.reject(error));
-
-    Promise.all([p1,p2,p3,p4])
+    Promise.all([
+      this.resolveMarks(),
+      this.resolveLights(),
+      this.resolveObject()
+    ])
       .then(() => this.status = STATUS_INDICATOR.ACTIVE)
       .catch(error => {
         this.onInitError = error;
         this.status = STATUS_INDICATOR.ERROR;
       })
+  }
+
+  private resolveObject() {
+    return this.objectService
+      .get(this.placedObjectId, this.objectTypeId)
+      .then(data => this.placedObject = data as PlacedObject)
+      .then(() => this.locationService.get(this.placedObject.locationId))
+      .then(data => this.politicalLocation = data)
+      .then(() => this.ownerService.get(this.placedObject.ownerId))
+      .then(data => this.owner = data)
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveLights() {
+    return this.catalogService
+      .listLighting()
+      .then(data => this.lightings = data)
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveMarks() {
+    return this.catalogService
+      .listMarkIndicator()
+      .then(data => this.marks = data)
+      .catch(error => Promise.reject(error));
   }
 
   allowEdition() {
@@ -222,8 +227,8 @@ export class PlacedObjectDetailGeneralViewComponent implements OnInit {
 
   delete() {
     this.objectService
-      .delete(this.placedObjectId)
-      .then(()=> this.router.navigate(['/objects']))
+      .delete(this.placedObjectId, this.type.id)
+      .then(()=> this.router.navigateByUrl('/objects/search'))
       .catch( error => {
         this.onInitError = error;
         this.status = STATUS_INDICATOR.ERROR;

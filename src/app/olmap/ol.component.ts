@@ -217,7 +217,10 @@ import Circle = ol.style.Circle;
 
     this.clearIndividualObjectLayer()
       .clearBuildingObjectLayer()
-      .clearWiringObjectLayer();
+      .clearWiringObjectLayer()
+      .clearRoadTrackSectionLayer()
+      .clearHighwayTrackSectionLayer()
+      .clearRailwayTrackSectionLayer();
 
     return this;
   }
@@ -540,6 +543,87 @@ import Circle = ol.style.Circle;
     return layer;
   }
 
+  clearRoadTrackSectionLayer(): OlComponent{
+    this.getRoadTrackSectionLayer().getSource().clear(false);
+    return this;
+  }
+
+  getRoadTrackSectionLayer(): VectorLayer{
+    if(this.olLayers.hasOwnProperty('roadTrackSection'))
+      return this.olLayers['roadTrackSection'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: '#626262',
+          lineDash: [5,6],
+          width: 3
+        })
+      })
+    });
+
+    layer.setProperties({'title':'Road Section'});
+
+    this.olLayers['roadTrackSection'] = layer;
+
+    return layer;
+  }
+
+  clearHighwayTrackSectionLayer(): OlComponent{
+    this.getHighwayTrackSectionLayer().getSource().clear(false);
+    return this;
+  }
+
+  getHighwayTrackSectionLayer(): VectorLayer{
+    if(this.olLayers.hasOwnProperty('highwayTrackSection'))
+      return this.olLayers['highwayTrackSection'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: '#626262',
+          lineDash: [5,6],
+          width: 3
+        })
+      })
+    });
+
+    layer.setProperties({'title':'Highway Section'});
+
+    this.olLayers['highwayTrackSection'] = layer;
+
+    return layer;
+  }
+
+  clearRailwayTrackSectionLayer(): OlComponent{
+    this.getRailwayTrackSectionLayer().getSource().clear(false);
+    return this;
+  }
+
+  getRailwayTrackSectionLayer(): VectorLayer{
+    if(this.olLayers.hasOwnProperty('railwayTrackSection'))
+      return this.olLayers['railwayTrackSection'];
+
+    let layer = new VectorLayer({
+      source: this.createDefaultVectorSource(),
+      style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: '#621f20',
+          lineDash: [5,6],
+          width: 3
+        })
+      })
+    });
+
+    layer.setProperties({'title':'Railway Section'});
+
+    this.olLayers['railwayTrackSection'] = layer;
+
+    return layer;
+  }
+
   clearTerrainLayer(): OlComponent{
     this.getTerrainLayer().getSource().clear(false);
     return this;
@@ -788,6 +872,21 @@ import Circle = ol.style.Circle;
     return this;
   }
 
+  public addRoadTrackSection(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+    this.addFeature(feature, this.getRoadTrackSectionLayer(), options);
+    return this;
+  }
+
+  public addHighwayTrackSection(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+    this.addFeature(feature, this.getHighwayTrackSectionLayer(), options);
+    return this;
+  }
+
+  public addRailwayTrackSection(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
+    this.addFeature(feature, this.getRailwayTrackSectionLayer(), options);
+    return this;
+  }
+
   public addObject(feature: Feature, options? : {center?: boolean, zoom?: number}) : OlComponent {
 
     switch (feature.get('class')){
@@ -802,6 +901,15 @@ import Circle = ol.style.Circle;
         break;
       case 'Terrain Level Curve':
         this.addTerrainLevelCurve(feature, options);
+        break;
+      case 'Road':
+        this.addRoadTrackSection(feature, options);
+        break;
+      case 'Highway':
+        this.addHighwayTrackSection(feature, options);
+        break;
+      case 'Railway':
+        this.addRailwayTrackSection(feature, options);
         break;
     }
 
@@ -1014,6 +1122,15 @@ import Circle = ol.style.Circle;
 
     if(all || this.layers.includes('wire'))
       layers.push(this.getWiringObjectLayer());
+
+    if(all || this.layers.includes('road'))
+      layers.push(this.getRoadTrackSectionLayer());
+
+    if(all || this.layers.includes('highway'))
+      layers.push(this.getHighwayTrackSectionLayer());
+
+    if(all || this.layers.includes('railway'))
+      layers.push(this.getRailwayTrackSectionLayer());
 
     if(layers.getArray().length > 0){
       let group = new ol.layer.Group();

@@ -5,7 +5,7 @@ import {AnalysisObject} from "./analysisObject";
 import {ElevatedObjectService} from "../object/object.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
-import {PlacedObjectType} from "../object/objectType";
+import {ElevatedObjectType} from "../object/objectType";
 import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 import {AnalysisService} from "./analysis.service";
 import {AirportService} from "../airport/airport.service";
@@ -150,7 +150,7 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
                      [fullScreen]="true"
                      [scale]="true"
                      [layerSwitcher]="true"
-                     [layers]="['airport', 'runway', 'individual', 'building', 'wire', 'terrain']"
+                     [layers]="['airport', 'runway', 'objects']"
             >
             </app-map>
           </ng-container>
@@ -184,7 +184,7 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
   onInitObjectsError: ApiError;
   onUpdateError:ApiError;
   onIncludeError:ApiError;
-  types:PlacedObjectType[];
+  types:ElevatedObjectType[];
   airportFeature: Feature;
   private olmap: OlComponent;
   onlyPlacedObjects: AnalysisObject[];
@@ -408,7 +408,7 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
   locateObjectOnMap(analysisObject: AnalysisObject){
 
     let layer: string;
-
+  //FIXME lo tendira q resolver olmap a partir de la feature
     switch (analysisObject.objectTypeId){
       case 0:
         layer = 'BuildingObject';
@@ -422,6 +422,9 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
       case 3:
         layer = 'Terrain';
         break;
+      case 4:{
+        layer = analysisObject.object.feature.get('class') + 'TrackSection'
+      }
     }
 
     this.olmap.selectFeature(analysisObject.objectId, layer, {center:true, zoom: 15, info: true});

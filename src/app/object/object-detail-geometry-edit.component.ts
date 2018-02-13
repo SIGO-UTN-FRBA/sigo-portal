@@ -3,13 +3,12 @@ import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ElevatedObjectService} from "./object.service";
 import Geometry = ol.geom.Geometry;
-import PlacedObjectTypes, {PlacedObjectType} from './objectType';
 import {Feature} from "openlayers";
-import Polygon = ol.geom.Polygon;
 import Point = ol.geom.Point;
 import LineString = ol.geom.LineString;
 import MultiPolygon = ol.geom.MultiPolygon;
 import GeoJSON = ol.format.GeoJSON;
+import {ElevatedObjectTypeFactory} from './objectType';
 
 @Component({
   selector: 'app-object-geometry-edit',
@@ -83,8 +82,8 @@ import GeoJSON = ol.format.GeoJSON;
 export class PlacedObjectDetailGeometryEditComponent implements OnInit {
   feature: Feature;
   coordinatesText : string;
-  @Input() placedObjectId: number;
-  @Input() placedObjectType: number;
+  @Input() objectId: number;
+  @Input() objectType: number;
   @Input() edit : boolean;
   @Output() editChange:EventEmitter<boolean> = new EventEmitter<boolean>();
   onInitError : ApiError;
@@ -101,14 +100,15 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.geometryType = PlacedObjectTypes[this.placedObjectType].geometry;
+    let type = ElevatedObjectTypeFactory.getTypeById(this.objectType);
+    this.geometryType = type.geometry;
     this.coordinatesText = "";
     this.onInitError = null;
 
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
-      .getFeature(this.placedObjectId, this.placedObjectType)
+      .getFeature(this.objectId, this.objectType)
       .then( data => {
         this.feature = data;
         if(data.getGeometry()){
@@ -129,20 +129,20 @@ export class PlacedObjectDetailGeometryEditComponent implements OnInit {
 
     let geom : Geometry;
 
-    switch(this.placedObjectType){
+    switch(this.objectType){
       case 0:
         geom = new MultiPolygon(JSON.parse(this.coordinatesText));
         break;
       case 1:
         geom = new Point(JSON.parse(this.coordinatesText));
         break;
-      case 2:
+      case 2: case 4:
         geom = new LineString(JSON.parse(this.coordinatesText));
         break;
     }
 
     this.placedObjectService
-      .updateFeature(this.placedObjectId, this.placedObjectType, geom)
+      .updateFeature(this.objectId, this.objectType, geom)
       .then( () => this.disallowEdition() )
       .catch(error => this.onSubmitError= error);
   };

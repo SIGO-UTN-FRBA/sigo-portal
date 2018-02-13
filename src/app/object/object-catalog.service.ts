@@ -3,20 +3,21 @@ import {AppSettings} from "../main/app-settings";
 import {ApiService} from "../main/api.service";
 import {ObjectMarkIndicator} from "./objectMarkIndicator";
 import {ObjectLighting} from "./objectLighting";
-import {PlacedObjectType} from "./objectType";
+import {ElevatedObjectType} from "./objectType";
 import "rxjs/add/operator/toPromise";
 import {AuthHttp} from 'angular2-jwt';
+import {TrackSectionType} from './trackSectionType';
 
 @Injectable()
 export class PlacedObjectCatalogService extends ApiService {
 
   constructor(http: AuthHttp){super(http)}
 
-  listTypeObject() : Promise<PlacedObjectType[]> {
+  listTypeObject() : Promise<ElevatedObjectType[]> {
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/catalogs/objects/objectTypes`)
       .toPromise()
-      .then(response => response.json() as PlacedObjectType[])
+      .then(response => response.json() as ElevatedObjectType[])
       .catch(this.handleError);
   }
 
@@ -33,6 +34,14 @@ export class PlacedObjectCatalogService extends ApiService {
       .get(`${AppSettings.API_ENDPOINT}/catalogs/objects/lightings`)
       .toPromise()
       .then(response => response.json() as ObjectLighting[])
+      .catch(this.handleError);
+  }
+
+  listTrackSectionTypes(): Promise<TrackSectionType[]>{
+    return this.http
+      .get(`${AppSettings.API_ENDPOINT}/catalogs/objects/trackTypes`)
+      .toPromise()
+      .then(response => response.json() as TrackSectionType[])
       .catch(this.handleError);
   }
 }

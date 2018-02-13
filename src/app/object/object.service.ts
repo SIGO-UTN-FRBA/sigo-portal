@@ -8,69 +8,70 @@ import "rxjs/add/operator/toPromise";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
 import {AuthHttp} from 'angular2-jwt';
+import {ElevatedObject} from './elevatedObject';
 
 @Injectable()
 export class ElevatedObjectService extends ApiService {
 
   constructor(http: AuthHttp){super(http)}
 
-  search(paramMap : ParamMap) : Promise<PlacedObject[]> {
+  search(paramMap : ParamMap) : Promise<ElevatedObject[]> {
 
     let queryString = paramMap.keys.reduce((total, key) => {return `${total}&${key}=${paramMap.get(key)}` }, '');
 
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/objects?${queryString}`)
       .toPromise()
-      .then(response => response.json() as PlacedObject[])
+      .then(response => response.json() as ElevatedObject[])
       .catch(this.handleError)
   }
 
-  get(objectId : number, typeId:number) : Promise<PlacedObject>{
+  get(objectId : number, typeId:number) : Promise<ElevatedObject>{
     return this.http
       .get(`${AppSettings.API_ENDPOINT}/objects/${objectId}?type=${typeId}`)
       .toPromise()
-      .then(response => response.json() as PlacedObject)
+      .then(response => response.json() as ElevatedObject)
       .catch(this.handleError);
   }
 
-  save(placedObject: PlacedObject) : Promise<PlacedObject> {
+  save(elevatedObject: ElevatedObject) : Promise<ElevatedObject> {
     return this.http
-      .post(`${AppSettings.API_ENDPOINT}/objects`, placedObject)
+      .post(`${AppSettings.API_ENDPOINT}/objects?type=${elevatedObject.typeId}`, elevatedObject)
       .toPromise()
-      .then( response => response.json() as PlacedObject)
+      .then( response => response.json() as ElevatedObject)
       .catch(this.handleError)
   }
 
-  delete(placedObjectId: number) : Promise<void> {
+  delete(placedObjectId: number, typeId: number) : Promise<void> {
     return this.http
-      .delete(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}`)
+      .delete(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}?type=${typeId}`)
       .toPromise()
       .then(()=> null)
       .catch(this.handleError);
   }
 
-  update(placedObject: PlacedObject) : Promise<PlacedObject> {
+  update(elevatedObject: ElevatedObject) : Promise<ElevatedObject> {
     return this.http
-      .put(`${AppSettings.API_ENDPOINT}/objects/${placedObject.id}`, placedObject)
+      .put(`${AppSettings.API_ENDPOINT}/objects/${elevatedObject.id}?type=${elevatedObject.typeId}`, elevatedObject)
       .toPromise()
-      .then(response => response.json() as PlacedObject)
+      .then(response => response.json() as ElevatedObject)
       .catch(this.handleError)
   }
 
-  getFeature(placedObjectId : number, typeId: number) : Promise<Feature> {
+  getFeature(objectId : number, typeId: number) : Promise<Feature> {
     return this.http
-      .get(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/feature?type=${typeId}`)
+      .get(`${AppSettings.API_ENDPOINT}/objects/${objectId}/feature?type=${typeId}`)
       .toPromise()
       .then(response => new GeoJSON().readFeature(response.json()))
       .catch(this.handleError)
   }
 
-  updateFeature(placedObjectId : number, typeId:number, geom : Geometry) : Promise<Geometry>{
+  updateFeature(objectId : number, typeId:number, geom : Geometry) : Promise<Geometry>{
 
     let jsonGeom = JSON.parse(new GeoJSON().writeGeometry(geom));
 
     return this.http
-      .patch(`${AppSettings.API_ENDPOINT}/objects/${placedObjectId}/feature?type=${typeId}`, {geometry: jsonGeom})
+      .patch(`${AppSettings.API_ENDPOINT}/objects/${objectId}/feature?type=${typeId}`, {geometry: jsonGeom})
       .toPromise()
       .then(response => response.json() as Geometry)
       .catch(this.handleError)

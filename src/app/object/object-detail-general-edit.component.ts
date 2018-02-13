@@ -4,7 +4,7 @@ import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ElevatedObjectService} from "./object.service";
 import {PlacedObjectCatalogService} from "./object-catalog.service";
-import {PlacedObjectType} from "./objectType";
+import {ElevatedObjectType, ElevatedObjectTypeFactory} from './objectType';
 import {ObjectMarkIndicator} from "./objectMarkIndicator";
 import {ObjectLighting} from "./objectLighting";
 import {ListItem} from "../commons/listItem";
@@ -16,7 +16,6 @@ import {LocationService} from "../location/location.service";
   selector: 'app-object-general-edit',
   template: `
     <div class="panel panel-default">
-
       <div class="panel-heading">
         <h3 class="panel-title">General</h3>
       </div>
@@ -33,7 +32,8 @@ import {LocationService} from "../location/location.service";
                 #objectForm="ngForm"
                 role="form"
                 class="form container-fluid"
-                (ngSubmit)="onSubmit()">
+                (ngSubmit)="onSubmit()"
+          >
 
             <app-error-indicator [errors]="[onSubmitError]" *ngIf="onSubmitError"></app-error-indicator>
 
@@ -45,14 +45,9 @@ import {LocationService} from "../location/location.service";
                   i18n="@@object.detail.section.general.type">
                   Type
                 </label>
-                <select name="inputType"
-                        class="form-control"
-                        [(ngModel)]="placedObject.typeId"
-                        required>
-                  <option *ngFor="let type of types;" [value]="type.id">
-                    {{type.description}}
-                  </option>
-                </select>
+                <p class="form-control-static">
+                  {{type.description}}
+                </p>
               </div>
               <div class="col-md-6 col-sm-12 form-group">
                 <label
@@ -262,11 +257,12 @@ export class PlacedObjectDetailGeneralEditComponent implements OnInit {
   onInitError: ApiError;
   onSubmitError: ApiError;
   indicator;
-  types: PlacedObjectType[];
+  types: ElevatedObjectType[];
   locations: ListItem[];
   lightnings: ObjectLighting[];
   marks: ObjectMarkIndicator[];
   owners: ListItem[];
+  type: ElevatedObjectType;
 
   constructor(
     private objectService : ElevatedObjectService,
@@ -275,52 +271,71 @@ export class PlacedObjectDetailGeneralEditComponent implements OnInit {
     private locationService: LocationService
 
   ){
-    this.placedObject = new PlacedObject();
     this.indicator = STATUS_INDICATOR;
   }
 
   ngOnInit(): void {
 
     this.status = STATUS_INDICATOR.LOADING;
-
     this.onInitError = null;
 
-    let p1 = this.catalogService
-      .listTypeObject()
-      .then(data => this.types = data)
-      .catch(error => Promise.reject(error));
+    this.type = ElevatedObjectTypeFactory.getTypeById(this.objectTypeId);
 
-    let p2 = this.catalogService
-      .listMarkIndicator()
-      .then(data => this.marks = data)
-      .catch(error => Promise.reject(error));
-
-    let p3 = this.catalogService
-      .listLighting()
-      .then(data => this.lightnings = data)
-      .catch(error => Promise.reject(error));
-
-    let p4 = this.ownerService
-      .list()
-      .then(data => this.owners = data)
-      .catch(error => Promise.reject(error));
-
-    let p5 = this.locationService
-      .listDepartaments()
-      .then(data => this.locations = data)
-      .catch(error => Promise.reject(error));
-
-    let p6 = this.objectService
-      .get(this.placedObjectId, this.objectTypeId)
-      .then( data => this.placedObject = data)
-      .catch(error => Promise.reject(error));
-
-    Promise.all([p1,p2,p3,p4,p5,p6])
+    Promise.all([
+      this.resolveObjectTypes(),
+      this.resolveMarks(),
+      this.resolveLights(),
+      this.resolveOwners(),
+      this.resolveLocations(),
+      this.resolveObject()
+    ])
       .then(() => this.status = STATUS_INDICATOR.ACTIVE)
       .catch(error => {
         this.onInitError = error;
         this.status = STATUS_INDICATOR.ERROR;
       })
+  }
+
+  private resolveObjectTypes() {
+    return this.catalogService
+      .listTypeObject()
+      .then(data => this.types = data)
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveMarks() {
+    return this.catalogService
+      .listMarkIndicator()
+      .then(data => this.marks = data)
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveLights() {
+    return this.catalogService
+      .listLighting()
+      .then(data => this.lightnings = data)
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveOwners() {
+    return this.ownerService
+      .list()
+      .then(data => this.owners = data)
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveLocations() {
+    return this.locationService
+      .listDepartaments()
+      .then(data => this.locations = data)
+      .catch(error => Promise.reject(error));
+  }
+
+  private resolveObject() {
+    return this.objectService
+      .get(this.placedObjectId, this.objectTypeId)
+      .then(data => this.placedObject = data as PlacedObject)
+      .catch(error => Promise.reject(error));
   }
 
   onSubmit(){

@@ -1,6 +1,7 @@
 import Feature = ol.Feature;
+import {ElevatedObject} from './elevatedObject';
 
-export class PlacedObject {
+export class PlacedObject implements ElevatedObject {
   id : number;
   name : string;
   typeId : number;
@@ -14,4 +15,8 @@ export class PlacedObject {
   lightingId : number;
   markIndicatorId : number;
   feature:Feature;
+
+  constructor(typeId: number) {
+    this.typeId = typeId;
+  }
 }

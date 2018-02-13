@@ -5,9 +5,9 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {OlComponent} from "../olmap/ol.component";
 import {ApiError} from "../main/apiError";
 import {ElevatedObjectService} from "./object.service";
-import PlacedObjectTypes from "./objectType";
 import Feature = ol.Feature;
 import GeoJSON = ol.format.GeoJSON;
+import {ElevatedObjectTypeFactory} from './objectType';
 
 @Component({
   selector: 'app-object-geometry-view',
@@ -57,7 +57,7 @@ import GeoJSON = ol.format.GeoJSON;
                    [rotate]="true"
                    [fullScreen]="true"
                    [scale]="true"
-                   [layers]="['individual', 'building', 'wire']"
+                   [layers]="['individual', 'building', 'wire', 'road', 'highway', 'railway']"
           >
           </app-map>
         </div>
@@ -69,8 +69,8 @@ import GeoJSON = ol.format.GeoJSON;
 
 export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterViewInit{
 
-  @Input() placedObjectId: number;
-  @Input() placedObjectType: number;
+  @Input() objectId: number;
+  @Input() objectType: number;
   private olmap: OlComponent;
   onInitError :ApiError;
   geometryType: string;
@@ -89,13 +89,13 @@ export class PlacedObjectDetailGeometryViewComponent implements OnInit, AfterVie
   }
 
   ngOnInit(): void {
-
-    this.geometryType = PlacedObjectTypes[this.placedObjectType].geometry;
+    let type = ElevatedObjectTypeFactory.getTypeById(this.objectType);
+    this.geometryType = type.geometry;
     this.coordinatesText = '';
     this.status = STATUS_INDICATOR.LOADING;
 
     this.placedObjectService
-      .getFeature(this.placedObjectId, this.placedObjectType)
+      .getFeature(this.objectId, this.objectType)
       .then((data) => {
 
         if(!data.getGeometry())

@@ -1,9 +1,9 @@
 import {Component, OnInit} from "@angular/core";
-import {PlacedObject} from "./placedObject";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiError} from "../main/apiError";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ElevatedObjectService} from "./object.service";
+import {ElevatedObject} from './elevatedObject';
 
 @Component({
   template: `
@@ -24,21 +24,48 @@ import {ElevatedObjectService} from "./object.service";
           <div class="media-left">
 
           </div>
-          <div class="media-body">
-            <h4 class="media-heading">
-              <a routerLink="/objects/{{result.typeId}}/{{result.id}}/detail">{{result.name}}</a>
-            </h4>
-            <p>{{result.subtype}}</p>
-          </div>
+          <ng-container [ngSwitch]="result.typeId">
+            <div class="media-body" *ngSwitchCase="0">
+              <h4 class="media-heading">
+                <a routerLink="/objects/placedObjects/{{result.id}}" [queryParams]="{ type : 0}">
+                  {{result.name}}
+                </a>
+              </h4>
+              <p>{{result['subtype']}}</p>
+            </div>
+            <div class="media-body" *ngSwitchCase="1">
+              <h4 class="media-heading">
+                <a routerLink="/objects/placedObjects/{{result.id}}" [queryParams]="{ type : 1}">
+                  {{result.name}}
+                </a>
+              </h4>
+              <p>{{result['subtype']}}</p>
+            </div>
+            <div class="media-body" *ngSwitchCase="2">
+              <h4 class="media-heading">
+                <a routerLink="/objects/placedObjects/{{result.id}}" [queryParams]="{ type: 2}">
+                  {{result.name}}
+                </a>
+              </h4>
+              <p>{{result['subtype']}}</p>
+            </div>
+            <div class="media-body" *ngSwitchCase="4">
+              <h4 class="media-heading">
+                <a routerLink="/objects/tracks/{{result.id}}">
+                  {{result.name}}
+                </a>
+              </h4>
+            </div>
+          </ng-container>
         </li>
       </ul>
     </div>
   `
 })
 
-export class PlacedObjectListComponent implements OnInit {
+export class ObjectListComponent implements OnInit {
 
-  results : PlacedObject[];
+  results : ElevatedObject[];
   status : number;
   indicator;
   onInitError : ApiError;

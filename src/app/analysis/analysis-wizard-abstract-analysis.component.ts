@@ -201,10 +201,11 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
       .list(this.analysisId)
       .then( data =>
         Promise.all(
-          data.map(o => this.objectService
-            .getFeature(o.objectId, o.objectTypeId)
-            .then(data => this.objectFeatures.push(data))
-            .catch(error => Promise.reject(error))
+          data.map(o =>
+            this.objectService
+              .getFeature(o.objectId, o.objectTypeId)
+              .then(data => this.objectFeatures.push(data))
+              .catch(error => Promise.reject(error))
           )
         )
       );
@@ -361,7 +362,7 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
   locateObjectOnMap(analysisObstacle: AnalysisObstacle){
 
     let layer: string;
-
+//FIXME tmb se repite en wizard-object, lo tendria que resolver olmap a partir de la feature
     switch (analysisObstacle.objectType){
       case 0:
         layer = 'BuildingObject';
@@ -375,6 +376,11 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
       case 3:
         layer = 'Terrain';
         break;
+      case 4:{
+        let feature = this.objectFeatures.find(f => (+f.getId()) == analysisObstacle.objectId);
+        layer =  feature.get('class') + 'TrackSection';
+        break;
+      }
     }
 
     this.olMap.selectFeature(analysisObstacle.objectId, layer, {center:true, zoom: 15, info: true});

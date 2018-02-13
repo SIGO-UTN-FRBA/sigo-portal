@@ -1,14 +1,14 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
-import PlacedObjectTypes, {PlacedObjectType} from './objectType';
+import {ElevatedObjectType, ElevatedObjectTypeFactory} from './objectType';
 
 @Component({
   template: `
     <h1 i18n="@@object.search.title">
-      Placed Objects
+      Elevated Objects
     </h1>
     <p i18n="@@airport.search.main_description">
-      This section allows users to manage placed objects.
+      This section allows users to manage elevated objects.
     </p>
     <hr/>
 
@@ -80,24 +80,19 @@ import PlacedObjectTypes, {PlacedObjectType} from './objectType';
   `
 })
 
-export class PlacedObjectSearchComponent implements OnInit {
+export class ObjectSearchComponent implements OnInit {
 
-  searchTypes : PlacedObjectType[];
-
-  searchType : PlacedObjectType;
-
-  searchName : string = '';
+  searchTypes: ElevatedObjectType[];
+  searchType: ElevatedObjectType;
+  searchName: string = '';
 
   constructor(
     private router : Router
   ){}
 
   ngOnInit(): void {
-
-    this.searchTypes = PlacedObjectTypes;
-
+    this.searchTypes = ElevatedObjectTypeFactory.getTypes();
     this.searchType = this.searchTypes[0];
-
     this.searchName = '';
   }
 
@@ -113,7 +108,7 @@ export class PlacedObjectSearchComponent implements OnInit {
       {queryParams: {type: this.searchType.id, name: this.searchName }});
   };
 
-  clearList = () =>{
+  clearList = () => {
     if(!this.router.isActive('/objects/search', true))
       this.router.navigate(['/objects/search']);
   };

@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
@@ -30,14 +30,24 @@ import {ActivatedRoute} from "@angular/router";
 
       <br>
 
-      <app-object-geometry-view *ngIf="!edit_geometry" [(edit)]="edit_geometry" [placedObjectId]="objectId" [placedObjectType]="objectType"></app-object-geometry-view>
-      <app-object-geometry-edit *ngIf="edit_geometry" [(edit)]="edit_geometry" [placedObjectId]="objectId" [placedObjectType]="objectType"></app-object-geometry-edit>
+      <app-object-geometry-view *ngIf="!edit_geometry" 
+                                [(edit)]="edit_geometry" 
+                                [objectId]="objectId" 
+                                [objectType]="objectType"
+      >
+      </app-object-geometry-view>
+      <app-object-geometry-edit *ngIf="edit_geometry" 
+                                [(edit)]="edit_geometry" 
+                                [objectId]="objectId" 
+                                [objectType]="objectType"
+      >
+      </app-object-geometry-edit>
       
     </div>
   `
 })
 
-export class PlacedObjectDetailComponent {
+export class PlacedObjectDetailComponent implements OnInit {
 
   edit_general : boolean;
   edit_geometry : boolean;
@@ -53,7 +63,7 @@ export class PlacedObjectDetailComponent {
 
   ngOnInit() : void {
     this.objectId = +this.route.snapshot.params['objectId'];
-    this.objectType = +this.route.snapshot.params['objectType'];
+    this.objectType = +this.route.snapshot.queryParamMap.get('type');
   }
 
 }
