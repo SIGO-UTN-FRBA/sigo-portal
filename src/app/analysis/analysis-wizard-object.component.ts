@@ -25,7 +25,10 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
   template:`
     <h1>
       <ng-container i18n="@@analysis.wizard.object.title">Analysis: Define objects</ng-container>
-      <small class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 1/4</small>
+      <small class="pull-right">
+        <ng-container i18n="@@wizard.commons.stage">Stage</ng-container>
+        1/4
+      </small>
     </h1>
     <p i18n="@@wizard.object.main_description">
       This section allows users to define which objects are going to be analyzed.
@@ -36,7 +39,7 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
     <div *ngIf="onInitError">
       <app-error-indicator [errors]="[onInitError]"></app-error-indicator>
     </div>
-    
+
     <div *ngIf="onSubmitError">
       <app-error-indicator [errors]="[onSubmitError]"></app-error-indicator>
     </div>
@@ -59,7 +62,7 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
 
             <form #caseForm
                   class="form-inline"
-                  (ngSubmit)="onUpdateRadius()"
+                  (ngSubmit)="onUpdate()"
             >
               <div class="form-group">
                 <label for="inputSearchRadius"
@@ -76,6 +79,16 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
                          required>
                   <div class="input-group-addon">[km]</div>
                 </div>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox"
+                         name="inputIncludeTerrain"
+                         [(ngModel)]="includeTerrain"
+                         i18n="@@analysis.wizard.object.section.objects.includeTerrain"
+                  >
+                  Include terrain
+                </label>
               </div>
               <button type="submit"
                       [disabled]="caseForm.invalid"
@@ -144,7 +157,7 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
             </ng-container>
 
             <br>
-            
+
             <app-map #mapObjects
                      [rotate]="true"
                      [fullScreen]="true"
@@ -163,7 +176,7 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
         <ul class="pager">
           <li class="next">
             <a (click)="onNext()" style="cursor: pointer">
-              <ng-container i18n="@@commons.wizard.next">Next </ng-container>
+              <ng-container i18n="@@commons.wizard.next">Next</ng-container>
               <span aria-hidden="true">&#9658;</span>
             </a>
           </li>
@@ -191,6 +204,7 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
   @ViewChildren('mapObjects') mapObjects: QueryList<ElementRef>;
   searchRadius:number;
   allChecked: boolean;
+  includeTerrain: boolean;
 
   constructor(
     analysisService: AnalysisService,
@@ -253,6 +267,7 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
       .then(data => {
         this.analysisCase = data;
         this.searchRadius = data.searchRadius * 100;
+        this.includeTerrain = data.includeTerrain;
       })
   }
 
@@ -292,7 +307,12 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
       if(!(this.olmap = item.first))
         return;
 
+      if(this.olmap.started)
+        return;
+
       this.locateFeatures();
+
+      this.olmap.started = true;
     });
   }
 
@@ -305,14 +325,14 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
     this.olmap.addAirport(this.airportFeature,{center:true, zoom:13});
   }
 
-  onUpdateRadius(){
+  onUpdate(){
 
     this.updateStatus = STATUS_INDICATOR.LOADING;
     this.onUpdateError=null;
     this.analysisObjects = [];
 
     this.caseService
-      .update(this.analysis.id, this.searchRadius / 100)
+      .update(this.analysis.id, this.searchRadius / 100, this.includeTerrain)
       .then(data => this.analysisCase = data)
       .then(() => this.clearMapLayers())
       .then(() => this.resolveObjects())

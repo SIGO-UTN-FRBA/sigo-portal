@@ -17,9 +17,9 @@ export class AnalysisCaseService extends ApiService {
       .catch(this.handleError)
   }
 
-  update(analysisId: number, radius: number):Promise<AnalysisCase> {
+  update(analysisId: number, radius: number, includeTerrain: boolean):Promise<AnalysisCase> {
     return this.http
-      .patch(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case`,{searchRadius: radius})
+      .patch(`${AppSettings.API_ENDPOINT}/analysis/${analysisId}/case`,{searchRadius: radius, includeTerrain: includeTerrain})
       .toPromise()
       .then(response => response.json() as AnalysisCase)
       .catch(this.handleError)

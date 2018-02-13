@@ -7,4 +7,5 @@ export class AnalysisCase {
   regulationId:number;
   areaId:number;
   searchRadius:number;
+  includeTerrain: boolean;
 }
