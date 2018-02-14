@@ -37,7 +37,7 @@ const objectRoutes : Routes = [
         component: ObjectNewTrackComponent
       },
       {
-        path: 'placedObjects/:objectId',
+        path: 'buildings/:objectId',
         data:{
           breadcrumb: { active: true, name: 'object'}
         },
@@ -46,7 +46,48 @@ const objectRoutes : Routes = [
             path: 'detail',
             component: PlacedObjectDetailComponent,
             data:{
-              breadcrumb: { active: false }
+              breadcrumb: { active: false },
+              typeId: 0
+            },
+          },
+          {
+            path: '',
+            redirectTo: 'detail'
+          }
+        ]
+      },
+      {
+        path: 'individuals/:objectId',
+        data:{
+          breadcrumb: { active: true, name: 'object'}
+        },
+        children:[
+          {
+            path: 'detail',
+            component: PlacedObjectDetailComponent,
+            data:{
+              breadcrumb: { active: false },
+              typeId: 1
+            },
+          },
+          {
+            path: '',
+            redirectTo: 'detail'
+          }
+        ]
+      },
+      {
+        path: 'overheadwires/:objectId',
+        data:{
+          breadcrumb: { active: true, name: 'object'}
+        },
+        children:[
+          {
+            path: 'detail',
+            component: PlacedObjectDetailComponent,
+            data:{
+              breadcrumb: { active: false },
+              typeId: 2
             },
           },
           {

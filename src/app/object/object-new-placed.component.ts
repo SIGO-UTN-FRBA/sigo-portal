@@ -10,7 +10,7 @@ import {ElevatedObjectService} from './object.service';
 import {STATUS_INDICATOR} from '../commons/status-indicator';
 import {ApiError} from '../main/apiError';
 import {PlacedObject} from './placedObject';
-import {ElevatedObjectType} from './objectType';
+import {ElevatedObjectType, ElevatedObjectTypeFactory} from './objectType';
 
 @Component({
   template:`
@@ -55,7 +55,7 @@ import {ElevatedObjectType} from './objectType';
                     Type
                   </label>
                   <p class="form-control-static">
-                    {{typeName}}
+                    {{type.description}}
                   </p>
                 </div>
                 <div class="col-md-6 col-sm-12 form-group">
@@ -258,12 +258,11 @@ export class ObjectNewPlacedComponent {
   placedObject: PlacedObject;
   onInitError: ApiError;
   onSubmitError: ApiError;
-  types: ElevatedObjectType[];
   locations: ListItem[];
   lightings: ObjectLighting[];
   marks: ObjectMarkIndicator[];
   owners: ListItem[];
-  typeName: string;
+  type: ElevatedObjectType;
 
   constructor(
     private router: Router,
@@ -278,37 +277,26 @@ export class ObjectNewPlacedComponent {
 
   ngOnInit(): void {
 
-    debugger;
     this.onInitError = null;
     this.status = STATUS_INDICATOR.LOADING;
     let typeId =+this.route.snapshot.queryParamMap.get("type");
+    this.type = ElevatedObjectTypeFactory.getTypeById(typeId);
 
     this.placedObject = new PlacedObject(typeId);
     this.placedObject.temporary = false;
     this.placedObject.verified = false;
 
     Promise.all([
-      this.resolveTypes(),
       this.resolveLights(),
       this.resolveMarks(),
       this.resolveOwners(),
       this.resolveLocations()
     ])
-      .then(()=> {
-        this.typeName = this.types.find(t => t.id == typeId).description;
-        this.status = STATUS_INDICATOR.ACTIVE;
-      })
+      .then(() => this.status = STATUS_INDICATOR.ACTIVE)
       .catch(error => {
         this.onInitError = error;
         this.status = STATUS_INDICATOR.ERROR;
       });
-  }
-
-  private resolveTypes() {
-    return this.catalogService
-      .listTypeObject()
-      .then(data => this.types = data)
-      .catch(error => Promise.reject(error));
   }
 
   private resolveLights() {
@@ -345,7 +333,7 @@ export class ObjectNewPlacedComponent {
 
     this.objectService
       .save(this.placedObject)
-      .then(data => this.router.navigateByUrl(`/objects/${data.typeId}/${data.id}/detail`))
+      .then(data => this.router.navigateByUrl(`/objects/${this.type.route}/${data.id}/detail`))
       .catch(error => this.onSubmitError = error);
   };
 

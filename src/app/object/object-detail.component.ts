@@ -63,7 +63,7 @@ export class PlacedObjectDetailComponent implements OnInit {
 
   ngOnInit() : void {
     this.objectId = +this.route.snapshot.params['objectId'];
-    this.objectType = +this.route.snapshot.queryParamMap.get('type');
+    this.objectType = this.route.snapshot.data.typeId;
   }
 
 }

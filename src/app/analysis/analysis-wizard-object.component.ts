@@ -5,7 +5,7 @@ import {AnalysisObject} from "./analysisObject";
 import {ElevatedObjectService} from "../object/object.service";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {ApiError} from "../main/apiError";
-import {ElevatedObjectType} from "../object/objectType";
+import {ElevatedObjectType, ElevatedObjectTypeFactory} from '../object/objectType';
 import {PlacedObjectCatalogService} from "../object/object-catalog.service";
 import {AnalysisService} from "./analysis.service";
 import {AirportService} from "../airport/airport.service";
@@ -135,7 +135,7 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
                       </a>
                     </td>
                     <td>
-                      <a [routerLink]="['/objects', analysisObject.object.typeId, analysisObject.object.id]">
+                      <a [routerLink]="['/objects', getTypeById(analysisObject.object.typeId).route, analysisObject.object.id]">
                         {{analysisObject.object.name}}
                       </a>
                     </td>
@@ -448,5 +448,9 @@ export class AnalysisWizardObjectComponent extends AbstractAnalysisWizardCompone
     }
 
     this.olmap.selectFeature(analysisObject.objectId, layer, {center:true, zoom: 15, info: true});
+  }
+
+  getTypeById(id: number): ElevatedObjectType {
+    return ElevatedObjectTypeFactory.getTypeById(id);
   }
 }

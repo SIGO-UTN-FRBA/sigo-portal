@@ -25,6 +25,7 @@ import {RunwayTakeoffSection} from '../direction/runwayTakeoffSection';
 import {AfterViewInit, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {BlockUI, NgBlockUI} from 'ng-block-ui';
 import {BlockTemplateComponent} from '../commons/block-template.component';
+import {ElevatedObjectType, ElevatedObjectTypeFactory} from '../object/objectType';
 
 export abstract class AbstractAnalysisWizardAnalysisComponent
   extends AbstractAnalysisWizardComponent
@@ -393,5 +394,9 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
     this.filterRestriction = null;
     this.filterPending = null;
     this.filteredObstacles = Array.from(this.obstacles);
+  }
+
+  getTypeById(id: number): ElevatedObjectType {
+    return ElevatedObjectTypeFactory.getTypeById(id);
   }
 }

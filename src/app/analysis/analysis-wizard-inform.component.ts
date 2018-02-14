@@ -17,6 +17,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
 import {AnalysisResult} from './analysisResult';
 import {AnalysisObstacle} from './analysisObstacle';
+import {ElevatedObjectType, ElevatedObjectTypeFactory} from '../object/objectType';
 
 @Component({
   template:`
@@ -138,7 +139,7 @@ import {AnalysisObstacle} from './analysisObstacle';
                     <ng-container *ngIf="obstacle.objectType == 3">
                       {{obstacle.objectName}}
                     </ng-container>
-                    <a *ngIf="obstacle.objectType != 3" [routerLink]="['/objects', obstacle.objectType, obstacle.objectId]">
+                    <a *ngIf="obstacle.objectType != 3" [routerLink]="['/objects', getTypeById(obstacle.objectType), obstacle.objectId]">
                       {{obstacle.objectName}}
                     </a>
                   </td>
