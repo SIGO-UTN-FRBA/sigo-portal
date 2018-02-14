@@ -30,7 +30,7 @@ import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.compon
         1/4
       </small>
     </h1>
-    <p i18n="@@wizard.object.main_description">
+    <p i18n="@@analysis.wizard.object.main_description">
       This section allows users to define which objects are going to be analyzed.
     </p>
 

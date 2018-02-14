@@ -4,25 +4,21 @@ import {BlockTemplateComponent} from "../commons/block-template.component";
 import {AnalysisService} from "./analysis.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ApiError} from "../main/apiError";
-import {AppError} from "../main/ierror";
 import {STATUS_INDICATOR} from "../commons/status-indicator";
 import {AnalysisExceptionService, ExceptionType} from "../exception/exception.service";
 import {AnalysisException} from "../exception/analysisException";
 import {RegulationService, RegulationType} from "../regulation/regulation.service";
 import {AnalysisWizardService} from "./analysis-wizard.service";
-import {ROLE_READONLY, ROLE_WORKER} from '../auth/role';
 import {AuthService} from '../auth/auth.service';
-import {Analysis} from './analysis';
-import {UiError} from '../main/uiError';
 import {AbstractAnalysisWizardComponent} from './analysis-wizard-abstract.component';
 
 @Component({
   template:`
     <h1>
-      <ng-container i18n="@@analysis.wizard.object.title">Analysis: Apply exceptions </ng-container>
+      <ng-container i18n="@@analysis.wizard.exception.title">Analysis: Apply exceptions </ng-container>
       <small class="pull-right"><ng-container i18n="@@wizard.commons.stage">Stage</ng-container> 2/4</small>
     </h1>
-    <p i18n="@@analysis.wizard.object.main_description">
+    <p i18n="@@analysis.wizard.exception.main_description">
       This section allows users to define which exceptions are going to be applied into the case.
     </p>
 

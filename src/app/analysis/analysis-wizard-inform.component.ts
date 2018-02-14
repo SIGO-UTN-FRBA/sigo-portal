@@ -17,7 +17,6 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {AnalysisModalAnalysisComponent} from './analysis-modal-analysis.component';
 import {AnalysisResult} from './analysisResult';
 import {AnalysisObstacle} from './analysisObstacle';
-import {ElevatedObjectType, ElevatedObjectTypeFactory} from '../object/objectType';
 
 @Component({
   template:`

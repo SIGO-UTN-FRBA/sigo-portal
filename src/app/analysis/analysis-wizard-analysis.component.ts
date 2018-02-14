@@ -22,13 +22,15 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
 @Component({
   template:`
     <h1>
-      <ng-container i18n="@@analysis.wizard.object.title">Analysis: Analyze obstacles</ng-container>
+      <ng-container i18n="@@analysis.wizard.analysis.title">
+        Analysis: Analyze obstacles
+      </ng-container>
       <small class="pull-right">
         <ng-container i18n="@@wizard.commons.stage">Stage</ng-container>
         3/4
       </small>
     </h1>
-    <p i18n="@@wizard.object.main_description">
+    <p i18n="@@analysis.wizard.analysis.main_description">
       This section allows users to analyze the obstacles detected as a result of the application of the regulation.
     </p>
 

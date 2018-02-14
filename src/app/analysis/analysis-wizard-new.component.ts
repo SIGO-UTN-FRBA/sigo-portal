@@ -8,10 +8,10 @@ import {AirportService} from '../airport/airport.service';
 
 @Component({
   template:`
-    <h1 i18n="@@airport.new.title">
+    <h1 i18n="@@wizard.new.title">
       New Analysis
     </h1>
-    <p i18n="@@airport.new.main_description">
+    <p i18n="@@wizard.new.main_description">
       This section allows users to create an analysis case.
     </p>
     <hr/>
