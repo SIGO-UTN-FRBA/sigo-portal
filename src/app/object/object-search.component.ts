@@ -7,7 +7,7 @@ import {ElevatedObjectType, ElevatedObjectTypeFactory} from './objectType';
     <h1 i18n="@@object.search.title">
       Elevated Objects
     </h1>
-    <p i18n="@@airport.search.main_description">
+    <p i18n="@@object.search.main_description">
       This section allows users to manage elevated objects.
     </p>
     <hr/>

@@ -9,7 +9,7 @@ import {STATUS_INDICATOR} from "../commons/status-indicator";
     <h1 i18n="@@regulation.search.title">
       Regulations
     </h1>
-    <p i18n="@@airport.search.main_description">
+    <p i18n="@@regulation.search.main_description">
       This section allows users to manage regulations.
     </p>
     <hr/>
