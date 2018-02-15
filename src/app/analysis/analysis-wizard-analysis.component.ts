@@ -158,10 +158,7 @@ import {AbstractAnalysisWizardAnalysisComponent} from './analysis-wizard-abstrac
                     </a>
                   </td>
                   <td>
-                    <ng-container *ngIf="obstacle.objectType == 3">
-                      {{obstacle.objectName}}
-                    </ng-container>
-                    <a *ngIf="obstacle.objectType != 3" [routerLink]="['/objects', getTypeById(obstacle.objectType), obstacle.objectId]">
+                    <a [routerLink]="['/objects', getTypeById(obstacle.objectType).route, obstacle.objectId]">
                       {{obstacle.objectName}}
                     </a>
                   </td>
