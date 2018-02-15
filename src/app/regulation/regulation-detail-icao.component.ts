@@ -12,9 +12,10 @@ export class FilterRulesBySurface implements PipeTransform {
   transform(rules: RuleICAOAnnex14[], surface: number, classification:number, category: number, code: number) {
 
     return rules.filter(r => r.surface == surface
-                                        && r.runwayCategory == +category
-                                        && r.runwayClassification == +classification
-                                        && r.runwayCodeNumber == +code);
+        && (r.runwayCategory == undefined || r.runwayCategory == +category)
+        && r.runwayClassification == +classification
+        && r.runwayCodeNumber == +code
+    );
   }
 }
 
