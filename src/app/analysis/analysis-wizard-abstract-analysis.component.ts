@@ -197,19 +197,14 @@ export abstract class AbstractAnalysisWizardAnalysisComponent
   }
 
   protected resolveObjectFeatures(): Promise<any> {
-
-    return this.analysisObjectService
-      .list(this.analysisId)
-      .then( data =>
-        Promise.all(
-          data.map(o =>
+    return Promise.all(
+      this.obstacles.map(o =>
             this.objectService
-              .getFeature(o.objectId, o.objectTypeId)
+              .getFeature(o.objectId, o.objectType)
               .then(data => this.objectFeatures.push(data))
               .catch(error => Promise.reject(error))
           )
-        )
-      );
+        );
   }
 
   protected resolveExceptionFeatures(): Promise<any> {
