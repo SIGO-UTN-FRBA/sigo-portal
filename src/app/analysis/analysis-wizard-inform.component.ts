@@ -138,6 +138,9 @@ import {AnalysisObstacle} from './analysisObstacle';
                     <a *ngIf="obstacle.objectType != 3" [routerLink]="['/objects', getTypeById(obstacle.objectType), obstacle.objectId]">
                       {{obstacle.objectName}}
                     </a>
+                    <ng-container *ngIf="obstacle.objectType == 3">
+                      {{obstacle.objectName}}
+                    </ng-container>
                   </td>
                   <td>{{obstacle.objectHeight | number}}</td>
                   <td>{{obstacle.restrictionHeight | number}}</td>
